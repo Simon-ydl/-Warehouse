@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="tensquare_article_9004" />
+        <module name="tensquare_base_9001" />
+        <module name="tensquare_common_9000" />
+        <module name="tensquare_gathering_9005" />
+        <module name="tensquare_qa_9003" />
+        <module name="tensquare_recruit_9002" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
