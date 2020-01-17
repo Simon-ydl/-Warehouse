@@ -4,7 +4,7 @@ spring:
   application:  # 服务名称，为后续的服务注册做准备的
     name: tensquare-article-9004
   datasource:  # 数据源
-    url: jdbc:mysql://192.168.11.139:3306/tensquare_article?characterEncoding=UTF8
+    url: jdbc:mysql://192.168.11.211:3306/tensquare_article?characterEncoding=UTF8
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 123456
@@ -13,4 +13,4 @@ spring:
     generate-ddl: true # 是否自动建表
     database: mysql  # 数据库类型
   redis:
-    host: 192.168.11.139
+    host: 192.168.11.211

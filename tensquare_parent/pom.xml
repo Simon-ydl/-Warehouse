@@ -14,6 +14,7 @@
         <module>tensquare_qa_9003</module>
         <module>tensquare_article_9004</module>
         <module>tensquare_gathering_9005</module>
+        <module>tensquare_spit_9006</module>
     </modules>
 
     <packaging>pom</packaging>
