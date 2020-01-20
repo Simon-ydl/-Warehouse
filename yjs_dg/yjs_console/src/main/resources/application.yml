@@ -1,0 +1,104 @@
+spring:
+  profiles:
+    active: local
+---
+
+#Spring的配置
+spring:
+  profiles: local
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  datasource:
+    #数据源
+    #type: com.zaxxer.hikari.HikariDataSource
+    #驱动
+    driver-class-name: com.mysql.jdbc.Driver
+    #数据库连接
+    url: jdbc:mysql://39.98.230.170:3306/yjs_dba?useUnicode=true&characterEncoding=UTF-8
+    #用户名
+    username: cms_dba
+    #密码
+    password: cms@fs2017
+    #模板引擎配置
+  freemarker:
+    #配置返回值前缀以及后缀
+    request-context-attribute: req  #req访问request
+    suffix: .html  #后缀名
+    content-type: text/html
+    enabled: true
+    cache: false #缓存配置
+    template-loader-path: classpath:/templates/ #模板加载路径 按需配置
+    charset: UTF-8 #编码格式
+    settings:
+      number_format: '0.##'   #数字格式化，无小数点
+  #配置mybatis
+mybatis:
+  #实体类包
+  type-aliases-package: com.ucap.core.cpanel.entity
+  #配置mapper路径
+  mapper-locations: classpath:mapper/*.xml
+#端口号
+server:
+  port: 8080
+  undertow:
+    accesslog:
+      enabled: true
+      pattern: common
+---
+
+#Spring的配置
+spring:
+  profiles: staging
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  datasource:
+    #数据源
+    type: com.zaxxer.hikari.HikariDataSource
+    separator: /;
+    hikari:
+      driver-class-name: com.mysql.jdbc.Driver
+      connection-timeout: 10000
+      pool-name: ucbyun_das
+      minimum-idle: 1
+      maximum-pool-size: 5
+      connection-test-query: SELECT 1
+    #驱动
+    driver-class-name: com.mysql.jdbc.Driver
+    #数据库连接
+    url: jdbc:mysql://:3306/ucap_core?useUnicode=true&characterEncoding=UTF-8
+    #用户名
+    username: root
+    #密码
+    password: root
+    #模板引擎配置
+  freemarker:
+    #配置返回值前缀以及后缀
+    request-context-attribute: req  #req访问request
+    suffix: .html  #后缀名
+    content-type: text/html
+    enabled: true
+    cache: false #缓存配置
+    template-loader-path: classpath:/templates/ #模板加载路径 按需配置
+    charset: UTF-8 #编码格式
+    settings:
+      number_format: '0.##'   #数字格式化，无小数点
+  #配置mybatis
+mybatis:
+  #实体类包
+  type-aliases-package: com.ucap.core.cpanel.entity
+  #配置mapper路径
+  mapper-locations: classpath:mapper/*.xml
+#端口号
+server:
+  port: 8080
+  undertow:
+    accesslog:
+      enabled: true
+      pattern: common
+
