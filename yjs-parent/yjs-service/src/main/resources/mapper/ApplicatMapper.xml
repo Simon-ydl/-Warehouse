@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yjs.dao.mapper.ApplicatMapper">
+	
+	
+	<insert id="save" parameterType="com.yjs.bean.application.Applicat">
+	insert into ro_applicant
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+	<if test="apName != null">
+	ap_name,
+	</if>
+	<if test="apNumberType != null">
+	ap_numberType,
+	</if>
+	<if test="apNumber != null">
+	ap_number,
+	</if>
+	<if test="businessCode != null">
+	business_code,
+	</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+	<if test="apName != null">
+	#{apName,jdbcType=VARCHAR},
+	</if>
+	<if test="apNumberType != null">
+	#{apNumberType,jdbcType=VARCHAR},
+	</if>
+	<if test="apNumber != null">
+	#{apNumber,jdbcType=VARCHAR},
+	</if>
+	<if test="businessCode != null">
+	#{businessCode,jdbcType=VARCHAR},
+	</if>
+	</trim>
+	</insert>
+	
+	<select id="findAllByBusinessCode" resultType="com.yjs.bean.application.Applicat" resultMap="applicat">
+		SELECT * FROM ro_applicant WHERE business_code = #{BusinessCode}
+	</select> 
+	
+	<resultMap type="Applicat" id="applicat">
+	<id property="id" column="id" />
+	<result property="apName" column="ap_name" />
+    <result property="apNumberType" column="apNumber_type" />
+    <result property="apNumber" column="ap_number" />
+    <result property="businessCode" column="business_code" />
+	</resultMap>
+
+	<update id="update"  parameterType="com.yjs.bean.application.Applicat">
+		UPDATE ro_applicant
+		<trim prefix="set" suffixOverrides=",">
+			<if test="apName!=null">ap_name=#{apName},</if>
+			<if test="apNumberType!=null">ap_numberType=#{apNumberType},</if>
+			<if test="apNumber!=null">ap_number=#{apNumber},</if>
+			<if test="businessCode!=null">business_code=#{businessCode},</if>
+		</trim>
+		WHERE business_code=#{businessCode}
+	</update>
+</mapper>

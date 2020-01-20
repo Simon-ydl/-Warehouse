@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yjs.dao.mapper.BusinessMapper" >
+
+<resultMap type="Business" id="business">
+	<id property="id" column="id" />
+	<result property="businessName" column="business_name" />
+    <result property="businessCode" column="business_code" />
+    <result property="createAt" column="create_at" />
+    <result property="matterId" column="matter_id" />
+	<result property="businessTag" column="business_tag"/>
+	<result property="state" column="state"/>
+</resultMap>
+	<select id="findAllByUseridcode" resultType="com.yjs.bean.business.Business" resultMap="business">
+		SELECT * FROM ro_business WHERE useridcode = #{useridcode}
+	</select> 
+	
+	<select id="findAllByBusinessCode" resultType="com.yjs.bean.business.Business" resultMap="business">
+		SELECT * FROM ro_business WHERE business_code = #{businessCode}
+	</select>
+
+	<select id="findAllByUseridcodeAndMatterId" resultType="com.yjs.bean.business.Business" resultMap="business">
+		SELECT * FROM ro_business WHERE useridcode = #{userIdCode} AND matter_id = #{matterId}
+	</select>
+
+	<insert id="save" parameterType="com.yjs.bean.business.Business">
+	insert into ro_business
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+	<if test="userIdCode != null">
+	useridcode,
+	</if>
+	<if test="businessName != null">
+	business_name,
+	</if>
+	<if test="businessCode != null">
+	business_code,
+	</if>
+	<if test="createAt != null">
+	create_at,
+	</if>
+	<if test="matterId != null">
+	matter_id,
+	</if>
+	<if test="state != null">
+		state,
+	</if>
+	<if test="businessTag != null">
+		business_tag,
+	</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+	<if test="userIdCode != null">
+	#{userIdCode,jdbcType=VARCHAR},
+	</if>
+	<if test="businessName != null">
+	#{businessName,jdbcType=VARCHAR},
+	</if>
+	<if test="businessCode != null">
+	#{businessCode,jdbcType=VARCHAR},
+	</if>
+	<if test="createAt != null">
+	#{createAt,jdbcType=TIMESTAMP},
+	</if>
+	<if test="matterId != null">
+	#{matterId,jdbcType=INTEGER},
+	</if>
+	<if test="state != null">
+		#{state,jdbcType=VARCHAR},
+	</if>
+	<if test="businessTag != null">
+		#{businessTag,jdbcType=VARCHAR},
+	</if>
+	</trim>
+	</insert>
+
+	<!--传入流水号和state修改business表的state-->
+	<update id="updateBusinessState">
+        UPDATE ro_business rb SET rb.`state` = #{state} WHERE rb.`business_code` = #{business_code};
+    </update>
+
+	<update id="update"  parameterType="com.yjs.bean.business.Business">
+		UPDATE ro_business
+		<trim prefix="set" suffixOverrides=",">
+			<if test="userIdCode!=null">useridcode=#{userIdCode},</if>
+			<if test="businessName!=null">business_name=#{businessName},</if>
+			<if test="businessCode!=null">business_code=#{businessCode},</if>
+			<if test="createAt!=null">create_at=#{createAt},</if>
+			<if test="matterId!=null">matter_id=#{matterId},</if>
+			<if test="state!=null">state=#{state},</if>
+			<if test="businessTag!=null">business_tag=#{businessTag},</if>
+		</trim>
+		WHERE business_code=#{businessCode}
+	</update>
+</mapper>

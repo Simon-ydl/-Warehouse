@@ -1,0 +1,352 @@
+@charset "utf-8";
+
+* {
+    font-family: "微软雅黑","宋体",Arial;
+    font-size: 13px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+body {
+	background-color: #FFFFFF;
+	margin: 0;
+	margin-left: 1.5%;
+	width: 97%;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table tr td {
+	border: 1px solid #CCCCCC;
+}
+
+img {
+	border: 0 none;
+}
+
+a {
+    color: #000000;
+    cursor: pointer;
+    font-size: 12px;
+}
+a:hover {
+    color: #FF7700;
+}
+a:link, a:visited {
+    text-decoration: none;
+}
+
+.table_style input[type="text"],.table_style input[type="password"] {
+	border:1px solid #D5D5D5;
+	height:24px;
+	line-height:20px;
+	border-radius:5px;
+	padding-left:5px;
+}
+
+textarea {
+	border: 1px solid #CCCCCC;
+	background: none repeat scroll 0 0 #FFFFFF;
+	margin: 2px 0;
+	margin-left: 1px;
+	width: 94%;
+	padding-left: 2px;
+	overflow-y: auto;
+	resize: none;
+	border-radius:5px;
+}
+
+@-moz-document url-prefix(){textarea {margin-left: 0px;}}
+@-moz-document url-prefix() { .combo-arrow {  vertical-align: middle; } } 
+label {
+	vertical-align: middle;
+}
+.radio{width:12px;height:14px;border:0;background:none;vertical-align: middle;margin-left:0;margin-top:0;margin-bottom:0;}
+.checkbox{width:12px;height:14px;border:0;background:none;vertical-align: middle;margin-left:0;margin-top:0;margin-bottom:0;}
+label {cursor:pointer;margin-right:10px;}
+.combo .combo-text {
+	border: 0;
+}
+
+.combo {
+	border-color: #CCCCCC;
+}
+
+.datebox .combo-text {
+	border: 1px solid #CCCCCC;
+}
+
+.calendar-body table {
+	border-collapse: separate;
+}
+
+.table_style {
+	line-height: 28px;
+	margin: 5px 5px 5px;
+	text-align: center;
+	width: 99%;
+}
+
+.title {
+	font-weight: bold;
+	height: 28px;
+	line-height: 28px;
+	text-align: left;
+	text-indent: 10px;
+}
+
+.header {
+    background: url("../image/th_bg.png") repeat-x scroll center center transparent;
+    border: 1px solid #CCCCCC;
+    font-weight: bold;
+    height: 28px;
+    line-height: 26px;
+    text-align: left;
+    text-indent: 10px;
+}
+
+.title a:link,.header a:link {
+	background: url("../image/showedit.png") no-repeat scroll left
+		center transparent;
+	color: #000099;
+	display: inline-block;
+	font-weight: bold;
+	vertical-align: middle;
+	width: 90%;
+}
+
+.title a:visited,.header a:visited {
+	background: url("../image/show.png") no-repeat scroll left center
+		transparent;
+	color: #000099;
+	display: inline-block;
+	font-weight: bold;
+	vertical-align: middle;
+	width: 90%;
+}
+
+.title a:hover,.header a:hover {
+	background: url("../image/hidden.png") no-repeat scroll left
+		center transparent;
+	color: #FF9900;
+	display: inline-block;
+	font-weight: bold;
+	vertical-align: middle;
+	width: 90%;
+}
+
+.titel a:active,.header a:active {
+	background: url("../image/hidden.png") no-repeat scroll left
+		center transparent;
+	color: #000099;
+	display: inline-block;
+	font-weight: bold;
+	vertical-align: middle;
+	width: 90%;
+}
+
+.blue_td {
+	height:40px;
+	padding-right: 2px;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.input_td {
+	padding-left: 2px;
+	padding-right: 4px;
+	text-align: left;
+	color:#1980B7;
+}
+.datagrid_h {line-height: 18px;margin: -5px 5px 10px;}
+.datagrid_h .panel-body {border-style:none;}
+.bottomDiv {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: center;
+}
+
+.buttonCss {background: url(../image/btn.png) no-repeat;width:66px;height:27px;color:#FFF;border:none;cursor:pointer;}
+
+.readOnlyArea {
+	background-color: #FFF;
+	border: 0 none;
+	font-size: 12px;
+	height: 80px;
+	margin-top: 3px;
+	overflow-y: auto;
+	resize: none;
+}
+
+
+.cell_inf {
+	min-width: 100px;
+	display: inline-block;
+	margin: 0 3px;
+	vertical-align: bottom;
+}
+
+.cell_content table {
+	background-color: #ebfafc;
+}
+
+.cell_content {
+	max-height: 300px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-right: 20px;
+}
+
+.cell_close {
+	width: 15px;
+	height: 15px;
+	top: 7px;
+	right: -17px;
+	float: right;
+	position: relative;
+	cursor:pointer;
+}
+
+.room_table {
+	line-height: 20px;
+	margin: 10px 10px 5px;
+	text-align: center;
+	border-collapse: collapse;
+}
+
+.add_input input {
+	width: 80px;
+}
+
+.cell_input {
+	text-align: center;
+}
+
+.cell_input input {
+	width: 30px;
+	height: 18px;
+	border: 1px solid #CCC;
+}
+
+.cell_input>span {
+	height: 23px;
+	width: 60px;
+	display: inline-block;
+	border-right: 1px solid #CCC;
+	padding-top: 3px;
+}
+
+.add_cell_IMG {
+	position: relative;
+	width: 10px;
+	height: 10px;
+	float: right;
+	top: 10px;
+	right: 5px;
+	cursor:pointer;
+}
+
+.del_cell_IMG {
+	position: relative;
+	width: 10px;
+	height: 10px;
+	float: right;
+	top: 0px;
+	right: 15px;
+	cursor:pointer;
+}
+
+.add_cell a:link {
+	background: url(../image/add_cell.png) no-repeat center;
+	display: inline-block;
+	width: 80px;
+	height: 80px;
+}
+
+.add_cell a:visited {
+	background: url(../image/add_cell.png) no-repeat center;
+	display: inline-block;
+	width: 80px;
+	height: 80px;
+}
+
+.add_cell a:hover {
+	background: url(../image/add_cell2.png) no-repeat center;
+	display: inline-block;
+	width: 80px;
+	height: 80px;
+}
+
+.add_cell a:active {
+	background: url(../image/add_cell2.png) no-repeat center;
+	display: inline-block;
+	width: 80px;
+	height: 80px;
+}
+.table_color{
+	background:url(../image/bg.png);
+	width:90px;
+	text-align:right;
+	}
+.build_inf {
+	min-width: 100px;
+	display: inline-block;
+	height: 100%;
+	text-align: left;
+}
+
+.cell_contact {
+	line-height: 24px;
+	padding-left: 10px;
+	padding-bottom: 5px;
+}
+
+.cell_info tr td {
+	padding-bottom: 1px;
+}
+.special {
+    display: inline-block;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 4px;
+    width: 165px;
+}
+.swfupload { 
+	position: absolute; 
+	z-index: 1; 
+}
+.reportTitle { 
+	font-weight:bold; 
+	background-color: #F5FAFE; 
+	color: rgb(102, 102, 102); 
+}
+
+.layui-form-label {width:200px;}
+.layui-form-pane .layui-form-label {width:200px;}
+.layui-form-pane .layui-form-item .layui-input-inline {width:330px;}
+.layui-center {text-align:center;}
+
+.layui-form-checkbox[lay-skin="primary"]:hover i{border-color: #1E9FFF;}
+.layui-form-checked[lay-skin="primary"] i{border-color: #1E9FFF; background-color: #1E9FFF;}
+.layui-form-radioed>i,.layui-form-radio>i:hover{color: #1E9FFF;}
+.layui-form-select dl dd.layui-this {background-color: #1E9FFF;}
+.layui-btn {background-color:#1E9FFF;}
+.layui-btn-danger {background-color:#FF5722;}
+.layui-btn-normal {
+	background-color: #1e9fff;
+}
+
+.layui-form-select dl dd.layui-this {background-color: #1E9FFF;}
+
+.layui-form-onswitch {border-color: #1E9FFF;background-color: #1E9FFF;}
+.layui-layer-tips .layui-layer-content {background-color:#1E9FFF;}
+.layui-layer-tips i.layui-layer-TipsB, .layui-layer-tips i.layui-layer-TipsT {border-right-color:#1E9FFF;}
+.layui-layer-tips i.layui-layer-TipsL, .layui-layer-tips i.layui-layer-TipsR {border-bottom-color:#1E9FFF;}
+
+.layui-none {background-color:#FFFFFF;}
+.layui-laydate .layui-this {background-color: #1E9FFF!important;}
+.layui-laydate-footer span:hover {color: #1E9FFF;}

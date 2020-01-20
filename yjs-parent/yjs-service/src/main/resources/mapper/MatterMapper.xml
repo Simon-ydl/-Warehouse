@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yjs.dao.mapper.MatterMapper">
+	<select id="findNameByMatterId" resultType="java.lang.String">    
+		SELECT name FROM ro_matter WHERE id = #{matterId}
+	</select>
+
+	<select id="findAllBymatterCode" resultType="Matter">
+		select * from ro_matter
+		where matter_code = #{matterCode};
+	</select>
+
+	<select id="findAllById" resultType="Matter">
+		select * from ro_matter
+		where id = #{matterId};
+	</select>
+</mapper>

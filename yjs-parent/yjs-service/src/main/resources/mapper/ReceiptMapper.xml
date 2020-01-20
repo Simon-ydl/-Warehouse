@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yjs.dao.mapper.ReceiptMapper">
+	
+	
+	<insert id="save" parameterType="com.yjs.bean.Receipt.Receipt">
+	insert into ro_receipt
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+	<if test="rName != null">
+	r_name,
+	</if>
+	<if test="rWay != null">
+	r_way,
+	</if>
+	<if test="rMobile != null">
+	r_mobile,
+	</if>
+	<if test="rArea != null">
+	r_area,
+	</if>
+	<if test="rAddress != null">
+	r_address,
+	</if>
+	<if test="rHall != null">
+	r_hall,
+	</if>
+	<if test="businessCode != null">
+	business_code,
+	</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+	<if test="rName != null">
+	#{rName,jdbcType=VARCHAR},
+	</if>
+	<if test="rWay != null">
+	#{rWay,jdbcType=VARCHAR},
+	</if>
+	<if test="rMobile != null">
+	#{rMobile,jdbcType=VARCHAR},
+	</if>
+	<if test="rArea != null">
+	#{rArea,jdbcType=VARCHAR},
+	</if>
+	<if test="rAddress != null">
+	#{rAddress,jdbcType=VARCHAR},
+	</if>
+	<if test="rHall != null">
+	#{rHall,jdbcType=VARCHAR},
+	</if>
+	<if test="businessCode != null">
+	#{businessCode,jdbcType=VARCHAR},
+	</if>
+	</trim>
+	</insert>
+
+	<select id="findAllByBusinessCode" resultType="Receipt" resultMap="receipt">
+		select * from ro_receipt where business_code = #{businessCode}
+	</select>
+
+	<resultMap id="receipt" type="Receipt">
+		<id property="id" column="id"/>
+		<result property="rName" column="r_name"/>
+		<result property="rWay" column="r_way"/>
+		<result property="rMobile" column="r_mobile"/>
+		<result property="rArea" column="r_area"/>
+		<result property="rAddress" column="r_address"/>
+		<result property="rHall" column="r_hall"/>
+		<result property="businessCode" column="business_code"/>
+	</resultMap>
+
+	<update id="update"  parameterType="com.yjs.bean.Receipt.Receipt">
+		UPDATE ro_receipt
+		<trim prefix="set" suffixOverrides=",">
+			<if test="rName!=null">r_name=#{rName},</if>
+			<if test="rWay!=null">r_way=#{rWay},</if>
+			<if test="rMobile!=null">r_mobile=#{rMobile},</if>
+			<if test="rArea!=null">r_area=#{rArea},</if>
+			<if test="rAddress!=null">r_address=#{rAddress},</if>
+			<if test="rHall!=null">r_hall=#{rHall},</if>
+			<if test="businessCode!=null">business_code=#{businessCode},</if>
+		</trim>
+		WHERE business_code=#{businessCode}
+	</update>
+</mapper>

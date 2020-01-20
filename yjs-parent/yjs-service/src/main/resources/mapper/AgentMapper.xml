@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yjs.dao.mapper.AgentMapper">
+	
+	
+	<insert id="save" parameterType="com.yjs.bean.agent.Agent">
+	insert into ro_agent
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+	<if test="aName != null">
+	aName,
+	</if>
+	<if test="aNumber != null">
+	aNumber,
+	</if>
+	<if test="aNumberType != null">
+	aNumberType,
+	</if>
+	<if test="aMobile != null">
+	aMobile,
+	</if>
+	<if test="aEmail != null">
+	aEmail,
+	</if>
+	<if test="businessCode != null">
+	business_code,
+	</if>
+	
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+	<if test="aName != null">
+	#{aName,jdbcType=VARCHAR},
+	</if>
+	<if test="aNumber != null">
+	#{aNumber,jdbcType=VARCHAR},
+	</if>
+	<if test="aNumberType != null">
+	#{aNumberType,jdbcType=VARCHAR},
+	</if>
+	<if test="aMobile != null">
+	#{aMobile,jdbcType=VARCHAR},
+	</if>
+	<if test="aEmail != null">
+	#{aEmail,jdbcType=VARCHAR},
+	</if>
+	<if test="businessCode != null">
+	#{businessCode,jdbcType=VARCHAR},
+	</if>
+	</trim>
+	</insert>
+
+	<select id="findAllByBusinessCode" resultType="Agent" resultMap="agent">
+		select * from ro_agent where business_code = #{businessCode};
+	</select>
+
+	<resultMap id="agent" type="Agent">
+		<id property="id" column="id"/>
+		<result property="aName" column="aName"/>
+		<result property="aNumber" column="aNumber"/>
+		<result property="aNumberType" column="aNumberType"/>
+		<result property="aMobile" column="aMobile"/>
+		<result property="aEmail" column="aEmail"/>
+		<result property="businessCode" column="business_code"/>
+	</resultMap>
+
+	<update id="update"  parameterType="com.yjs.bean.agent.Agent">
+		UPDATE ro_agent
+		<trim prefix="set" suffixOverrides=",">
+			<if test="aName!=null">aName=#{aName},</if>
+			<if test="aNumber!=null">aNumber=#{aNumber},</if>
+			<if test="aNumberType!=null">aNumberType=#{aNumberType},</if>
+			<if test="aMobile!=null">aMobile=#{aMobile},</if>
+			<if test="aEmail!=null">aEmail=#{aEmail},</if>
+			<if test="businessCode!=null">business_code=#{businessCode},</if>
+		</trim>
+		WHERE business_code=#{businessCode}
+	</update>
+</mapper>

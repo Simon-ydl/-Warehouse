@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+  <meta charset="UTF-8">
+  <title>出生小孩入户申请审批表</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <link rel="stylesheet" href="/static/css/font.css"  >
+<!--  <link rel="stylesheet" href="/static/css/xadmin.css" >-->
+  <link rel="stylesheet" href="/static/layui/css/layui.css">
+  <link rel="stylesheet" href="/static/css/custom.css">
+  <script src="/static/js/utils/tool.js" charset="utf-8"></script>
+  <script src="/static/js/utils/gongan.js" charset="utf-8"></script>
+  <script src="/static/layui/layui.js" charset="utf-8"></script>
+  <script src="/static/js/vue/vue.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/static/js/jquery-1.8.2.min.js"></script>
+<!--  <script type="text/javascript" src="/static/js/xcity.js"></script>-->
+  <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+  <style>
+
+      body {
+          width: 100%;
+          min-height: 100%;
+          background: #fff;
+      }
+
+      .layui-form-label {
+          width: 150px;
+      }
+
+      .layui-input-block {
+          margin-left: 180px;
+      }
+
+      .layui-form-item .layui-input-inline {
+          width: 250px;
+      }
+
+
+      .layui-table-cell {
+          overflow: visible !important;
+      }
+      .layui-table-box {
+          overflow: visible;
+      }
+      .layui-table-body {
+          overflow: visible;
+      }
+      td .layui-form-select {
+          margin-top: -10px;
+          margin-left: -15px;
+          margin-right: -15px;
+      }
+  </style>
+
+</head>
+
+<body>
+
+    <div id="indexApp" class="registerTableDemo" style="padding: 10px;">
+        <form class="layui-form"  >
+            <div style="text-align: center;padding: 20px;">
+                <h2 style="font-weight: 600;">出生小孩入户申请审批表</h2>
+            </div>
+            <div style="margin-left: auto; margin-right: auto;">
+                <div class="layui-form-item">
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span style="color:red">*</span>申请日期</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-col-xs12">
+                                    <input type="text" readonly :value="getNowFormatDate" name="applyDate"  placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span style="color:red">*</span>受理地单位</label>
+                            <div class="layui-input-inline">
+                                <select name="acceptingUnit"  lay-verify="required"  >
+                                    <option value=""></option>
+                                    <option v-for="(item ,index) in acceptData" :value="item.value">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span style="color:red">*</span>拟入户地公安机关</label>
+                            <div class="layui-input-inline">
+                                <select name="gonganOrgan"  lay-verify="required"  >
+                                    <option value=""></option>
+                                    <option v-for="(item ,index) in acceptData" :value="item.value">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span style="color:red">*</span>出生小孩姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="name" lay-verify="name" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span style="color:red">*</span>性別</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="sex" value="1" title="男" checked>
+                                <input type="radio" name="sex" value="2" title="女">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--                            <div class="layui-form-item">-->
+                <!--                                <div class="layui-inline">-->
+                <!--                                    <label class="layui-form-label"><span style="color:red">*</span>出生日期</label>-->
+                <!--                                    <div class="layui-input-inline">-->
+                <!--                                        <input type="text" readonly lay-verify="birthDate" name="birthDate" id="birthDate"  placeholder="请选择"  autocomplete="off" class="layui-input">-->
+                <!--                                    </div>-->
+                <!--                                </div>-->
+
+                <!--                            </div>-->
+                <div class="layui-form-item">
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span style="color:red">*</span>出生日期</label>
+                            <div class="layui-input-inline">
+                                <input type="text" readonly id="birthdate" name="birthdate"  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span style="color:red">*</span>民族</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="nation" name="nation" lay-filter="aihao">
+                                    <option value=""></option>
+                                    <option v-for="(n, i) in nation" :key="i" :value="n">{{ i }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span style="color:red">*</span>出生证编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="birthCert"  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span style="color:red">*</span>出生证签发日期</label>
+                            <div class="layui-input-inline">
+                                <input type="text" readonly id="birthCertStartDate" name="birthCertStartDate"  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="layui-form-item">
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span style="color:red">*</span>血型</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" name="bloodType" lay-filter="bloodType">
+                                    <option value=""></option>
+                                    <option v-for="(n, i) in bloodData" :key="i" :value="n.value">{{ n.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-form-item x-city" id="start">
+                        <label class="layui-form-label"><span style="color:red">*</span>拟入户地址</label>
+                        <div class="layui-input-inline">
+                            <select lay-verify="required" name="address" lay-filter="address">
+                                <option value="">请选择</option>
+                                <option v-for="(n, i) in inareaData" :key="i" :value="n.value">{{ n.name }}</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline" >
+                            <input type="text"   name="detailAddress"  lay-verify="required" placeholder="xxx路xxx楼xxx号" autocomplete="off" class="layui-input">
+                        </div>
+                        <!--                                    <div class="layui-input-inline">-->
+                        <!--                                        <select name="province" lay-filter="province">-->
+                        <!--                                            <option value="">请选择省</option>-->
+                        <!--                                        </select>-->
+                        <!--                                    </div>-->
+                        <!--                                    <div class="layui-input-inline">-->
+                        <!--                                        <select name="city" lay-filter="city">-->
+                        <!--                                            <option value="">请选择市</option>-->
+                        <!--                                        </select>-->
+                        <!--                                    </div>-->
+
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span style="color:red">*</span>出生医学证明上是否有父母双方信息</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="existParentInfo" value="1" title="是" checked="" lay-filter="existParentInfo" >
+                            <input type="radio" name="existParentInfo" value="0" title="否" lay-filter="existParentInfo">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span v-if="existParentInfo=='1'" style="color:red">*</span>父亲姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="fathername" :lay-verify="existParentInfo=='1'?'required':''" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span v-if="existParentInfo=='1'" style="color:red">*</span>父亲联系电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="fatherPhone"  :lay-verify="existParentInfo=='1'?'required':''" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span v-if="existParentInfo=='1'" style="color:red">*</span>父亲证件类型</label>
+                            <div class="layui-input-inline">
+                                <select :lay-verify="existParentInfo=='1'?'required':''" name="fatherCertType" lay-filter="fatherCertType">
+                                    <option value=""></option>
+                                    <option v-for="(n, i) in IdtypeData" :key="i" :value="n.value">{{ n.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span v-if="existParentInfo=='1'" style="color:red">*</span>父亲证件号码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="fatherCertId" :lay-verify="existParentInfo=='1'?'required':''" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span v-if="existParentInfo=='1'" style="color:red">*</span>母亲姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="mothername" :lay-verify="existParentInfo=='1'?'required':''" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span v-if="existParentInfo=='1'" style="color:red">*</span>母亲联系电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="motherPhone" :lay-verify="existParentInfo=='1'?'required':''" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span v-if="existParentInfo=='1'" style="color:red">*</span>母亲证件类型</label>
+                            <div class="layui-input-inline">
+                                <select :lay-verify="existParentInfo=='1'?'required':''" name="motherCertType" lay-filter="motherCertType">
+                                    <option value=""></option>
+                                    <option v-for="(n, i) in IdtypeData" :key="i" :value="n.value">{{ n.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span v-if="existParentInfo=='1'" style="color:red">*</span>母亲证件号码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="motherCertId" :lay-verify="existParentInfo=='1'?'required':''" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span style="color:red">*</span>出生小孩是否有兄弟姐妹</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="existBrotherInfo" value="1" title="是" lay-filter="existBrotherInfo">
+                            <input type="radio" name="existBrotherInfo" value="0" title="否" checked="" lay-filter="existBrotherInfo">
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="existBrotherInfo == '1'" style="width: 80%;margin: auto;margin-bottom: 20px;">
+                    <table class="layui-hide" id="brotherTable" lay-filter="brotherTable"></table>
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" @click="addBrother">添加</button>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+<!--                    <label class="layui-form-label">出生小孩父母 （或监护人）声明</label>-->
+                    <div style="width: 80%;margin: auto;margin-bottom: 20px;">
+                        <h3 style="font-weight: 400;margin-bottom: 5px;">出生小孩父母 （或监护人）声明</h3>
+                        <textarea placeholder="" name="desc" readonly class="layui-textarea">     上述所填写的内容及提交的证件、证明材料真实合法，且无在其它地方登记户口，签名均由本人所签。如提供了假情况、假证明材料，愿意承担由此带来的法律责任。</textarea>
+                    </div>
+                </div>
+            </div>
+<!--            <div class="layui-collapse">-->
+<!--                <div class="layui-colla-item">-->
+<!--                    <h2 class="layui-colla-title" style="color: rgb(67, 142, 185);">出生小孩入户申请审批表</h2>-->
+<!--                    <div class="layui-colla-content layui-show">-->
+
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--            </div>-->
+
+            <div style="text-align: center;margin-top: 20px;">
+<!--                lay-submit="" lay-filter="*"  @click="next"-->
+                <button type="button" lay-submit="" lay-filter="*" class="layui-btn layui-btn-normal" >完成</button>
+
+            </div>
+        </form>
+
+
+    </div>
+</body>
+<script type="text/html" id="selectRelation">
+    <select  name="fatherCertType" lay-filter="printerNo_select" >
+        <option value=""></option>
+        <option value="75" {{d.relation=='75'?'selected':''}}>姐姐</option>
+        <option value="77" {{d.relation=='77'?'selected':''}}>妹妹</option>
+        <option value="71" {{d.relation=='71'?'selected':''}}>兄</option>
+        <option value="73" {{d.relation=='73'?'selected':''}}>弟</option>
+    </select>
+</script>
+<script type="text/html" id="selectCertType">
+    <select  name="fatherCertType" lay-filter="printerNo_select" >
+        <option value=""></option>
+        <option value="111" {{d.certType=='111'?'selected':''}}>居民身份证</option>
+        <option value="112" {{d.certType=='112'?'selected':''}}>临时居民身份证</option>
+        <option value="114" {{d.certType=='114'?'selected':''}}>中国人民解放军军官证</option>
+        <option value="115" {{d.certType=='115'?'selected':''}}>中国人民武装警察部队警官证</option>
+        <option value="117" {{d.certType=='117'?'selected':''}}>出生医学证明</option>
+        <option value="414" {{d.certType=='414'?'selected':''}}>普通护照</option>
+        <option value="511" {{d.certType=='511'?'selected':''}}>台湾居民来往大陆通行证</option>
+        <option value="516" {{d.certType=='516'?'selected':''}}>港澳同胞回乡证（通行证）</option>
+        <option value="696" {{d.certType=='696'?'selected':''}}>户口簿</option>
+        <option value="990" {{d.certType=='990'?'selected':''}}>其他</option>
+    </select>
+</script>
+<script type="text/html" id="inputCertId">
+    <input type="text" >
+</script>
+<script type="text/html" id="caozuoTpl">
+    <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="delete" >删除</button>
+</script>
+<script   th:inline="javascript">
+
+    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+    var itemId = [[${itemId}]];
+
+    var itemIdStr = [[${itemIdStr}]];
+
+    var materialId = [[${materialId}]];
+
+    var materialItemId = [[${materialItemId}]];
+
+    var businessCode = [[${businessCode}]];
+
+    console.log("主题ID------",itemId);
+
+    console.log("主题事项ID------",itemIdStr);
+
+    console.log("事项材料ID------",materialId);
+
+    console.log("事项材料对应事项ID------",materialItemId);
+
+    console.log("业务ID------",businessCode);
+
+    var indexApp = new Vue({
+        el: '#indexApp',
+        data: {
+            acceptData:acceptData,//公安受理地单位数据
+            bloodData:bloodData,//血型数据
+            inareaData:inareaData,
+            IdtypeData:IdtypeData,
+            existParentInfo:'1',
+            existBrotherInfo:'0',
+            pre_handle:{notDgHj:false,notXsfz:false},
+            qrzry:"1",
+            certid:'',
+            birthdate:'',
+            nation:nation,
+            brotherData:[{"name":'',"relation":"","certType":'',"certId":''}]
+        },
+        // beforeMount: function () {
+        //     this.$nextTick(function () {
+        //         form.render();
+        //     })
+        // },
+        updated: function () {
+            this.$nextTick(function () {
+                form.render();
+                element.init();
+            })
+        },
+        computed: {
+
+            getBrotherData: function(){
+                return "{ data:"+JSON.stringify(this.brotherData)+",  id:'test'}";
+            },
+            getNowFormatDate: function(){
+                return getNowFormatDate();
+            },
+            getbirthdate: function () {
+                if(this.certid){
+                    return getBirthdate(this.certid);
+                }else{
+                    return getBirthdate(this.certid);
+                }
+            }
+        },
+        methods: {
+            addBrother: function(){
+                this.brotherData.push({"name":'',"relation":"","certType":'',"certId":''})
+                console.log(this.brotherData);
+                this.$nextTick(function(){
+                    table.reload('brotherTable',{
+                        data: this.brotherData
+                    });
+                })
+
+            },
+            next: function(){
+
+                console.log("111");
+
+                parent.layer.close(index);
+
+                // parent.layer.open({
+                //     type: 2,
+                //     title: '本科生入户事项办理',
+                //     shadeClose: false,
+                //     shade: 0.5,
+                //     maxmin: true,
+                //     area: ['90%', '90%'],
+                //     content: '/register/toUploadMaterial.do' //iframe的url
+                // });
+
+                parent.layer.open({
+                    type: 2,
+                    title: "上传材料",
+                    shade: 0.5,
+                    maxmin: true,
+                    area: ['90%', '90%'],
+                    content: '/register/toRegisterIndex.do?businessCode='+businessCode+'&formPage=material&itemId='+itemId+'&itemIdArr='+itemIdStr
+                });
+
+            }
+        },
+        watch: {
+            certid: function (val, oldVal) {
+                if(val && val.length>=18){
+                    this.birthdate = getBirthdate(val);
+                }
+            },
+        }
+    })
+
+
+    layui.config({
+        version: '1575889601624' //为了更新 js 缓存，可忽略
+    });
+    var element,form,table;
+    var $;
+    layui.use(['form','element','laydate','table'], function(){
+        element = layui.element;
+        var laydate = layui.laydate;
+        form= layui.form;
+        table= layui.table;
+        $ = layui.$;
+
+        // $('#start').xcity('广东');
+        function initTable(){
+            table.render({
+                elem: '#brotherTable'
+                , data: indexApp.brotherData
+                // , page: false
+                , id: "brotherTable"
+                // , cellMinWidth: 200
+                , cols: [
+                    [
+                        {field: "name", title: "姓名", edit: 'text'  }
+                        , {field: "relation", title: "与出生小孩关系",templet: '#selectRelation'} //,templet: '#selectRelation'
+                        , {field: "certType", title: "证件类型",templet: '#selectCertType'} //,templet: '#selectCertType'
+                        , {field: "certId", title: "证件号码",edit: 'text'}
+                        , {title: "操作",toolbar: '#caozuoTpl',width:80 }
+                    ]
+                ]
+                ,done: function(res, curr, count){
+                    //如果是异步请求数据方式，res即为你接口返回的信息。
+                    //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                    console.log(res);
+
+                    //得到当前页码
+                    console.log(curr);
+
+                    //得到数据总量
+                    console.log(count);
+                }
+            });
+        }
+
+
+        //监听工具条
+        table.on('tool(brotherTable)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+            var trElem = $(obj.tr);
+            if(layEvent === 'batch'){ //
+                //do somehing
+
+
+            } else if(layEvent === 'delete'){ //删除
+                layer.confirm('真的删除行么', {icon: 7, title:'提示'},function(index){
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+
+                    indexApp.brotherData.splice(trElem.data('index'),1);
+
+                    console.log("删除后的结果信息----",indexApp.brotherData)
+                    layer.close(index);
+                    //向服务端发送删除指令
+                });
+            }
+        });
+
+        //毕业日期
+        laydate.render({
+            elem: '#birthdate',
+            trigger: 'click' //采用click弹出
+        });
+        //出生日期
+        laydate.render({
+            elem: '#graduateDate',
+            trigger: 'click' //采用click弹出
+        });
+        //出生证签发日期
+        laydate.render({
+            elem: '#birthCertStartDate',
+            trigger: 'click' //采用click弹出
+        });
+
+        // 监听表格中的下拉选择将数据同步到table.cache中
+        form.on('select(printerNo_select)', function (data) {
+            console.log("data-----",data);
+            var selectElem = $(data.elem);
+            var tdElem = selectElem.closest('td');
+            var trElem = tdElem.closest('tr');
+            var tableView = trElem.closest('.layui-table-view');
+            console.log("data-----",trElem.data('index'));
+            console.log("data-----",tdElem.data('field'));
+            table.cache[tableView.attr('lay-id')][trElem.data('index')][tdElem.data('field')] = data.value;
+            indexApp.brotherData[trElem.data('index')][tdElem.data('field')] = data.value;
+            console.log("表格上的数据------", indexApp.brotherData)
+        });
+
+        //监听单元格编辑
+        table.on('edit(brotherTable)', function(obj){
+            var trElem = $(obj.tr);
+            var value = obj.value //得到修改后的值
+                ,data = obj.data //得到所在行所有键值
+                ,field = obj.field; //得到字段
+            console.log(trElem.data('index'),value,data,field);
+            // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+            indexApp.brotherData[trElem.data('index')][field] = value;
+            console.log("表格上的数据------", indexApp.brotherData)
+        });
+
+
+        form.on('submit(*)', function(data){
+            // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+            // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            // indexApp.next();
+            if(data.field.existBrotherInfo == '1'){
+
+                if(indexApp.brotherData && indexApp.brotherData.length>0){
+                    console.log(indexApp.brotherData);
+                    for(var i=0;i<indexApp.brotherData.length;i++){
+                        for(var j in indexApp.brotherData[i]) {
+
+                            if(!indexApp.brotherData[i][j] && j != 'LAY_TABLE_INDEX'){
+                                console.log("123123123");
+                                layer.alert('请完善出生孩子兄弟姐妹信息!', {icon: 5});
+                                return;
+                            }
+
+                        }
+                    }
+
+                }else{
+                    layer.alert('请完善出生孩子兄弟姐妹信息!', {icon: 5});
+                    return;
+                }
+            }
+
+            console.log("提交。。。。");
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+
+        form.on('checkbox(pre_handle)', function(data){
+
+            var name = layui.$(data.elem).attr('name');
+            indexApp.pre_handle[name] = data.elem.checked;
+            console.log(indexApp.pre_handle);
+
+        });
+
+        //监听是否出生证存在父母信息
+        form.on('radio(existParentInfo)', function(data){
+            console.log(data.elem); //得到radio原始DOM对象
+            console.log(data.value); //被点击的radio的value值
+            // indexApp.qrzry = data.value;
+            indexApp.existParentInfo = data.value
+            form.render();
+        });
+
+        //监听是否存在兄弟姐妹信息
+        form.on('radio(existBrotherInfo)', function(data){
+            console.log(data.elem); //得到radio原始DOM对象
+            console.log(data.value); //被点击的radio的value值
+            // indexApp.qrzry = data.value;
+            indexApp.existBrotherInfo = data.value
+            if(data.value == '1'){
+                indexApp.$nextTick(function(){
+                    initTable();
+                })
+
+            }
+            form.render();
+        });
+
+
+
+        var $ = layui.$, active = {
+
+            next: function(){
+
+                console.log("1111");
+                parent.layer.close(index);
+            }
+        }
+
+        $('.registerTableDemo .layui-btn').on('click', function(){
+            console.log("1111");
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+        form.verify({
+            //对应表单组件的lay-verify值
+            name: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '姓名不能为空';
+                }
+                if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+                    return '姓名不能有特殊字符';
+                }
+                if(/(^\_)|(\__)|(\_+$)/.test(value)){
+                    return '姓名首尾不能出现下划线\'_\'';
+                }
+                if(/^\d+\d+\d$/.test(value)){
+                    return '姓名不能全为数字';
+                }
+            },
+            certid: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '身份证号码不能为空';
+                }
+                if(!verifyCertId(value)){
+                    return '请输入正确的身份证号码';
+                }
+
+            },
+            nation: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '请选择民族';
+                }
+            },
+
+        });
+
+
+    });
+
+
+
+</script>
+
+</html>

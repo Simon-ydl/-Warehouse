@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjs.dao.mapper.IDatumMapper">
+    <!-- 根据业务流水号查询详细表单信息-->
+    <select id="findDatumInformation" resultType="java.util.HashMap" >
+        SELECT rd.*,ri.item_name,rf.`file_name`,rf.`file_url`,rg.* FROM ro_datum rd
+        LEFT JOIN ro_items ri ON ri.`id` = rd.`items_id`
+        LEFT JOIN ro_files rf ON rf.`business_code` = rd.`business_code`
+        LEFT JOIN ro_agent rg ON rg.`business_code` = rd.`business_code`
+        WHERE rd.`business_code` = #{business_code} AND rd.`items_id` = #{itemsId};
+    </select>
+
+    <!-- 根据业务流水号查询详细表单信息-->
+    <select id="findByItemsIdAndBusinessCode" resultType="com.yjs.bean.datum.Datum">
+       SELECT content FROM ro_datum  WHERE business_code = #{businessCode} AND items_id = #{itemsId}
+    </select>
+
+    <!-- 根据业务流水号查询申请人经办人和部门信息-->
+    <select id="findApplicantDepartment" resultType="java.util.HashMap" >
+        SELECT  rg.`aEmail`,rg.`aMobile`,rg.`aName`,rg.`aNumber`,rg.`business_code`,
+                ra.`ap_name`,ra.`ap_number`,
+                rdt.`department_name`,
+                ri.`item_name`,rd.items_id
+        FROM ro_datum rd
+        LEFT JOIN ro_agent rg ON rg.`business_code` = rd.`business_code`
+        LEFT JOIN ro_applicant ra ON ra.`business_code` = rd.`business_code`
+        LEFT JOIN ro_items ri ON ri.`id` = rd.`items_id`
+        LEFT JOIN ro_department rdt ON rdt.`id` = ri.`department_id`
+        WHERE rd.`business_code` =  #{businessCode} AND rd.`items_id` = #{itemsId};
+    </select>
+
+    <!-- 根据业务流水号查询申请人经办人和部门信息-->
+    <select id="findApplicantDepartment2" resultType="java.util.HashMap" >
+        SELECT  rg.`aEmail`,rg.`aMobile`,rg.`aName`,rg.`aNumber`,rg.`business_code`,
+                ra.`ap_name`,ra.`ap_number`,ra.`business_code`,
+                rdt.`department_name`,
+                ri.`item_name`
+        FROM ro_datum rd
+        LEFT JOIN ro_agent rg ON rg.`business_code` = rd.`business_code`
+        LEFT JOIN ro_applicant ra ON ra.`business_code` = rd.`business_code`
+        LEFT JOIN ro_items ri ON ri.`id` = rd.`items_id`
+        LEFT JOIN ro_department rdt ON rdt.`id` = ri.`department_id`
+        WHERE rd.`business_code` =  #{businessCode} AND rd.`items_id` = #{itemsId};
+    </select>
+
+    <!-- 根据业务流水号查询经办人信息-->
+    <select id="findDeptId" resultType="java.util.HashMap" >
+        select rdt.`id` deptId,ru.* from ro_user ru
+	left join ro_department rdt on rdt.`department_name` = ru.`user_org`
+	where ru.`account` = #{account};
+    </select>
+
+    <!-- 根据业务流水号查询上传文件表单名字和地址-->
+    <select id="findFileNameAndUrl" resultType="java.util.HashMap" >
+        SELECT rf.`file_name`,rf.`file_url`,rf.id FROM ro_files rf WHERE rf.`business_code` = #{businessCode} And rf.`item_id` = #{itemsId};
+    </select>
+
+    <!-- 根据业务流水号查询用户填写表单-->
+    <select id="findContent" resultType="java.util.HashMap" >
+        SELECT rd.`create_at` FROM ro_datum rd WHERE rd.`business_code` = #{businessCode} and rd.`items_id` = #{itemsId};
+    </select>
+
+    <!-- 根据业务流水号和事项id查询用户填写表单-->
+    <select id="findContentByItemsid" resultType="java.util.HashMap" >
+        SELECT rd.`create_at` FROM ro_datum rd WHERE rd.`business_code` = #{businessCode} and rd.`items_id` = #{itemsId};
+    </select>
+
+    <!-- 根据业务流水号查询主题id-->
+    <select id="findBusiness">
+       SELECT rb.`matter_id` FROM ro_business rb WHERE rb.`business_code` = #{business_code};
+    </select>
+
+    <!-- 根据业务流水号查询申请材料提交信息-->
+    <select id="findFileBybusinessCode" resultType="java.util.HashMap" >
+        SELECT rd.name,rd.content,rd.items_id,rd.state FROM ro_datum rd
+        WHERE rd.business_code = #{business_code} AND rd.state = '2';
+    </select>
+
+    <!--查看历史记录-->
+    <select id="findByBusinessResultSatue" resultType="java.util.HashMap">
+    SELECT ra.create_time,ra.approver,rd.department_name
+    FROM ro_approver ra
+    LEFT JOIN ro_department rd ON ra.department_id = rd.id
+    LEFT JOIN ro_workflow rw on rw.department_id =rd.id
+    WHERE
+    ra.business_code = #{businessCode}
+    ORDER BY rw.workflow_order ;
+    </select>
+
+    <!--以下两个sql语句是给前端的-->
+    <!--根据流水号获取经办人和申请人和部门审批历史-->
+    <select id="findAllByFront" resultType="java.util.HashMap">
+    select * from ro_datum rd
+	LEFT JOIN ro_agent rg ON rg.`business_code` = rd.`business_code`
+	LEFT JOIN ro_applicant ra ON ra.`business_code` = rd.`business_code`
+	LEFT JOIN ro_items ri ON ri.`id` = rd.`items_id`
+	LEFT JOIN ro_department rdt ON rdt.`id` = ri.`department_id`
+	WHERE rd.`business_code` = #{business_code};
+    </select>
+
+    <select id="findFile" resultType="java.util.HashMap">
+        SELECT rf.* FROM ro_files rf WHERE rf.`business_code` = #{business_code};
+    </select>
+
+    <!--根据fileid查找file-->
+    <select id="findFileById" resultType="java.util.HashMap">
+        SELECT rf.file_url,rf.file_name FROM ro_files rf WHERE rf.id = #{id};
+    </select>
+
+    <resultMap id="getSearchResult" type="com.yjs.bean.datum.Datums">
+        <id column="id" property="id" ></id>
+        <result column="content" property="content"></result>
+        <result column="state" property="state"></result>
+        <result column="create_at" property="createAt"></result>
+        <result column="business_code" property="businessCode"></result>
+        <result column="items_id" property="itemsId"></result>
+        <result column="item_name" property="itemName"></result>
+        <result column="department_id" property="departmentId"></result>
+        <result column="department_name" property="departmentName"></result>
+        <result column="ap_id" property="approveId"></result>
+        <result column="ap_name" property="approveName"></result>
+        <result column="ap_number" property="approveNumber"></result>
+    </resultMap>
+
+    <select id="getSearchResultByDepartmentIdAndState" resultMap="getSearchResult">
+        select * from ro_datum rd
+        left join ro_items ri on rd.`items_id` = ri.`id`
+        left join ro_department rdt on rdt.`id` = ri.`department_id`
+        left join ro_applicant ra on rd.`business_code` = ra.`business_code`
+        where 1 = 1
+        and rd.state = #{state} and rdt.`id` = #{department_id} and ri.`item_name` like #{item_name}
+        ORDER BY rd.`create_at` LIMIT #{start},#{end}
+    </select>
+
+    <!--坑。。。。修改下一部门的状态为1-->
+    <update id="updateDeptState">
+        UPDATE ro_datum rd SET rd.`state` = 1 WHERE rd.`business_code` = #{business_code} AND rd.`items_id` = 10;
+    </update>
+
+</mapper>

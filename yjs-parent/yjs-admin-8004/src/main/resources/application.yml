@@ -1,0 +1,74 @@
+server:
+  port: 7004
+spring:
+  mvc:
+    static-path-pattern: /static/**
+  application:
+    name: yjs-admin #微服名称
+  datasource:
+    #数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    #驱动
+    driver-class-name: com.mysql.jdbc.Driver
+    #数据库连接
+    url: jdbc:mysql://19.104.51.80:3306/yjs_db?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    #用户名
+    username: root
+    #密码
+    password: Nanxiu*80
+#thymelea模板配置
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+    encoding: utf-8
+    mode: HTML5
+  devtools:
+    restart:
+      enabled: true
+    freemarker:
+      cache: false
+eureka:
+  client:
+    service-url:
+      defaultZone: http://19.104.51.80:7001/eureka/,http://19.104.51.80:7002/eureka/,http://19.104.51.80:7003/eureka/
+  instance:
+    prefer-ip-address: true #使用ip区分服务
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.yjs.bean
+  configuration.map-underscore-to-camel-case: true
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level:
+    com.yjs: info
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+activiti:
+  # 自动部署验证设置:true-开启（默认）、false-关闭
+  check-process-definitions: false
+  nullCatalogMeansCurrent: true
+#  fastFDS文件服务配置
+fdfs:
+  so-timeout: 1501 # 超时时间
+  connect-timeout: 601 # 连接超时时间
+  thumb-image: # 缩略图
+    width: 60
+    height: 60
+  tracker-list: # tracker地址
+    - 19.104.51.80:22122
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMillisecond: 15000 # 设置hystrix的超时时间为15000ms
+ribbon:
+  ReadTimeout: 12000
+  ConnectTimeout: 10000
+

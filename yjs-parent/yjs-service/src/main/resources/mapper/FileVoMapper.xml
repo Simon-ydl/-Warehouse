@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yjs.dao.mapper.FileVoMapper">
+
+	<insert id="saveFileVo" parameterType="com.yjs.bean.yjs.FileVo">
+		insert into ro_files
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="names != null">
+				names,
+			</if>
+			<if test="nameEx != null">
+				nameEx,
+			</if>
+			<if test="path != null">
+				path,
+			</if>
+			<if test="sizes != null">
+				sizes,
+			</if>
+			<if test="businessCode != null">
+				business_code,
+			</if>
+			<if test="itemId != null">
+				item_id,
+			</if>
+			<if test="fileId != null">
+				file_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="names != null">
+				#{names,jdbcType=VARCHAR},
+			</if>
+			<if test="nameEx != null">
+				#{nameEx,jdbcType=VARCHAR},
+			</if>
+			<if test="path != null">
+				#{path,jdbcType=VARCHAR},
+			</if>
+			<if test="sizes != null">
+				#{sizes,jdbcType=VARCHAR},
+			</if>
+			<if test="businessCode != null">
+				#{businessCode,jdbcType=VARCHAR},
+			</if>
+			<if test="itemId != null">
+				#{itemId,jdbcType=INTEGER},
+			</if>
+			<if test="fileId">
+				#{fileId,jdbcType=INTEGER}
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="deleteFileVo" parameterType="com.yjs.bean.yjs.FileVo">
+        DELETE FROM ro_files WHERE file_id = #{fileId}
+	</delete>
+
+	<update id="updatefileVo"  parameterType="com.yjs.bean.yjs.FileVo">
+		UPDATE ro_files
+		<trim prefix="set" suffixOverrides=",">
+			<if test="names!=null">names=#{names},</if>
+			<if test="nameEx!=null">nameEx=#{nameEx},</if>
+			<if test="path!=null">path=#{path},</if>
+			<if test="sizes!=null">sizes=#{sizes},</if>
+			<if test="businessCode!=null">business_code=#{businessCode},</if>
+			<if test="itemId!=null">item_id=#{itemId},</if>
+			<if test="fileId!= null">file_id=#{fileId}</if>
+		</trim>
+		WHERE business_code=#{businessCode} AND name=#{name}
+	</update>
+
+
+	<select id="findByItemId" resultType="com.yjs.bean.yjs.FileVo" >
+		SELECT f.names, f.nameEx, f.path, f.sizes, f.business_code , f.item_id, f.file_id FROM ro_files f, ro_department d, ro_items i WHERE i.id = f.item_id AND i.department_id = d.id AND d.id = 7
+	</select>
+
+	<select id="findByFileId" resultType="com.yjs.bean.yjs.FileVo">
+		select * from ro_files
+		where file_id = #{fileId};
+	</select>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yjs.dao.mapper.ItemsMapper">
+	
+	<select id="findByItemCode" resultType="Items" resultMap="items">
+		select * from ro_items where item_code = #{itemCode};
+	</select>
+
+	<select id="findByItemsId" resultType="Items" resultMap="items">
+		select * from ro_items where id = #{itemsId};
+	</select>
+
+	<resultMap id="items" type="Items">
+		<id property="id" column="id"/>
+		<result property="itemName" column="item_name"/>
+		<result property="itemResult" column="item_result"/>
+		<result property="departmentId" column="department_id"/>
+		<result property="itemCode" column="item_code"/>
+		<result property="state" column="state"/>
+	</resultMap>
+
+</mapper>

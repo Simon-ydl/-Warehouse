@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 代理对象 namespace ="接口全路径 （包名+类名）" -->
+<mapper namespace="com.yjs.dao.mapper.Usermapper">
+<select id="selectAlluser" resultType="com.yjs.bean.UserBean">
+SELECT * from ro_loginuser
+</select>
+<select id="selectUser" resultType="int">
+SELECT COUNT(*) from ro_loginuser where useridcode=#{useridcode}
+</select>
+
+<insert id="insertUser">
+INSERT INTO ro_loginuser VALUES(#{useridcode},#{cn},#{idcardtype},#{idcardnumber},#{telephonenumber})
+</insert> 
+
+<update id="updateUser" parameterType="com.yjs.bean.UserBean">
+UPDATE ro_loginuser SET useridcode=#{useridcode},cn=#{cn},idcardtype=#{idcardtype},idcardnumber=#{idcardnumber},telephonenumber=#{telephonenumber}
+WHERE useridcode=#{useridcode}
+</update>
+
+  
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yjs.dao.mapper.SituationMapper">
+	
+	
+	<insert id="save" parameterType="com.yjs.bean.Situation.Situation">
+	insert into ro_situation
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+	<if test="siName != null">
+	si_name,
+	</if>
+	<if test="siContent != null">
+	si_content,
+	</if>
+	<if test="businessCode != null">
+	business_code,
+	</if>
+	
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+	<if test="siName != null">
+	#{siName,jdbcType=VARCHAR},
+	</if>
+	<if test="siContent != null">
+	#{siContent,jdbcType=LONGVARCHAR},
+	</if>
+	<if test="businessCode != null">
+	#{businessCode,jdbcType=VARCHAR},
+	</if>
+	</trim>
+	</insert>
+
+	<select id="findAllByBusinessCode" resultType="Situation" resultMap="situation">
+		select * from ro_situation where business_code = #{businessCode}
+	</select>
+
+	<resultMap id="situation" type="Situation">
+		<id property="id" column="id"/>
+		<result property="siName" column="si_name"/>
+		<result property="siContent" column="si_content"/>
+		<result property="businessCode" column="business_code"/>
+	</resultMap>
+
+	<update id="update"  parameterType="com.yjs.bean.Situation.Situation">
+		UPDATE ro_situation
+		<trim prefix="set" suffixOverrides=",">
+			<if test="siName!=null">si_name=#{siName},</if>
+			<if test="siContent!=null">si_content=#{siContent},</if>
+			<if test="businessCode!=null">business_code=#{businessCode},</if>
+		</trim>
+		WHERE business_code=#{businessCode}
+	</update>
+</mapper>

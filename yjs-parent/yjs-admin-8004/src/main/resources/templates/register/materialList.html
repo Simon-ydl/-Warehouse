@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="/static/css/font.css"  >
+    <!--  <link rel="stylesheet" href="/static/css/xadmin.css" >-->
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <script src="/static/layui/layui.js" charset="utf-8"></script>
+    <script src="/static/js/vue/vue.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/js/utils/global.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+
+        body {
+            width: 100%;
+            min-height: 100%;
+            background: #fff;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div id="indexApp" class="registerTableDemo" style="padding: 10px;">
+    <form class="layui-form" lay-filter="registerForm">
+        <input style="display: none;" name="matterCode" th:value="${itemId}">
+        <div class="layui-collapse">
+
+            <div class="layui-colla-item" >
+                <h2 class="layui-colla-title" style="color: rgb(67, 142, 185);">办事材料</h2>
+                <div class="layui-colla-content layui-show gr material-table" id="material-table">
+                    <table class="layui-table"  lay-even="">
+                        <thead class="table-header">
+                        <tr>
+                            <td width="10px" align="center" rowspan="4" id="abc">序号</td>
+                            <td align="center" rowspan="4">材料名称</td>
+                            <td width="10px" align="center" rowspan="4" class="share-no">收件要点</td>
+                            <td width="10px" align="center" rowspan="4" class="share-no">收件样本</td>
+                            <td width="10px" align="center" rowspan="4" class="share-no">是否容缺</td>
+                            <td align="center" colspan="9">纸质件</td>
+                            <td width="45px" align="center">电子件</td>
+                            <td width="60px" align="center" rowspan="4">是否具备电子证照</td>
+                            <td width="28px" align="center" rowspan="4" id="upload-tab-header" class="share-no-s">附件</td>
+                        </tr>
+                        <tr>
+                            <td width="10px" align="center" rowspan="3">必需</td><!--1-->
+
+                            <td align="center" colspan="2" rowspan="3">材料形式</td><!--2-->
+                            <td align="center" colspan="3" rowspan="3">收/验</td><!--2-->
+                            <td align="center" colspan="1" rowspan="3">应收份数</td><!--2-->
+                            <td align="center" colspan="2">收取数量</td><!--2-->
+                            <td align="center" rowspan="3">必需</td>
+                        </tr>
+                        <tr>
+                            <td align="center" rowspan="2">总份数</td>
+                            <td align="center" rowspan="2">总页数</td>
+                        </tr>
+                        </thead>
+                        <tbody id="material-detail" class="layui-form" lay-filter="material-detail">
+                            <template v-for="(item,index) in materialList">
+                                <tr>
+                                    <td width="10px" align="center" >{{index+1}}</td>
+                                    <td align="center" >{{item.filenameAlias?item.filenameAlias:item.materialName}}</td>
+                                    <td width="10px" align="center"  class="share-no">
+                                        <i @mouseover="mouseOver(item.sjyd,$event)" class="layui-icon layui-icon-tips" style="color: #1E9FFF;cursor: pointer;"></i>
+                                    </td><!--收件要点-->
+                                    <td width="10px" align="center"  class="share-no">
+                                        <template v-if="item.ybslAttachList && item.ybslAttachList.length>0">
+                                            <i @click="checkPhoto(item,'查看收件样本')" class="layui-icon layui-icon-search" style="color: #1E9FFF;cursor: pointer;"></i>
+                                        </template >
+                                        <template v-else>
+                                            <i  class="layui-icon layui-icon-search" style="cursor: pointer;"></i>
+                                        </template>
+                                    </td>
+                                    <td width="10px" align="center"  class="share-no">{{item.zcqy == '1'?'是':'否'}}</td><!--是否容缺-->
+                                    <td width="60px" align="center" >{{item.zzjyqbx == '1'?'是':'否'}}</td><!--必需-->
+                                    <td width="28px" align="center"  colspan="2" class="share-no-s">
+                                        {{getZzjyqlx(item)}}</td><!--纸质材料形式-->
+                                    <td width="10px" align="center"colspan="3"  >{{getYjys(item)}}</td><!--纸质收/验-->
+                                    <td align="center" colspan="1" >
+                                        <template v-if="item.ybf == 2">
+                                            <span class="org-num" >
+                                                {{ item.oriNumDisplay }}
+                                            </span>
+                                        </template>
+                                        <template v-else-if="item.fjbf == 2">
+                                            <span class="copy-num" >
+                                                {{ item.copyNumDisplay }}
+                                            </span>
+                                        </template>
+                                        <template v-else-if="item.ybf == 1">
+                                            <span class="org-num" >
+                                                {{ item.oriNumDisplay }}
+                                            </span>
+                                        </template>
+                                        <template v-else-if="item.fjbf == 1">
+                                        <span class="copy-num"  >
+                                            {{ item.copyNumDisplay }}
+                                        </span>
+                                        </template>
+                                        <template v-else>
+                                            -
+                                        </template>
+
+                                    </td><!--2-->
+                                    <template v-if="item.ybf == 2">
+                                        <td align="center">
+                                            <template v-if="item.needInputOri">
+                                                <input type="text" lay-verify="required" style="width: 30px;" class="layui-input-inline page-num org-fs" value="" maxlength="3">
+                                                <input type="hidden" class="layui-input-inline page-num copy-fs" value="" maxlength="3">
+                                            </template>
+                                            <template v-else>
+                                                -
+                                            </template>
+                                        </td>
+                                        <td align="center">
+                                            <template v-if="item.needInputOri && item.sfxytxzys == 1">
+                                                <input type="text" lay-verify="required" style="width: 30px;" class="layui-input-inline page-num org-zs" value="" maxlength="3">
+                                                <input type="hidden" class="layui-input-inline page-num copy-zs" value="" maxlength="3">
+                                            </template>
+                                            <template v-else>
+                                                -
+                                            </template>
+                                        </td>
+                                    </template>
+                                    <template v-else-if="item.fjbf == 2">
+                                        <td align="center">
+                                            <template v-if="item.needInputCopy">
+                                                <!-- 收 - 填写数量 -->
+                                                <input type="text" lay-verify="required" style="width: 30px;" class="layui-input-inline page-num copy-fs" value="" maxlength="3">
+                                                <input type="hidden" class="layui-input-inline page-num org-fs" value="" maxlength="3">
+                                            </template>
+                                            <template v-else>
+                                                -
+                                            </template>
+
+                                        </td>
+                                        <td align="center">
+                                            <template v-if="item.needInputCopy && item.sfxytxzys == 1">
+                                                <input type="text" lay-verify="required" style="width: 30px;" class="layui-input-inline page-num copy-zs" value="" maxlength="3">
+                                                <input type="hidden" class="layui-input-inline page-num org-zs" value="" maxlength="3">
+
+                                            </template>
+                                            <template v-else>
+                                                -
+                                            </template>
+
+                                        </td>
+                                    </template>
+                                    <template v-else-if="item.ybf == 1">
+                                        <td align="center">
+                                            <template v-if="item.needInputOri">
+                                                <input type="text" lay-verify="required" style="width: 30px;" class="layui-input-inline page-num org-fs" value="" maxlength="3">
+                                                <input type="hidden" class="layui-input-inline page-num copy-fs" value="" maxlength="3">
+                                            </template>
+                                            <template v-else>
+                                                -
+                                            </template>
+
+                                        </td>
+                                        <td align="center">
+                                            <template v-if="item.needInputOri && item.sfxytxzys == 1">
+                                                <input type="text" lay-verify="required" style="width: 30px;" class="layui-input-inline page-num org-zs" value="" maxlength="3">
+                                                <input type="hidden" class="layui-input-inline page-num copy-zs" value="" maxlength="3">
+
+                                            </template>
+                                            <template v-else>
+                                                -
+                                            </template>
+                                        </td>
+                                    </template>
+                                    <template v-else>
+                                        <td align="center"  >-</td><!--收取数量 总份数-->
+                                        <td align="center"  >-</td><!--收取数量 总页数-->
+                                    </template>
+
+                                    <td align="center" >{{item.zzjyqbx == '1'?'是':'否'}}</td>
+                                    <td align="center" >{{item.dsfsjly == '1'?'是':'否'}}</td>
+                                    <td align="center" >
+                                        <button type="button" @click="toUpload(item)" :class="'layui-btn layui-btn-sm layui-btn-normal upload-attach-btn upload-btn '+item.id">上传
+                                            <span class="file-num" style="color: red;"></span></button>
+                                        <input type="hidden" :class="'file-json '+item.id+'_materialCode'" value='' data-thirdList="">
+<!--                                        <template v-if="item.dsfsjly == '1'">-->
+<!--&lt;!&ndash;                                                <button type="button" class="layui-btn layui-btn-sm layui-btn-normal upload-license-btn upload-btn" ><span class="btnName">选择</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <span class="file-num" style="color: red;"></span></button>&ndash;&gt;-->
+<!--                                            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal check-thirdData-btn upload-btn">上传<span-->
+<!--                                                    class="file-num" style="color: red;"></span></button>-->
+<!--                                        </template>-->
+<!--                                        <template v-else-if="item.dsfsjly == '2'">-->
+<!--                                            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal check-thirdData-btn upload-btn">上传<span-->
+<!--                                                    class="file-num" style="color: red;"></span></button>-->
+<!--                                        </template>-->
+<!--                                        <template v-else-if="item.dsfsjly == '3'">-->
+<!--&lt;!&ndash;                                                <button type="button" class="layui-btn layui-btn-sm layui-btn-normal upload-shareMaterial-btn upload-btn" ><span class="btnName">选择</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <span class="file-num" style="color: red;"></span></button>&ndash;&gt;-->
+<!--                                            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal check-thirdData-btn upload-btn">上传<span-->
+<!--                                                    class="file-num" style="color: red;"></span></button>-->
+<!--                                        </template>-->
+<!--                                        <template v-else-if="item.dzbdlx == '1'">-->
+<!--                                            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal write-dzbdlx-btn upload-btn " >-->
+<!--                                                <label>{{ item.isFormFilled? '已填写' : '填写' }}</label>-->
+<!--                                            </button>-->
+<!--                                        </template>-->
+<!--                                        <template v-else-if="item.dzbdlx == '2'">-->
+<!--                                            <button type="button" class="thirdBdButton layui-btn layui-btn-sm layui-btn-normal third-dzbdlx-btn upload-btn " >-->
+<!--                                                <label class="thirdBdLabel">填写</label>-->
+<!--                                            </button>-->
+<!--                                        </template>-->
+<!--                                        <template v-else>-->
+<!--                                            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal upload-attach-btn upload-btn">上传</button>-->
+<!--                                        </template>-->
+                                    </td>
+                                </tr>
+                            </template>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div style="text-align: center;margin-top: 20px;">
+            <!--                @click="next"-->
+            <button type="button" lay-submit="" lay-filter="*" class="layui-btn layui-btn-normal" >保存并下一步</button>
+        </div>
+    </form>
+</div>
+</body>
+<script type="text/html" id="caozuoTpl">
+    <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="sreach">登记</button>
+</script>
+<script type="text/x-template" id="prefixRootTemplate">
+    {{# for(var i = 0; i < d.data.length; i++) { }}
+    {{# var condition = d.data[i]; }}
+    {{# if(condition.sjlx == '1'){ }}
+
+    {{# if(d.type == '1'){ }}
+    {{# var conditionIds = condition.id; }}
+    <div class="layui-card" >
+        <div>
+            <div class="layui-card-header ">
+                <span style="color:red">*</span>
+                {{= condition.name }}
+            </div>
+            <div class="layui-card-body" style="border-bottom: 1px solid rgb(246, 246, 246);">
+                <div class="layui-inline prefix" name="{{= condition.id+'_qx'}}">
+                    {{# for(var j = 0; j < condition.childs.length; j++) { }}
+                    {{# var item = condition.childs[j]; }}
+                    {{# var sfzz = item.sfzz?item.sfzz:'0'; }}
+                    <!--                            {{# var name = item.name.substring(0,60)+(item.name.length>60?"......":''); }}-->
+                    <!--                                    <input type="radio" lay-verify="otherReq" rootId="{{= condition.id}}" name="{{= condition.id+'_qx'}}" value="{{= item.id}}" lay-filter="prefix"  title="{{= item.name}}" >-->
+                    <input type="checkbox" class="prefixDa" sfzz="{{= sfzz}}"  rootId="{{= condition.id}}" name="{{= item.id+'_qx'}}" value="{{= item.id}}" lay-filter="prefix"  title="{{= item.name}}"  lay-skin="primary" >
+                    {{# } }}
+                </div>
+            </div>
+            <div id="{{= conditionIds+'_childContent'}}">
+            </div>
+        </div>
+    </div>
+    {{# }else{ }}
+    {{# var conditionIdss = condition.id; }}
+    <div class="layui-card-header"><span style="color:red">*</span>
+    </div>
+    <div class="layui-card-body" style="border-bottom: 1px solid rgb(246, 246, 246);">
+        <div class="layui-inline prefix" name="{{= condition.id+'_qx'}}">
+            {{# for(var j = 0; j < condition.childs.length; j++) { }}
+            {{# var item = condition.childs[j]; }}
+            {{# var sfzz = item.sfzz?item.sfzz:'0'; }}
+            <input type="checkbox" class="prefixDa" sfzz="{{= sfzz}}"  rootId="{{= condition.id}}" name="{{= item.id+'_qx'}}" value="{{= item.id}}" lay-filter="prefix"  title="{{= item.name}}"  lay-skin="primary" >
+
+            <!--                        <input type="radio" lay-verify="otherReq" rootId="{{= condition.id}}" name="{{= condition.id+'_qx'}}" value="{{= item.id}}" lay-filter="prefix"  title="{{= item.name}}" >-->
+            {{# } }}
+        </div>
+    </div>
+    <div id="{{= conditionIdss+'_childContent'}}"></div>
+    {{# } }}
+    {{# } }}
+    {{# } }}
+    {{# if(d.data.length <= 0 && d.type == '1'){ }}
+    <span>无数据</span>
+    {{# } }}
+</script>
+
+<script type="text/x-template" id="qztjRootTemplate">
+    {{# for(var i = 0; i < d.data.length; i++) { }}
+    {{# var condition = d.data[i]; }}
+    {{# if(condition.sjlx == '1'){ }}
+
+    {{# if(d.type == '1'){ }}
+    {{# var conditionId = condition.id; }}
+    <div class="layui-card" >
+        <div>
+            <div class="layui-card-header">
+                {{# if(condition.sfbx == '1'){ }}
+                <span style="color:red">*</span>
+                {{# } }}
+                {{= condition.name }}
+            </div>
+            <div class="layui-card-body" style="border-bottom: 1px solid rgb(246, 246, 246);">
+                <div class="qztj {{= condition.id+'_qx'}}" isbx="{{= condition.sfbx}}" type="{{= condition.sfdx == '0'?'radio':'checkbox'}}" name="{{= condition.id+'_qx'}}">
+                    {{# for(var j = 0; j < condition.childs.length; j++) { }}
+                    {{# var item = condition.childs[j]; }}
+                    {{# var sfzz = item.sfzz?item.sfzz:'0'; }}
+                    {{# var materialId = '' }}
+                    {{# if(item.childs && item.childs.length>0){ }}
+                    {{# for(var k = 0; k < item.childs.length; k++) { }}
+                    {{# if(item.childs[k].data){ }}
+                    {{# materialId += item.childs[k].data.id+',' }}
+                    {{# } }}
+                    {{# } }}
+                    {{# } }}
+                    {{# if(condition.sfdx == '0'){ }}
+
+                    {{# if(condition.sfbx == '1'){ }}
+                    <input type="radio" class="qztjDa" lay-verify="otherReq" sfzz="{{= sfzz}}" rootId="{{= condition.id}}" name="{{= condition.id+'_qx'}}" value="{{= item.id+(materialId?'_materialId_'+materialId:'')}}" lay-filter="qingxing"  title="{{= item.name}}" >
+                    {{# }else{ }}
+                    <input type="radio" class="qztjDa" sfzz="{{= sfzz}}"  rootId="{{= condition.id}}" name="{{= condition.id+'_qx'}}" value="{{= item.id+(materialId?'_materialId_'+materialId:'')}}" lay-filter="qingxing"  title="{{= item.name}}" >
+                    {{# } }}
+                    {{# } }}
+                    {{# if(condition.sfdx == '1'){ }}
+                    {{# if(condition.sfbx == '1'){ }}
+                    <input type="checkbox" class="qztjDa" sfzz="{{= sfzz}}" lay-verify="otherReq" rootId="{{= condition.id}}" name="{{= condition.id+'_qx_'+item.id}}" value="{{= item.id+(materialId?'_materialId_'+materialId:'')}}" lay-filter="qingxing"  title="{{= item.name}}"  lay-skin="primary" >
+                    {{# }else{ }}
+                    <input type="checkbox" class="qztjDa" sfzz="{{= sfzz}}" rootId="{{= condition.id}}" name="{{= condition.id+'_qx_'+item.id}}" value="{{= item.id+(materialId?'_materialId_'+materialId:'')}}" lay-filter="qingxing"  title="{{= item.name}}"  lay-skin="primary" >
+                    {{# } }}
+                    {{# } }}
+                    {{# } }}
+                </div>
+            </div>
+            {{# if(condition.sfdx == '0'){ }}
+            <div id="{{= conditionId+'_childContent'}}"></div>
+            {{# } }}
+            {{# if(condition.sfdx == '1'){ }}
+            {{# for(var j = 0; j < condition.childs.length; j++) { }}
+            {{# var item = condition.childs[j]; }}
+            <div id="{{= conditionId+'_childContent_'+item.id}}"></div>
+            {{# } }}
+            {{# } }}
+        </div>
+    </div>
+    {{# }else{ }}
+    <div class="layui-card-header">
+        {{# if(condition.sfbx == '1'){ }}
+        <span style="color:red">*</span>
+        {{# } }}
+        {{= condition.name }}
+    </div>
+    <div class="layui-card-body" style="border-bottom: 1px solid rgb(246, 246, 246);">
+        <div class="qztj {{= condition.id+'_qx'}}" isbx="{{= condition.sfbx}}" type="{{= condition.sfdx == '0'?'radio':'checkbox'}}" name="{{= condition.id+'_qx'}}">
+            {{# for(var j = 0; j < condition.childs.length; j++) { }}
+            {{# var item = condition.childs[j]; }}
+            {{# var sfzz = item.sfzz?item.sfzz:'0'; }}
+            {{# var materialId = '' }}
+            {{# if(item.childs && item.childs.length>0){ }}
+            {{# for(var k = 0; k < item.childs.length; k++) { }}
+            {{# if(item.childs[k].data){ }}
+            {{# materialId += item.childs[k].data.id+',' }}
+            {{# } }}
+            {{# } }}
+            {{# } }}
+            {{# if(condition.sfdx == '0'){ }}
+            {{# if(condition.sfbx == '1'){ }}
+            <input type="radio" class="qztjDa"  lay-verify="otherReq" sfzz="{{= sfzz}}" rootId="{{= condition.id}}" name="{{= condition.id+'_qx'}}" value="{{= item.id+(materialId?'_materialId_'+materialId:'')}}" lay-filter="qingxing"  title="{{= item.name}}" >
+            {{# }else{ }}
+            <input type="radio" class="qztjDa" sfzz="{{= sfzz}}"  rootId="{{= condition.id}}" name="{{= condition.id+'_qx'}}" value="{{= item.id+(materialId?'_materialId_'+materialId:'')}}" lay-filter="qingxing"  title="{{= item.name}}" >
+            {{# } }}
+            <!--                                <input type="radio" rootId="{{= condition.id}}" name="{{= condition.id+'_qx'}}" value="{{= item.id}}" lay-filter="qingxing"  title="{{= item.name}}" >-->
+            {{# } }}
+            {{# if(condition.sfdx == '1'){ }}
+            {{# if(condition.sfbx == '1'){ }}
+            <input type="checkbox" class="qztjDa" lay-verify="otherReq" sfzz="{{= sfzz}}" rootId="{{= condition.id}}" name="{{= condition.id+'_qx_'+item.id}}" value="{{= item.id+(materialId?'_materialId_'+materialId:'')}}" lay-filter="qingxing"  title="{{= item.name}}"  lay-skin="primary" >
+            {{# }else{ }}
+            <input type="checkbox" class="qztjDa" sfzz="{{= sfzz}}" rootId="{{= condition.id}}" name="{{= condition.id+'_qx_'+item.id}}" value="{{= item.id+(materialId?'_materialId_'+materialId:'')}}" lay-filter="qingxing"  title="{{= item.name}}"  lay-skin="primary" >
+            {{# } }}
+            {{# } }}
+            {{# } }}
+        </div>
+    </div>
+    {{# if(condition.sfdx == '0'){ }}
+    <div id="{{= condition.id+'_childContent'}}"></div>
+    {{# } }}
+    {{# if(condition.sfdx == '1'){ }}
+    {{# for(var j = 0; j < condition.childs.length; j++) { }}
+    {{# var item = condition.childs[j]; }}
+    <div id="{{= condition.id+'_childContent_'+item.id}}"></div>
+    {{# } }}
+    {{# } }}
+    {{# } }}
+    {{# } }}
+    {{# } }}
+
+    {{# if(d.data.length <= 0 && d.type == '1'){ }}
+    <span>无数据</span>
+    {{# } }}
+</script>
+
+<script type="text/x-template" id="qztjChildsRadio">
+    {{# for(var i = 0; i < d.childs.length; i++) { }}
+    {{#     var condition = d.childs[i]; }}
+    <input type="radio" name="qrzry" value="1" lay-filter="qingxing"  title="国内全日制普通高等教育学历人员" >
+    {{# } }}
+
+</script>
+<script type="text/x-template" id="materialTemplate">
+    {{# if($.isArray(d.materials) && d.materials.length > 0) { }}
+    {{# for(var i = 0; i < d.materials.length; i++) { }}
+    {{#     var material = d.materials[i]; }}
+    {{#     var licenses = d.licenses; }}
+    {{#     var isHaveLicense = material.dsfsjly == 1 && licenses && licenses.length > 0 ? true : false; }}
+    {{#     var isShare = material.dsfsjly == 2 ? true : false; }}
+    {{#     var isShareMaterial = material.dsfsjly == 3 ? true : false; }}
+    <!--纸质件是否必须-->
+    {{#     if(material.zzjyqbx != 1) { }}
+    {{#     material.yfs = ''; }}
+    {{#     material.ybf = ''; }}
+    {{#     material.fjbf = ''; }}
+    {{#     material.fjfs = ''; }}
+    {{#     } }}
+    {{#     var tmpOriginNum =  ''; }}
+    {{#     var tmpOriginPageNum =  ''; }}
+    {{#     var tmpCopyNum =  ''; }}
+    {{#     var tmpCopyPageNum =  ''; }}
+    {{#     var tmpFileJsonStr =  ''; }}
+    {{#     var tmpGuidJsonStr =  ''; }}
+    {{#     var tmpContent =  ''; }}
+    {{#     if(d.tmpMaterialData && d.tmpMaterialData[material.id]) { }}
+    {{#         var tmpData = d.tmpMaterialData[material.id]; }}
+    {{#         var tmpOriginNum = tmpData.originNum || ''; }}
+    {{#         var tmpOriginPageNum = tmpData.originPageNum || ''; }}
+    {{#         var tmpCopyNum = tmpData.copyNum || ''; }}
+    {{#         var tmpCopyPageNum = tmpData.copyPageNum || ''; }}
+    {{#         var tmpFileJsonStr = tmpData.fileJsonStr || ''; }}
+    {{#         var tmpGuidJsonStr = tmpData.guidJsonStr || ''; }}
+    {{#         var tmpContent = tmpData.content || material.FormContent || ''; }}
+    {{#     } }}
+    <tr class="item-material-info" data-id="{{= material.id }}" data-unsid="{{= material.unSid }}" data-ybf="{{= material.ybf}}" data-fjbf="{{= material.fjbf}}"
+        data-sfdzzz="{{= isHaveLicense ? '1' : '0' }}" data-sfgxpt="{{= isShare ? '1' : '0' }}" data-mid="{{= material.materialId}}"
+        data-dzbdlx="{{= material.dzbdlx}}" data-sfgxcl="{{= isShareMaterial ? '1' : '0' }}"
+        data-needInputCopy="{{material.needInputCopy}}" data-needInputOri="{{material.needInputOri}}"
+        data-fileSize="{{= material.fileSize || ''}}" data-fileExt="{{= material.fileExt || ''}}">
+
+        <td align="center">{{= (i+1) }}</td>
+        <td align="left"><span class="material-name">{{= material.filenameAlias? material.filenameAlias : material.materialName }}</span>
+        </td>
+        <!--收件要点-->
+        <td align="center" class="share-no">
+            {{# if(material.sjyd){ }}
+            <i style="color:#1E9FFF;cursor:pointer;" class="sjyd layui-icon layui-icon-tips icon-size-20 {{= material.sjyd? 'icon-search-blue tips-btn' : ''}}"></i>
+            {{# }else{ }}
+            <i style="cursor:pointer;" class="sjyd layui-icon layui-icon-tips icon-size-20 {{= material.sjyd? 'icon-search-blue tips-btn' : ''}}"></i>
+            {{# } }}
+            <input type="hidden" class="tips-data" value="{{= material.sjyd }}">
+        </td>
+        <!-- 收件样本 -->
+        <td align="center" class="share-no">
+            {{# if(material.sjydsAttachList && material.sjydsAttachList.length > 0) { }}
+            <i class="searchsjyd layui-icon layui-icon-search icon-size-20 icon-search-blue form-show-btn"
+               data-formtype="sjyd"></i>
+            <input type="hidden" class="form-data" value="{{= JSON.stringify(material.sjydsAttachList) }}">
+            {{# } else { }}
+            <i class="layui-icon layui-icon-search icon-size-20"></i>
+            {{# } }}
+        </td>
+        <!-- 是否容缺 -->
+        <td align="center" class="zcqy share-no" data-zcqy="{{= material.zcqy }}">{{= material.zcqy == 1? '是':'否' }}</td>
+        <input type="hidden" class="sfxytxzys" value="{{= material.sfxytxzys}}">
+
+        <!-- 纸质件是否必须 -->
+        <td align="center" class="iszzjyqbx" data-zzjyqbx="{{= material.zzjyqbx }}">{{= material.zzjyqbx == 1? '是':'否'
+            }}
+        </td>
+
+        <!--材料形式-->
+        <td align="center" colspan="2">
+            {{# if(material.ybf == 2) { }}
+            原件正本
+            {{# } else if(material.fjbf == 2) { }}
+            复印件
+            {{# }else if(material.ybf == 1){ }}
+            原件正本
+            {{# }else if(material.fjbf == 1){ }}
+            复印件
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+        <!-- 收/验 -->
+        <!-- TODO 临时处理，隐藏原有，采用新td显示 -->
+        {{# var syText = ''; }}
+        {{# if(material.ybf == 2) { }}
+        {{#   syText = '收'; }}
+        {{# } else if(material.fjbf == 2) { }}
+        {{#   syText = '收'; }}
+        {{#   if(material.orgCheck == 1) { }}
+        {{#       syText = '收(验原件)'; }}
+        {{#   } }}
+        {{# } else if(material.ybf == 1 || material.fjbf == 1) { }}
+        {{#       syText = '验'; }}
+        {{# } }}
+        <td align="center" colspan="2">{{= syText }}</td>
+        {{# if(material.ybf == 2) { }}
+        <td align="center" class="org-sy" colspan="2" style="display:none;">收</td>
+        <td align="center" class="copy-sy" colspan="2" style="display:none;">验</td>
+        {{# }else if(material.fjbf == 2){ }}
+        <td align="center" class="copy-sy" colspan="2" style="display:none;">收</td>
+        <td align="center" class="org-sy" colspan="2" style="display:none;">验</td>
+        {{# }else if(material.ybf == 1){ }}
+        <td align="center" class="org-sy" colspan="2" style="display:none;">验</td>
+        <td align="center" class="copy-sy" colspan="2" style="display:none;">验</td>
+        {{# }else if(material.fjbf == 1){ }}
+        <td align="center" class="copy-sy" colspan="2" style="display:none;">验</td>
+        <td align="center" class="org-sy" colspan="2" style="display:none;">验</td>
+        {{# }else { }}
+        <td align="center" class="org-sy" colspan="2" style="display:none;">-</td>
+        <td align="center" class="copy-sy" colspan="2" style="display:none;">-</td>
+        {{# } }}
+
+        <!-- 应收份数 -->
+        <td align="center"colspan="2">
+            {{# if(material.ybf == 2) { }}
+            <span class="org-num" data-num="{{= material.yfs }}">
+                    {{ material.oriNumDisplay?material.oriNumDisplay:1 }}
+                </span>
+            {{#} else if(material.fjbf == 2) { }}
+            <span class="copy-num" data-num="{{= material.fjfs }}" >
+                    {{ material.copyNumDisplay?material.copyNumDisplay:1 }}
+                </span>
+            {{# }else if(material.ybf == 1){ }}
+            <span class="org-num" data-num="{{= material.yfs }}">
+                    {{ material.oriNumDisplay?material.oriNumDisplay:1 }}
+                </span>
+            {{# }else if(material.fjbf == 1){ }}
+            <span class="copy-num" data-num="{{= material.fjfs }}" >
+                    {{ material.copyNumDisplay?material.copyNumDisplay:1 }}
+                </span>
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+
+        <!-- 收取数量 -->
+
+        {{# if(material.ybf == 2) { }}
+        <td align="center">
+            {{# if(material.needInputOri) { }}
+            <!-- 收 - 填写数量 -->
+            <input type="text" class="layui-input-inline page-num org-fs" value="{{= tmpOriginNum || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num copy-fs" value="{{= tmpCopyNum || '' }}" maxlength="3">
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+        <td align="center">
+            {{# if(material.needInputOri && material.sfxytxzys == 1) { }}
+            <!-- 收 - 填写数量 -->
+            <input type="text" class="layui-input-inline page-num org-zs" value="{{= tmpOriginPageNum || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num copy-zs" value="{{= tmpCopyPageNum  || '' }}" maxlength="3">
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+        {{#} else if(material.fjbf == 2) { }}
+        <td align="center">
+            {{# if(material.needInputCopy) { }}
+            <!-- 收 - 填写数量 -->
+            <input type="text" class="layui-input-inline page-num copy-fs" value="{{= tmpCopyNum || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num org-fs" value="{{= tmpOriginNum || '' }}" maxlength="3">
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+        <td align="center">
+            {{# if(material.needInputCopy && material.sfxytxzys == 1) { }}
+            <!-- 收 - 填写数量 -->
+            <input type="text" class="layui-input-inline page-num copy-zs" value="{{= tmpCopyPageNum  || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num org-zs" value="{{= tmpOriginPageNum || '' }}" maxlength="3">
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+        {{# }else if(material.ybf == 1){ }}
+        <td align="center">
+            {{# if(material.needInputOri) { }}
+            <!-- 收 - 填写数量 -->
+            <input type="text" class="layui-input-inline page-num org-fs" value="{{= tmpOriginNum || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num copy-fs" value="{{= tmpCopyNum || '' }}" maxlength="3">
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+        <td align="center">
+            {{# if(material.needInputOri && material.sfxytxzys == 1) { }}
+            <!-- 收 - 填写数量 -->
+            <input type="text" class="layui-input-inline page-num org-zs" value="{{= tmpOriginPageNum || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num copy-zs" value="{{= tmpCopyPageNum  || '' }}" maxlength="3">
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+        {{# }else if(material.fjbf == 1){ }}
+        <td align="center">
+            {{# if(material.needInputCopy) { }}
+            <!-- 收 - 填写数量 -->
+            <input type="text" class="layui-input-inline page-num copy-fs" value="{{= tmpCopyNum || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num org-fs" value="{{= tmpOriginNum || '' }}" maxlength="3">
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+        <td align="center">
+            {{# if(material.needInputCopy && material.sfxytxzys == 1) { }}
+            <!-- 收 - 填写数量 -->
+            <input type="text" class="layui-input-inline page-num copy-zs" value="{{= tmpCopyPageNum  || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num org-zs" value="{{= tmpOriginPageNum || '' }}" maxlength="3">
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+        {{# } else { }}
+        <td align="center">
+            <input type="hidden" class="layui-input-inline page-num copy-fs" value="{{= tmpCopyNum || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num org-fs" value="{{= tmpOriginNum || '' }}" maxlength="3">
+            -
+        </td>
+        <td align="center">
+            <input type="hidden" class="layui-input-inline page-num copy-zs" value="{{= tmpCopyPageNum || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num org-zs" value="{{= tmpOriginPageNum || '' }}" maxlength="3">
+            -
+        </td>
+        {{# } }}
+
+
+        <!-- 电子件是否必须 -->
+        <td align="center" class="isdzjyqbx" data-dzjyqbx="{{= material.dzjyqbx }}">{{= material.dzjyqbx == 1? '是':'否'
+            }}
+        </td>
+        <!--是否具备电子证照-->
+        <td align="center">
+            {{= isHaveLicense ? '是' : '否' }}
+        </td>
+        <!--上传附件, 模式3下的二次跳转不显示上传按钮-->
+        <td align="center" class="upload-td share-no-s" >
+            {{# if(isHaveLicense) { }}
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal upload-license-btn upload-btn" data-content="{{=JSON.stringify(licenses) }}"><span class="btnName">选择</span>
+                <span class="file-num" style="color: red;"></span></button>
+            <input type="hidden" class="file-json">
+            {{# } else if(isShare){ }}
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal check-thirdData-btn upload-btn">上传<span
+                    class="file-num" style="color: red;"></span></button>
+            <input type="hidden" class="file-json" value='[]' data-thirdList="">
+            {{# } else if(isShareMaterial){ }}
+            <!--            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal upload-shareMaterial-btn upload-btn" data-uniqueConnectId = {{= material.uniqueConnectId}}><span class="btnName">选择</span>-->
+            <!--                <span class="file-num" style="color: red;"></span></button>-->
+            <!--            <input type="hidden" class="file-json" value=''>-->
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal check-thirdData-btn upload-btn">上传<span
+                    class="file-num" style="color: red;"></span></button>
+            <input type="hidden" class="file-json" value='[]' data-thirdList="">
+            {{# } else if(material.dzbdlx == 1){ }}
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal write-dzbdlx-btn upload-btn {{= tmpContent? 'pass' : 'fail'}}" data-content="{{= tmpContent? JSON.stringify(tmpContent) : '' }}">
+                <label>{{= tmpContent || material.isFormFilled? '已填写' : '填写' }}</label>
+            </button>
+
+            <input type="hidden" class="formState" value='{{= material.formState}}' >
+            <input type="hidden" class="tbid" value='{{= material.dzbdid}}' >
+            {{# } else if(material.dzbdlx == 2){ }}
+            <button type="button" class="thirdBdButton layui-btn layui-btn-sm layui-btn-normal third-dzbdlx-btn upload-btn {{= tmpContent? 'pass' : 'fail'}}" data-content="{{= tmpContent? JSON.stringify(tmpContent) : '' }}">
+                <label class="thirdBdLabel">填写</label>
+            </button>
+
+            <input type="hidden" class="formState" value='{{= material.formState}}' >
+            <input type="hidden" class="tbid" value >
+            <input type="hidden" class="dzbddz" value='{{= material.dzbddz}}' >
+            {{# } else { }}
+            {{#   var tmpFileNum = ''; }}
+            {{#   if(tmpFileJsonStr) { }}
+            {{#       var tmpFileLength = JSON.parse(tmpFileJsonStr).length || ''; }}
+            {{#       if(tmpFileLength) { }}
+            {{#           tmpFileNum = '(' + tmpFileLength + ')'; }}
+            {{#       } }}
+            {{#   } else { }}
+            {{#       tmpFileJsonStr = '[]'; }}
+            {{#   } }}
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal upload-attach-btn upload-btn">上传<span
+                    class="file-num" style="color: red;">{{= tmpFileNum || '' }}</span></button>
+            <input type="hidden" class="file-json" value='{{= tmpFileJsonStr || "[]" }}'>
+            {{# } }}
+            <input type="hidden" class="guid-json" value=''>
+        </td>
+    </tr>
+    {{# } }}
+    {{# } else { }}
+    <tr>
+        <td colspan="17" style="text-align: center;">无数据</td>
+    </tr>
+    {{# } }}
+
+</script>
+<!-- th:inline="none"-->
+<script  th:inline="javascript" >
+
+    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+    var itemId = [[${itemId}]];
+
+    var itemList = [[${itemList}]];
+
+    var onethingItem = [[${onethingItem}]];
+
+    var matter = [[${matter}]];
+
+    var materialIdStr = [[${materialId}]];
+
+    var materialItemId = [[${materialItemId}]];
+
+    console.log(itemId);
+    console.log(itemList);
+    console.log(onethingItem);
+    console.log(matter);
+    console.log(materialIdStr);
+    console.log("材料对应的事项ID"+materialItemId);
+
+
+
+    if(!itemId){
+
+        console.log('获取一件事ID失败，请重试！！！');
+    }
+
+    // var notPassPre = true;
+    //
+    // if(itemId == 'ff8080816dd7ef4a016ded9734320011'){
+    //     notPassPre = false;
+    // }
+    //
+    // if(itemId == 'ff8080816cb6dcad016cb72e02a104c6'){
+    //     onethingItem = JSON.parse('{"code":1,"msg":"操作成功","data":{"createTime":1576460094000,"id":"ff8080816ef91832016f0c580a4e7f1e","version":"4","sffqx":"1","situationData":[{"id":"ff8080816ef91832016f0c580bce7fb7","name":"新生儿入户","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"e4267e3a415c4ba6bdae74f5cda44a22","childs":[{"id":"ff8080816ef91832016f0c580bc97f44","name":"父母是否东莞户籍？","status":"1","sfbx":"1","sfdx":"0","sjlx":"1","sfzz":"0","unSid":"bf3d2079b36f4eaaa137834c4b7e42ba","childs":[{"id":"ff8080816ef91832016f0c580bc97f45","name":"非东莞户籍","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"39fc1e080e9c4d2493e686134d4ad790","childs":[{"id":"ff8080816ef91832016f0c580bc97f46","name":"父母双方是否在莞从事","status":"1","sfbx":"1","sfdx":"0","sjlx":"1","sfzz":"0","unSid":"c5965ba2a54f466ca292cd36bd8ff886","childs":[{"id":"ff8080816ef91832016f0c580bc97f47","name":"是","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"e13151ba2d8c4c6ca26c507285f7cbd3","childs":[]},{"id":"ff8080816ef91832016f0c580bc97f49","name":"否","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"e98693b3e4ca4f3d984af13b58e65637","childs":[]}]}]},{"id":"ff8080816ef91832016f0c580bc97f51","name":"东莞户籍","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"1cc6e1ac59cb46a18bfd9d38b21c73b2","childs":[]}]},{"id":"ff8080816ef91832016f0c580bca7f6b","name":"是否是一孩登记？","status":"1","sfbx":"1","sfdx":"0","sjlx":"1","sfzz":"0","unSid":"418299c931484d92a60ba88aa4046b3f","childs":[{"id":"ff8080816ef91832016f0c580bca7f6c","name":"是","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"d61e60b594d647c3bf0f4a9e7c255e9f","childs":[]},{"id":"ff8080816ef91832016f0c580bcd7fa0","name":"否","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"e29c0e7d82474882b0e5858852583736","childs":[]}]}]}]}}');
+    // }
+
+
+    var onethingItemList = {id:itemId,childs:[]};
+    var materialMainList = [];
+
+    if(onethingItem && onethingItem.length>0){
+
+        for(var i=0;i<onethingItem.length;i++){
+
+            for(var j=0;j<onethingItem[i].situationData[0].childs.length;j++){
+                onethingItemList.childs.push(onethingItem[i].situationData[0].childs[j]);
+            }
+
+            for(var j=0;j<onethingItem[i].materialMainList.length;j++){
+                var itemId = onethingItem[i].itemInfo.itemId;
+                onethingItem[i].materialMainList[j].itemId = itemId;
+                materialMainList.push(onethingItem[i].materialMainList[j]);
+            }
+
+
+        }
+
+        // onethingItemList = onethingItem.data;
+    }
+    console.log("获取全部事项情形数组——————",onethingItemList);
+    console.log("获取全部事项情形材料数组——————",materialMainList);
+    var prefixDataList = {id:itemId,childs:[]};
+
+    if(onethingItem && onethingItem.length>0){
+
+        for(var i=0;i<onethingItem.length;i++){
+            if(onethingItem[i].prefixData && onethingItem[i].prefixData.length>0){
+                for(var j=0;j<onethingItem[i].prefixData[0].childs.length;j++){
+                    prefixDataList.childs.push(onethingItem[i].prefixData[0].childs[j]);
+                }
+            }
+
+
+        }
+        // onethingItemList = onethingItem.data;
+    }
+
+
+
+
+
+    console.log("获取全部事项前置条件——————",prefixDataList);
+
+    function getItemChild(id,item){
+
+        if(item.sfbx == '0' && item.sjlx == '1'){
+            console.log("---------"+item.name)
+        }
+
+        if(item.sfdx == '1' && item.sjlx == '1'){
+            console.log("+++++++++"+item.name)
+        }
+
+        if(item.id == id){
+            return item.childs;
+        }else{
+            var arr = [];
+            for(var i=0;i<item.childs.length;i++){
+                var childs  = item.childs[i];
+                var arrs = [];
+                if(childs.childs && childs.childs.length>0){
+                    arrs = getItemChild(id,childs)
+                }
+                if(arrs && arrs.length>0){
+                    return arrs;
+                }
+            }
+            return arr;
+        }
+    }
+
+    //根据选择情形得到的材料ID容器
+    var materialId = [];
+    //根据选择情形得到的材料信息容器
+    var materialIdList = [];
+
+    if(materialIdStr){
+        materialId = materialIdStr.split(",");
+    }
+
+    console.log("获取材料ID数组——---",materialId);
+
+    var indexApp = new Vue({
+        el: '#indexApp',
+        data: {
+            pre_handle:{notDgHj:false,notXsfz:false},
+            qrzry:"1",
+            matter:matter,
+            isPassPre:false,
+            changeprefix:'',
+            changeqztj:'',
+            itemList:itemList,
+            materialId:materialId,
+            materialItemId:{},
+            materialList:[],
+            isPass:true,
+            zzjyqlx:{
+                "1":"原件",
+                "2":"复印件",
+                "3":"电子版",
+            }
+        },
+        // beforeMount: function () {
+        //     this.$nextTick(function () {
+        //         form.render();
+        //     })
+        // },
+
+        mounted: function(){
+            if(materialMainList && materialMainList.length>0){
+                this.materialList = [];
+                //找出通用材料
+                for(var j=0;j<materialMainList.length;j++){
+                    // console.log("………………………………",materialMainList[i].id);materialMainList[j].tycl == '1' &&
+                    if(this.materialId.indexOf(materialMainList[j].id)>=0){
+                        this.materialList.push(materialMainList[j]);
+                        this.materialId.push(materialMainList[j].id);
+                    }
+                }
+                //组装材料数组
+                // for(var i=0;i<this.materialId.length;i++){
+                //     for(var j=0;j<materialMainList.length;j++){
+                //         // console.log("………………………………",materialMainList[i].id);
+                //         if(this.materialId[i] == materialMainList[j].id && materialMainList[j].tycl != '1'){
+                //             this.materialList.push(materialMainList[j]);
+                //         }
+                //         continue;
+                //     }
+                // }
+
+                //处理材料对应的事项ID
+                for(var j=0;j<materialMainList.length;j++){
+
+                    if(this.materialId.indexOf(materialMainList[j].id)>=0){
+
+                        if(this.materialItemId[materialMainList[j].id]){
+                            this.materialItemId[materialMainList[j].id] = this.materialItemId[materialMainList[j].id] + ',' +materialMainList[j].itemId
+                        }else {
+                            this.materialItemId[materialMainList[j].id] = materialMainList[j].itemId
+
+                        }
+                    }
+
+                }
+
+
+
+                console.log("得到情形材料为++++++++",this.materialList);
+                console.log("得到情形材料对应的事项ID++++++++",this.materialItemId);
+
+                // this.$nextTick(function () {
+                    // initMaterial({materials:this.materialList});
+                    this.handleMaterial();
+                // })
+
+            }
+        },
+        updated: function () {
+            this.$nextTick(function () {
+
+                if(form){
+                    form.render();
+                }
+
+                if(element){
+                    element.init();
+                }
+
+            })
+        },
+        computed: {
+            ifPrefix: function (){
+                if(prefixDataList && prefixDataList.childs && prefixDataList.childs.length>0){
+
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        },
+        methods: {
+            toUpload: function(item){
+                // var materialCode = $('.'+item.id+'_materialCode').val();
+                // console.log("已经上传的文件code-------",materialCode);
+                // console.log("已经上传的文件code-------",item);
+                // console.log("已经上传的文件code-------",this.materialItemId);
+
+                layer.open({
+                    type: 2,
+                    title: item.filenameAlias?item.filenameAlias:item.materialName,
+                    shade: 0.5,
+                    maxmin: true,
+                    area: ['90%', '90%'],
+                    content: '/register/toMaterialFile.do?itemId='+this.materialItemId[item.id]+'&materialId='+item.id+'&materialName='+(item.filenameAlias?item.filenameAlias:item.materialName)+'&materialCode='+item.id //iframe的url
+                    // content: '/register/toRegister.do?itemId='+data.matterCode //iframe的url
+                    // content: '/register/toRegisterIndex.do?formPage=material&itemId='+data.matterCode+'&itemIdArr=11441900007331881C3442106100010'
+                    // content: '/register/toRegisterIndex.do?formPage=material&itemId=ff8080816dd7ef4a016ded9734320011&itemIdArr=11441900MB2C8994323442111386000,11441900007331881C3442106100010&materialId=ff8080816f4086f3016f54d063cc1367,ff8080816f4086f3016f54d063e6136f,ff8080816f4086f3016f54d063c81366,ff8080816f4086f3016f54d063b51361,ff8080816f4086f3016f54d063ed1372,ff8080816f4086f3016f54d063c01364,ff8080816f4086f3016f54d063ed1373,ff8080816f4086f3016f54d063e5136e,ff8080816f4086f3016f54d063ad135f,ff8080816f4086f3016f54d063a9135e,ff8080816f657624016f852d88a519a1,ff8080816f4086f3016f54d06361134c'
+
+                });
+            },
+            //获取纸质验/收
+            getYjys: function(item){
+                var syText = '';
+                if(item.ybf == 2) {
+                    syText = '收';
+                }else if(item.fjbf == 2) {
+                    syText = '收';
+                    if(item.orgCheck == 1) {
+                        syText = '收(验原件)';
+                    }
+                } else if(item.ybf == 1 || item.fjbf == 1) {
+                    syText = '验';
+                }
+                return syText;
+            },
+            //获取纸质材料形式
+            getZzjyqlx: function(item){
+                if(item.ybf == 2) {
+                    return "原件正本";
+                }else if(item.fjbf == 2) {
+                    return "复印件";
+                }else if(item.ybf == 1){
+                    return "原件正本";
+                }else if(item.fjbf == 1){
+                    return "复印件";
+                } else {
+                    return "-";
+                }
+            },
+            //预览材料样本
+            checkPhoto: function(item,title,id){
+                console.log(item);
+                if (item.ybslAttachList && item.ybslAttachList.length > 0) {
+
+                    var title = title || '图片预览';
+                    var id = id || '';
+                    var start = 0;
+                    var json = {title: title, id: id, start: start, data: []}
+                    for (var i in item.ybslAttachList) {
+                        var data = item.ybslAttachList[i];
+                        var src = "/register/downloadFile?id="+ data.path ; //原图地址
+                        var photo = {alt: data.name, pid: "", src: src};
+                        json.data.push(photo);
+                    }
+                    layer.photos({
+                        photos: json
+                        , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                    });
+                } else {
+                    layui.layer.msg('没有相关数据');
+                }
+            },
+            //查看材料要点弹框
+            mouseOver: function(text,event){
+                console.log("1231")
+                layer.tips(text, event.target, {
+                    tips: [1, '#01aaed'],
+                    time: 4000
+                });
+            },
+            next:function(){
+
+                parent.layer.close(index);
+
+                parent.layer.open({
+                    type: 2,
+                    title: '本科生入户事项办理',
+                    shadeClose: false,
+                    shade: 0.5,
+                    maxmin: true,
+                    area: ['90%', '90%'],
+                    content: '/register/tohjApplyTable.do' //iframe的url
+                });
+
+            },
+            handleMaterial: function(){
+                for (var i = 0; i < this.materialList.length; i++) {
+                    var material = this.materialList[i];
+                    // TODO
+                    // 原件是收，取消复印件的配置
+                    // 原件是验，如果复印件有配置，复印件生效，取消原有字段，使用新字段
+                    // 原件是无，复印件的配置生效，取消原有字段
+                    if(material.ybf == 2) {
+                        material.fjbf = 0;
+                        material.fjfs = '';
+                    } else if(material.ybf == 1) {
+                        if(material.fjbf == 1 || material.fjbf == 2) {
+                            material.ybf = 0;
+                            material.yfs = '';
+                            material.orgCheck = 1;
+                            material.yfsSftxsl = '';
+                        }
+                    } else {
+                        material.ybf = 0;
+                        material.yfs = '';
+                    }
+
+                    //db里没有默认值
+                    //复印件数是否是空的, 注意 "" == 0, false == 0 是true
+                    var isCopyNumEmpty = material.fjfs === null || material.fjfs === undefined;
+                    material.copyNumDisplay = isCopyNumEmpty? '-' : ("" + material.fjfs);
+                    //复印件张数同分数是否需要显示input框
+                    material.needInputCopy = (material.fjfsSftxsl === '1' || material.fjbf == 2) && !isCopyNumEmpty &&
+                        material.copyNumDisplay !== '0';
+
+                    //原件数是否是空的, 注意 "" == 0, false == 0 是true
+                    var isOriNumEmpty = material.yfs === null || material.yfs === undefined;
+                    material.oriNumDisplay = isOriNumEmpty? '-' : ("" + material.yfs);
+                    //原件张数同分数是否需要显示input框
+                    material.needInputOri = (material.yfsSftxsl === '1' || material.ybf == 2) && !isOriNumEmpty &&
+                        material.oriNumDisplay !== '0';
+                    //当预约办理时候, 如果有填写过表单, savedMaterialForm: { tbid : rowid }
+
+                }
+            }
+        },
+        watch: {
+            isPassPre: function (val, oldVal) {
+                console.log("34342342342424");
+                if(val){
+                    this.$nextTick(function () {
+                        if(onethingItemList && onethingItemList.childs ){
+                            initQztj(onethingItemList.childs);
+                            form.render();
+                        }
+                        if(materialMainList && materialMainList.length>0){
+                            this.materialList = [];
+                            for(var i=0;i<materialMainList.length;i++){
+                                if(materialMainList[i].tycl == '1' && this.materialId.indexOf(materialMainList[i].id)<0){
+                                    this.materialId.push(materialMainList[i].id)
+                                    this.materialList.push(materialMainList[i]);
+                                }
+
+                                if(materialMainList[i].tycl == '1'){
+                                    if(this.materialItemId[materialMainList[i].id]){
+                                        this.materialItemId[materialMainList[i].id] = this.materialItemId[materialMainList[i].id] + ',' +materialMainList[i].itemId
+                                    }else {
+                                        this.materialItemId[materialMainList[i].id] = materialMainList[i].itemId
+
+                                    }
+                                }
+                            }
+
+
+                            this.$nextTick(function () {
+                                // initMaterial({materials:this.materialList});
+                                this.handleMaterial();
+                            })
+
+                        }
+                    })
+                }else{
+                    this.materialId = [];
+                }
+            },
+            //点击选择回答前置条件问题时触发，遍历前置条件是否全部回答并没有触发终止的条件就认为是通过前置条件
+            changeprefix: function (val, oldVal) {
+                console.log("11111111111");
+                // if(val){
+                var check = checkPrefix();
+                console.log("11111111111     ",check);
+                if(check){
+                    this.$nextTick(function () {
+                        if(onethingItemList && onethingItemList.childs ){
+                            initQztj(onethingItemList.childs);
+                            form.render();
+                        }
+                    })
+                    this.isPassPre = true;
+                }else{
+                    this.isPassPre = false;
+
+                }
+                // }
+            },
+            //点击选择回答情形问题，遍历情形是否已经全部选择，并同时找出渲染的材料列表
+            changeqztj: function (val, oldVal) {
+                console.log("22222222222");
+                // if(val){
+                var check = checkQztj();
+                console.log("22222222222",check);
+                this.isPass = check;
+                var data1 = form.val("registerForm");
+                console.log("333333",data1);
+                this.materialId = [];
+                this.materialList = [];
+                this.materialItemId = {};
+                for(key in data1){
+
+                    if(key.indexOf("_qx")>=0){
+
+                        if(data1[key].indexOf("_materialId_")>=0){
+
+                            var arr = data1[key].split("_materialId_")[1].split(",");
+
+                            for(var i=0;i<arr.length;i++){
+
+                                // if(this.materialItemId[arr[i]]){
+                                //     this.materialItemId[arr[i]] = this.materialItemId[arr[i]]+','+
+                                // }
+                                if(arr[i] && this.materialId.indexOf(arr[i])<0){
+                                    this.materialId.push(arr[i]);
+                                }
+                            }
+
+
+                        }
+
+                    }
+                }
+
+                console.log("得到的材料ID为++++++++",this.materialId);
+                for(var j=0;j<materialMainList.length;j++){
+                    // console.log("………………………………",materialMainList[i].id);
+                    if(materialMainList[j].tycl == '1' && this.materialId.indexOf(materialMainList[j].id)<0){
+                        this.materialList.push(materialMainList[j]);
+                        this.materialId.push(materialMainList[j].id);
+                    }
+                }
+                for(var i=0;i<this.materialId.length;i++){
+                    for(var j=0;j<materialMainList.length;j++){
+                        // console.log("………………………………",materialMainList[i].id);
+                        if(this.materialId[i] == materialMainList[j].id && materialMainList[j].tycl != '1'){
+                            this.materialList.push(materialMainList[j]);
+                        }
+                        continue;
+                    }
+                }
+
+                for(var j=0;j<materialMainList.length;j++){
+
+                    if(this.materialId.indexOf(materialMainList[j].id)>=0){
+
+                        if(this.materialItemId[materialMainList[j].id]){
+                            this.materialItemId[materialMainList[j].id] = this.materialItemId[materialMainList[j].id] + ',' +materialMainList[j].itemId
+                        }else {
+                            this.materialItemId[materialMainList[j].id] = materialMainList[j].itemId
+
+                        }
+                    }
+
+                }
+
+
+
+                console.log("得到情形材料为++++++++",this.materialList);
+                console.log("得到情形材料对应的事项ID++++++++",this.materialItemId);
+                this.handleMaterial();
+                // initMaterial({materials:this.materialList})
+                // if(check){
+                //     this.$nextTick(function () {
+                //         if(onethingItemList && onethingItemList.childs ){
+                //             initQztj(onethingItemList.childs);
+                //             form.render();
+                //         }
+                //     })
+                //     this.isPassPre = true;
+                // }else{
+                //     this.isPassPre = false;
+                //
+                // }
+                // }
+            },
+        }
+    })
+
+
+    layui.config({
+        version: '1575889601624' //为了更新 js 缓存，可忽略
+    });
+    var element,form,laytpl,$;
+    layui.use(['form','element','laytpl'], function(){
+        laytpl = layui.laytpl;
+        element = layui.element;
+        form= layui.form;
+        $ = layui.$;
+
+
+
+        //渲染一级情形
+        window.initQztj = function initQztj(data){
+            //渲染情形
+            var getTpl = qztjRootTemplate.innerHTML
+                ,view = document.getElementById('qztj');
+            laytpl(getTpl).render({data:data,type:'1'}, function(html){
+                view.innerHTML = html;
+                form.render();
+            });
+        }
+
+        //渲染前置条件情形
+        window.initPrefix = function initPrefix(data){
+
+            var getTpl = prefixRootTemplate.innerHTML
+                ,view = document.getElementById('prefix');
+            laytpl(getTpl).render({data:data,type:'1'}, function(html){
+                view.innerHTML = html;
+                form.render();
+            });
+        }
+
+        //初始化渲染材料表格
+        window.initMaterial = function initMaterial(data){
+
+            var getTpl = materialTemplate.innerHTML
+                ,view = document.getElementById('material-detail');
+            laytpl(getTpl).render(data, function(html){
+                view.innerHTML = html;
+                form.render();
+                //上传的附件展示
+                $(document).delegate('.sjyd', 'mouseover', function() {
+                    console.log("%%%5");
+                    console.log("1231");
+                    var text = $(this).next(".tips-data").val();
+                    layer.tips(text, $(this), {
+                        tips: [1, '#01aaed'],
+                        time: 4000
+                    });
+                });
+
+                $(document).delegate('.searchsjyd', 'click', function() {
+                    console.log("%%%5");
+                    console.log("1231");
+                    var text = $(this).next(".tips-data").val();
+                    layer.tips(text, $(this), {
+                        tips: [1, '#01aaed'],
+                        time: 4000
+                    });
+                });
+
+
+
+                // $(document).delegate('.sjyd', 'mouseout', function() {
+                //     layer.closeAll('tips');
+                // });
+
+
+            });
+        }
+
+        window.checkPrefix = function checkPrefix(){
+            var flag = true;
+            // $(".prefix").each(function(){
+            //     console.log($(this).attr("name"));
+            //     var name = $(this).attr("name");
+            //     flag = $("input[name='"+name+"']:checked").val();
+            //     if(!flag){
+            //         flag = false;
+            //     }
+            // });
+
+            // console.log("&&&&&&&&&&&&&",$(".prefix").length)
+
+            $(".prefix").each(function(){
+                var isCheck = false;
+                $(this).children(".prefixDa").each(function() {
+                    // console.log("~~~~~~~~~~",$(this).is(':checked'))
+                    // console.log("当前选择前置节点是否终止————————",$(this).attr('sfzz'))
+                    if($(this).attr('sfzz') == '1'){
+                        if($(this).is(':checked')){
+                            flag = false;
+                        }
+                    }
+                    if($(this).is(':checked')){
+                        isCheck = true;
+                    }
+                })
+
+                if(!isCheck){
+                    flag = false;
+                }
+
+                // console.log($(this).attr("name"));
+                // var name = $(this).attr("name");
+                // flag = $("input[name='"+name+"']").is(':checked');
+                //
+                // console.log("!!!!!!!!!!!!",$("input[name='"+name+"']").is(':checked'));
+                // if(!flag){
+                //     flag = false;
+                // }
+            });
+
+
+
+
+            // if($(this).children(".qztjDa")){
+            //     var isCheck = false;
+            //     $(this).children(".qztjDa").each(function() {
+            //         console.log("~~~~~~~~~~",$(this).is(':checked'))
+            //         if($(this).is(':checked')){
+            //             isCheck = true;
+            //         }
+            //     })
+            //     if(!isCheck){
+            //         flag = false;
+            //     }
+            // }
+
+
+            return flag;
+        }
+
+
+        window.checkQztj = function checkQztj(){
+            var flag = true;
+            $(".qztj").each(function(){
+                var qztjtype = $(this).attr("type");
+                var isbx = $(this).attr("isbx");
+                console.log("@@@@@@@@@@@@@@@------",$(this).attr("type"));
+                if(qztjtype == 'radio'){
+
+
+                    var name = $(this).attr("name");
+                    var val = $("input[name='"+name+"']:checked").val();
+                    var verifyElem = $('input[name='+name+']');
+                    // console.log("@@@@@@@@@@@@@@@------",verifyElem.attr("type"));
+                    var sfzz = $("input[name='"+name+"']:checked").attr("sfzz");
+
+                    if(isbx == '0'){
+
+                        if(val && sfzz == "1"){
+                            flag = false;
+                        }
+
+                        return true;
+                    }
+
+                    if(!val){
+                        flag = false;
+                    }else{
+                        console.log("asdjajdsjajds",sfzz == "1")
+                        if(sfzz == "1"){
+                            flag = false;
+                        }
+                    }
+                }else{
+                    if(isbx == '0'){
+                        return true;
+                    }
+
+                    if($(this).children(".qztjDa")){
+                        var isCheck = false;
+                        $(this).children(".qztjDa").each(function() {
+                            console.log("~~~~~~~~~~",$(this).is(':checked'))
+                            if($(this).is(':checked')){
+                                isCheck = true;
+                            }
+                        })
+                        if(!isCheck){
+                            flag = false;
+                        }
+                    }
+                }
+
+            });
+
+            return flag;
+        }
+
+        //初始化是如果存在前置条件就渲染
+        // if(indexApp.ifPrefix){
+        //     initPrefix(prefixDataList.childs);
+        //     form.render();
+        // }else{
+        //     if(onethingItemList && onethingItemList.situationData && onethingItemList.situationData[0]){
+        //         initQztj(onethingItemList.situationData[0].childs);
+        //         form.render();
+        //     }else{
+        //         initQztj([]);
+        //         form.render();
+        //     }
+        // }
+        //渲染前置条件下一级情形
+        window.initChildPrefix = function initChildPrefix(parentid,data,type){
+
+            var getTpl = qztjRootTemplate.innerHTML
+                ,view = document.getElementById(type);
+            if(view){
+                laytpl(getTpl).render({data:data,type:'2'}, function(html){
+                    view.innerHTML = html;
+                    form.render();
+
+                });
+            }
+
+        }
+
+        //渲染下一级情形
+        window.initChildQztj = function initChildQztj(parentid,data,type){
+
+            var getTpl = qztjRootTemplate.innerHTML
+                ,view = document.getElementById(type);
+            laytpl(getTpl).render({data:data,type:'2'}, function(html){
+                view.innerHTML = html;
+                form.render();
+            });
+        }
+
+
+
+        form.on('checkbox(pre_handle)', function(data){
+
+            var name = layui.$(data.elem).attr('name');
+            indexApp.pre_handle[name] = data.elem.checked;
+            console.log(indexApp.pre_handle);
+
+        });
+
+        form.verify({
+            otherReq: function(value,item){
+                var $ = layui.$;
+                var verifyName=$(item).attr('name')
+                    ,verifyType=$(item).attr('type')
+                    ,formElem=$(item).parents('.layui-form')//获取当前所在的form元素，如果存在的话
+                    ,verifyElem=formElem.find('input[name='+verifyName+']')//获取需要校验的元素
+                    ,isTrue= verifyElem.is(':checked')//是否命中校验
+                    ,focusElem = verifyElem.next().find('i.layui-icon');//焦点元素
+                console.log("&&&&&&&&&&&&&&&",verifyType)
+                if(!isTrue || !value){
+                    //定位焦点
+                    if(verifyType=='radio'){
+                        focusElem.css(verifyType=='radio'?{"color":"#FF5722"}:{"border-color":"#FF5722"});
+                        //对非输入框设置焦点
+                        focusElem.first().attr("tabIndex","1").css("outline","0").blur(function() {
+                            focusElem.css(verifyType=='radio'?{"color":""}:{"border-color":""});
+                        }).focus();
+                        return '必填项不能为空';
+                    }else{
+                        var data1 = form.val("registerForm");
+                        var flag = false;
+                        for(key in data1) {
+                            if(key.indexOf(verifyElem.attr('rootid'))>=0){
+                                flag = true;
+                            }
+                        }
+                        if(!flag) {
+                            // console.log("!!!!!",focusElem)
+                            $("."+verifyElem.attr('rootid')+"_qx .layui-icon").css(verifyType=='radio'?{"color":"#FF5722"}:{"border-color":"#FF5722"});
+                            // focusElem.css(verifyType=='radio'?{"color":"#FF5722"}:{"border-color":"#FF5722"});
+                            // //对非输入框设置焦点
+                            // focusElem.first().attr("tabIndex","1").css("outline","0").blur(function() {
+                            //     focusElem.css(verifyType=='radio'?{"color":""}:{"border-color":""});
+                            // }).focus();
+                            return '必填项不能为空';
+                        }
+                    }
+                }
+            }
+
+        });
+
+        form.on('submit(*)', function(data){
+            // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+            // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            console.log(JSON.stringify(data.field)); //当前容器的全部表单字段，名值对形式：{name: value}
+            indexApp.next();
+            return false;
+            var param = data.field;
+
+            var url = "/register/saveRegisterFirst.do";
+
+            var siContentArr = [];
+
+            for(key in param){
+
+                if(key.indexOf("_qx")>=0){
+                    siContentArr.push(param[key])
+                }
+
+            }
+
+            globalAsyncPost(url, {
+                "matterCode": param.matterCode || '',
+                "apName": param.apName || '',
+                "apNumberType": param.apNumberType || '',
+                "apNumber": param.apNumber || '',
+                "rWay": param.rWay || '',
+                "rHall": param.rHall || '',
+                "content": "",
+                "siContent": siContentArr.join(","),
+            },function(res) {
+                console.log(res);
+                if(res && res.flag == true){
+                    indexApp.next();
+                }else{
+                    layer.msg('保存失败，请重试!');
+                }
+            })
+
+
+            // $.ajax({
+            //     url: url,
+            //     type: 'post',
+            //     data: {
+            //         "matterCode": param.matterCode || '',
+            //         "apName": param.apName || '',
+            //         "apNumberType": param.apNumberType || '',
+            //         "apNumber": param.apNumber || '',
+            //         "rWay": param.rWay || '',
+            //         "rHall": param.rHall || '',
+            //         "content": "",
+            //         "siContent": siContentArr.join(","),
+            //     },
+            //     async:true,
+            //     // dataType: 'text',
+            //     // contentType: contentType || 'application/x-www-form-urlencoded',
+            //     success : function(res) {
+            //         try {
+            //             var result =  $.parseJSON(res);
+            //             if(endCallBack) endCallBack();
+            //             if(result && (result.code == 102 || result.code == 401)) return;
+            //             if(successCallBack) successCallBack(result);
+            //         }
+            //         catch(ex){console.log(ex);top.msg('系统响应错误');if(typeof console != 'undefined') console.log(ex); else alert(ex);}
+            //     },
+            //     error : function(error) {
+            //         if(error.readyState != 0)
+            //         {
+            //             if(successCallBack) successCallBack({code:0,msg:'系统响应错误'});
+            //             top.msg('系统响应错误');
+            //         }
+            //     }
+            // });
+
+
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+        form.on('checkbox(prefix)', function(data){
+            // console.log(data); //得到radio原始DOM对象
+            console.log($(data.elem).attr("sfzz")); //得到radio原始DOM对象
+            console.log($(data.elem).attr("parentname")); //被点击的radio的value值
+            console.log($(data.elem).attr("name")); //被点击的radio的value值
+            console.log(data.value); //被点击的radio的value值
+            if(data.elem.checked){
+                indexApp.changeprefix = data.value;
+
+                if($(data.elem).attr("sfzz") == '1'){
+                    layer.alert('符合该条件不允许继续办理业务,请重新确认')
+                }
+
+            }else{
+                indexApp.changeprefix = data.value+'0';
+            }
+
+            form.render();
+
+            console.log("$$$$$$$$$$$$",checkPrefix());
+
+            // var raoLg = $("#prefix ul").length;
+            // for(var i =1;i<= raoLg;i++){
+            //     var flag = $("input[name='radio"+i+"']:checked").val();
+            //     //alert(flag);
+            //     if(flag==null){
+            //         alert("您还有未填项，无法提交!");
+            //
+            //         return false;
+            //     }
+            // }
+
+
+            var parentId = $(data.elem).attr("name");
+            parentId = parentId.substring(0,parentId.indexOf("_"));
+            var id = data.value.split("_materialId_")[0];
+
+            var arr = getItemChild(id,prefixDataList)
+            console.log("获取回答问题下级——————————",arr,parentId);
+            if(arr && arr.length>0){
+                initChildPrefix(parentId,arr,parentId+'_childContent');
+            }else{
+                initChildPrefix(parentId,[],parentId+'_childContent');
+            }
+
+
+        });
+
+
+        form.on('radio(qingxing)', function(data){
+            console.log(data); //得到radio原始DOM对象
+            console.log($(data.elem).attr("sfzz")); //得到radio原始DOM对象
+            console.log($(data.elem).attr("parentname")); //被点击的radio的value值
+            console.log($(data.elem).attr("name")); //被点击的radio的value值
+            console.log(data.value); //被点击的radio的value值
+            indexApp.changeqztj = data.value;
+            form.render();
+
+            if($(data.elem).attr("sfzz") == '1'){
+                layer.alert('符合该条件不允许继续办理业务,请重新确认')
+            }
+
+            var parentId = $(data.elem).attr("name");
+            parentId = parentId.substring(0,parentId.indexOf("_"));
+            var id = data.value.split("_materialId_")[0];
+
+            var arr = getItemChild(id,onethingItemList)
+            console.log("获取回答问题下级——————————",arr,parentId);
+            if(arr && arr.length>0){
+                initChildQztj(parentId,arr,parentId+'_childContent');
+            }else{
+                initChildQztj(parentId,[],parentId+'_childContent');
+            }
+
+
+        });
+
+        form.on('checkbox(qingxing)', function(data){
+            console.log(data.elem.checked); //是否被选中，true或者false
+            console.log($(data.elem).attr("parentname")); //被点击的radio的value值
+            console.log($(data.elem).attr("name")); //被点击的radio的value值
+            console.log(data.value); //被点击的radio的value值
+
+            form.render();
+            var parentId = $(data.elem).attr("name");
+            parentId = parentId.substring(0,parentId.indexOf("_"));
+            var id = data.value.split("_materialId_")[0];
+            if(data.elem.checked){
+                indexApp.changeqztj = data.value;
+                var arr = getItemChild(id,onethingItemList)
+                console.log("获取回答问题下级——————————",arr,parentId);
+                if(arr && arr.length>0){
+                    initChildQztj(parentId,arr,parentId+'_childContent_'+id);
+                }else{
+                    initChildQztj(parentId,[],parentId+'_childContent_'+id);
+                }
+            }else{
+                indexApp.changeqztj = "";
+                if(document.getElementById(parentId+'_childContent_'+id)){
+                    document.getElementById(parentId+'_childContent_'+id).innerHTML = "";
+                }
+
+            }
+
+        });
+
+
+        var $ = layui.$, active = {
+
+            next: function(){
+
+                console.log("1111");
+                parent.layer.close(index);
+            }
+        }
+
+        $('.registerTableDemo .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        element.render()
+    });
+</script>
+
+</html>

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/vue/vue.js"></script>
+    <script src="/static/js/vue/axios.js"></script>
+    <script src="/static/js/data/data.js"></script>
+
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+<div class="layui-row" id="app">
+    <div class="layui-col-xs8 applyInfoDiv" style="padding-right: 15px;padding-left: 15px;">
+        <div class="layui-collapse" style="margin-top: 20px;">
+            <div class="layui-colla-item">
+                <div class="layui-colla-title" style="font-size: 14px;color: #4383B4;">
+                    <b>申请事项信息</b>
+                </div>
+                <div class="layui-colla-content layui-show">
+                    <table class="layui-table">
+                        <tbody>
+                        <tr>
+                            <td align="right" class="title">申请事项</td>
+                            <td width="30%" data-name="sbxmmc"><span>{{applicantDepartment.item_name}}</span></td>
+                            <td align="right" class="title">申请时间</td>
+                            <td width="30%" id="createDate">{{content.create_at | formatDate}}</td>
+                        </tr>
+                        <tr>
+                            <td align="right" class="title">申报流水号</td>
+                            <td colspan="3" data-name="sblsh" id="sblsh">
+                                <input type="hidden" id="ywlsh">{{applicantDepartment.business_code}}
+                            </td>
+                        </tr>
+                        <!--                        <tr>-->
+                        <!--                            <td colspan="1" align="right" class="title">申请人单位（人）</td>-->
+                        <!--                            <td colspan="11" data-name="bsName">{{applicantDepartment.ap_name}}</td>-->
+                        <!--                        </tr>-->
+                        <tr style="display: none" id="agentName">
+                            <td align="right" class="title">代办人</td>
+                            <td colspan="3" data-name="jName" id="jNameTd"></td>
+                        </tr>
+                        <tr style="display: none" id="accessName">
+                            <td align="right" class="title">代办机构名称</td>
+                            <td data-name="agentName"></td>
+                            <td align="right" class="title">经办人</td>
+                            <td data-name="jName"></td>
+                        </tr>
+                        <tr id="bsxxTr" style="display: none">
+                            <td align="right" class="title">办事信息</td>
+                            <td colspan="3" id="bsxxNr"></td>
+                        </tr>
+                        <!--                        <tr id="qztj-tr">-->
+                        <!--                            <td align="right" class="title">前置条件</td>-->
+                        <!--                            <td colspan="3" id="qztj-str">无</td>-->
+                        <!--                        </tr>-->
+                        <!--                        <tr>-->
+                        <!--                            <td align="right" class="title">申报条件信息</td>-->
+                        <!--                            <td colspan="3" id="situationTd">-->
+
+                        <!--                            </td>-->
+                        <!--                        </tr>-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-collapse" style="margin-top: 20px;">
+            <div class="layui-colla-item">
+                <div class="layui-colla-title" style="font-size: 14px;color: #4383B4;">
+                    <b>办事对象</b>
+                </div>
+                <div class="layui-colla-content layui-show">
+                    <table class="layui-table">
+                        <tbody>
+                        <tr>
+                            <td align="right" class="title">申请人单位(人)</td>
+                            <td colspan="6" data-name="dName"><span>{{applicantDepartment.ap_name}}</span></td>
+                            <td align="right" class="title">申请人证件号码</td>
+                            <td colspan="6" id="cNumber">{{applicantDepartment.ap_number}}</td>
+                        </tr>
+                        <!--                        <tr>-->
+                        <!--                            <td colspan="1" align="right" class="title">手机号码</td>-->
+                        <!--                            <td colspan="11" data-name="contentMobile" id="cMobile">{{content2.mobile}}</td>-->
+                        <!--                        </tr>-->
+                        <tr>
+                            <td align="right" class="title">经办人姓名(人)</td>
+                            <td colspan="6" data-name="dName">{{applicantDepartment.aName}}</td>
+                            <td align="right" class="title">经办人证件号码</td>
+                            <td colspan="6" data-name="cNumber">{{applicantDepartment.aNumber}}</td>
+                        </tr>
+<!--                        <tr>-->
+<!--                            <td align="right" class="title">经办人手机号码</td>-->
+<!--                            <td colspan="3" data-name="dAmobile">{{applicantDepartment.aMobile}}</td>-->
+<!--                            <td align="right" class="title">经办人邮箱</td>-->
+<!--                            <td colspan="6" data-name="dEmail">{{applicantDepartment.aEmail}}</td>-->
+<!--                        </tr>-->
+                        <tr>
+                            <td align="right" class="title">经办人手机号</td>
+                            <td colspan="9" data-name="sblsh" id="sblsh2">
+                                <input type="hidden" id="ywlsh2">{{applicantDepartment.aMobile}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-collapse" style="margin-top: 20px;margin-bottom: 20px">
+            <div class="layui-colla-item">
+                <div class="layui-colla-title" style="font-size: 14px;color: #4383B4;">
+                    <b>申请表信息</b>
+                </div>
+                <div class="layui-colla-content layui-show">
+                    <table class="layui-table" id="dataClTable2">
+                        <tr>
+                            <td align="left" class="title" colspan="6">申请表</td>
+                            <td align="right" class="title" colspan="6">
+                                <div class="layui-input-inline">
+                                    <button class="layui-btn  layui-btn-xs" id="fjclPickerBtn3"
+                                            @click="aaa(applicantDepartment.business_code,applicantDepartment.items_id)">
+                                        查看
+                                    </button>
+                                    <br>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-collapse" style="margin-top: 20px;margin-bottom: 20px">
+            <div class="layui-colla-item">
+                <div class="layui-colla-title" style="font-size: 14px;color: #4383B4;">
+                    <b>申请材料提交信息</b>
+                </div>
+                <div class="layui-colla-content layui-show">
+                    <table class="layui-table" id="dataClTable">
+                        <thead>
+                            <tr>
+                                <th align="left">
+                                    <input type="checkbox" @click="checkAll" :checked="selectIds.length === allIds.length">
+                                </th>
+                                <th align="left" class="title" colspan="4">材料名称</th>
+                                <th align="left" class="title" colspan="4">意见</th>
+                                <th align="right" class="title" colspan="4">附件</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="file in fileList">
+                                <td align="left">
+                                    <input type="checkbox" :value="file.id" @click="check" :checked="selectIds.includes(file.id)">
+                                </td>
+                                <td align="left" class="title" colspan="6">{{file.file_name}}</td>
+                                <td>
+                                    <input type="text" placeholder="请输入补正原因" class="layui-input" v-model="correction[file.id]">
+                                </td>
+                                <td align="right" class="title" colspan="6">
+                                    <div class="layui-input-inline">
+                                        <button class="layui-btn  layui-btn-xs" id="fjclPickerBtn2"
+                                                @click="viewFile(file.file_name,file.file_url,file.id)">
+                                            查看
+                                        </button>
+                                        <br>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!--取证方式1129-->
+        <div id="test4" class="layui-collapse" style="margin-top: 20px;display: none">
+            <div class="layui-colla-item">
+                <div class="layui-colla-title" style="font-size: 14px;color: #4383B4;">
+                    <b>办结结果取件方式</b>
+                </div>
+                <div class="layui-colla-content layui-show">
+                    <table class="layui-table">
+                        <tbody>
+                        <tr id="test1" style="display: none">
+                            <td id="td1" align="right" class="title" style="width: 190px">取件方式</td>
+                            <td colspan="3" id="qujianType"></td>
+                        </tr>
+                        <tr id="test2" style="display: none">
+                            <td align="right" class="title">姓名</td>
+                            <td width="30%" id="recipientName"></td>
+                            <td align="right" class="title">联系电话</td>
+                            <td width="30%" id="linkPhone"></td>
+                        </tr>
+
+                        <tr id="test3" style="display: none">
+                            <td align="right" class="title">邮寄地址</td>
+                            <td colspan="3" id="address"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <form id="mainForm" name="mainForm" method="post" success="toList()" class="layui-form" lay-filter="mainForm"
+          onsubmit="return false;">
+        <input type="hidden" name="sphjmc">
+        <input type="hidden" name="sphjCode">
+        <input type="hidden" name="sphjId">
+        <input type="hidden" name="flowItemId">
+        <input type="hidden" name="sfbjcz">
+        <input type="hidden" name="itemCode">
+        <input type="hidden" name="bizType">
+        <input type="hidden" name="clcjType">
+        <input type="hidden" name="passFlag">
+        <input type="hidden" name="isSend">
+        <input type="hidden" name="leftNodeId">
+        <input type="hidden" name="leftNodeType">
+        <input type="hidden" name="dyTaskInfos">
+        <input type="hidden" name="bathFlag">
+        <input type="hidden" name="bsCardType">
+        <input type="hidden" name="bsCardNum" id="bsCardNum">
+        <input type="hidden" name="applyDeptName">
+        <input type="hidden" name="applyDeptId">
+
+
+        <!--审批过程工程文件相关信息以json格式保存-->
+        <input type="hidden" class="dwg-json" value="">
+
+        <div id="processFormDiv" class="layui-col-xs4"
+             style="padding-right: 15px;padding-left: 15px;padding-top: 20px;padding-bottom: 20px;">
+            <div class="layui-card" style="padding-bottom: 20px;">
+                <div class="layui-card-header"
+                     style="font-size: 14px;background-color:#F2F2F2;padding-left: 10px;vertical-align: middle;color: #4383B4;">
+                    <b>受理信息</b>
+                </div>
+
+                <div class="layui-card-body">
+                    <table class="layui-table">
+                        <tbody>
+                        <tr>
+                            <td align="right" style="text-align: right;vertical-align: middle;width:45%;" class="title">
+                                当前环节<font color="red">*</font>
+                            </td>
+                            <td>
+                                <div class="layui-input-inline" id="taskName">
+                                    {{activiti.actName}}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="fczTr" style="display:none;">
+                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">流转动作<font
+                                    color="red">*</font></td>
+                            <td>
+                                <div class="layui-input-inline">
+                                    <input name="trName" type="hidden">
+                                    <select name="trId" id="tranSelect" lay-verify="required" lay-filter="tranSelect">
+
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="fczTr" v-if="activiti.nextName!=null">
+                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">下一环节<font
+                                    color="red">*</font></td>
+                            <td>
+                                <div class="layui-input-inline" id="tranName">
+                                    {{activiti.nextName}}
+                                    <!--                                    {{activiti.nextName}}-->
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="display: none" id="bjczTr">
+                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">办结类型<font
+                                    color="red">*</font></td>
+                            <td>
+                                <select name="bjlx" lay-filter="bjlx">
+
+                                </select>
+                            </td>
+                        </tr>
+                        <tr id="blrPicker">
+                            <input type="hidden" name="taskAssignType">
+                            <input type="hidden" name="taskAssignValue">
+                            <input type="hidden" name="taskAssignData">
+                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">
+                                当前部门办理人<font color="red">*</font></td>
+                            <td>
+                                <div class="layui-input-inline">
+                                    {{data2.userName}}
+                                    <!--                                    <button class="layui-btn layui-btn-xs" onclick="toSelUser(this)" id="pickerBtn" data-json="[]">-->
+
+                                    <!--                                    </button>-->
+                                </div>
+                            </td>
+                        </tr>
+                        <!--                        <tr id="qitayijian">-->
+                        <!--                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">常用意见-->
+                        <!--                            </td>-->
+                        <!--                            <td>-->
+                        <!--                                <div class="layui-input-inline">-->
+                        <!--                                    <input type="hidden" name="yijian" value="9">-->
+                        <!--                                    <select id="qtyj" name="yijian2" lay-filter="yijian2">-->
+
+                        <!--                                    </select>-->
+                        <!--                                </div>-->
+                        <!--                            </td>-->
+                        <!--                        </tr>-->
+
+                        <!--其他意见详情-->
+                        <!--                        <tr id="qitayijianxiangqing">-->
+                        <!--                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">意见<font color="red">*</font></td>-->
+                        <!--                            <td>-->
+                        <!--                                <textarea class="layui-textarea" lay-verify="required" id="yjxiangqing" name="qitayijian" rows="5" style="width:100%;color: black;"></textarea>-->
+                        <!--                            </td>-->
+                        <!--                        </tr>-->
+
+                        <tr id="getResStampPanel" style="display: none">
+                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">审批电子印章
+                            </td>
+                            <td>
+                                <div class="layui-input-inline" id="approvalStamp">
+                                    <!--<input type="hidden" name="stamp">-->
+                                    <select id="stampSelect" name="stampId" lay-filter="stampSelect">
+
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="fczTr spfjTr" style="display: none">
+                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">审批附件
+                            </td>
+                            <td>
+                                <!-- multiple多个文件上传 accept文件类型-->
+                                <input class="fjInput" type="file" name="approvalAttachJson" value="[]">
+                                <button class="layui-btn  layui-btn-xs" onclick="addFile(this)">
+                                    <i class="iconfont layui-extend-add"></i>上传<label style="color: red"
+                                                                                      class="num"></label>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="zjnrTr">
+
+                            <!-- js加载 -->
+                        </tr>
+                        <!--证照填写后生成 决定书-->
+                        <tr class="zjfileTr" style="display: none">
+                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">
+                                决定书：
+                            </td>
+                            <td style="padding: 0px">
+                                <button type="button" style="margin-left: 20px" class="layui-btn layui-btn-sm"
+                                        id="zjfileBtn" onclick="viewElectric(this)">
+                                    查看决定书
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr id="mailTr-picker" style="display: none">
+                            <td style="text-align: right;vertical-align: middle;" class="title">
+                                <i class="layui-icon layui-icon-tips icon-size-20 icon-search-blue tips-btn"></i>是否发送通知书
+                            </td>
+                            <td>
+                                <input name="sffstzs" lay-skin="switch" lay-filter="mailInputFilter" lay-text="是|否"
+                                       type="checkbox">
+                            </td>
+                        </tr>
+                        <tr id="jmailTr" style="display: none">
+                            <td style="text-align: right;vertical-align: middle;" class="title">经办人邮箱</td>
+                            <td id="jMailTd"></td>
+                        </tr>
+                        <tr id="bslMailInfo" style="display: none">
+                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">不受理原因
+                            </td>
+                            <td>
+                                <select name="bslreason" lay-filter="reasonFilter">
+                                    <option value="1">1、依法不需要取得行政许可。</option>
+                                    <option value="2">2、该事项依法不属于本行政机关职权范围，请向相关提出行政许可申请。</option>
+                                    <option value="3">3、你（单位）隐瞒有关情况，提供虚假材料。</option>
+                                    <option value="4">4、其他原因</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr id="rejectReason" style="display: none">
+                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">原因
+                            </td>
+                            <td>
+                                <input type="text" placeholder="请输入不受理原因" class="layui-input" name="rejectReason">
+                            </td>
+                        </tr>
+                        <tr id="jgNameInfo" style="display: none">
+                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">相关部门名称
+                            </td>
+                            <td>
+                                <input type="text" placeholder="请输入相关部门名称" class="layui-input" name="jgName">
+                            </td>
+                        </tr>
+
+                        <tr id="tuijian-picker" style="display: none">
+                            <td style="text-align: right;vertical-align: middle;" class="title">是否退件</td>
+                            <td>
+                                <input name="isTuijian" lay-filter="isTuijian" type="radio" value="1" title="是">
+                                <input name="isTuijian" lay-filter="isTuijian" type="radio" value="0" title="否"
+                                       checked="">
+                            </td>
+                        </tr>
+                        <tr class="fczTr">
+                            <td style="text-align: right;vertical-align: middle;" class="title">审批意见</td>
+                            <td>
+                                <textarea v-model="pass.remark" class="layui-textarea" id="bz" name="bz" rows="5"
+                                          style="width:100%;color: black;"></textarea>
+                            </td>
+                        </tr>
+
+                        <tr id="express-picker" style="display: none">
+                            <td style="text-align: right;vertical-align: middle;" class="title">是否发起物料流转</td>
+                            <td>
+                                <input name="isExpress" lay-filter="isExpress" type="radio" value="1" title="是"
+                                       checked="">
+                                <input name="isExpress" lay-filter="isExpress" type="radio" value="0" title="否">
+                            </td>
+                        </tr>
+
+                        <tr style="display: none" id="sumitBtnTr">
+                            <td align="center" colspan="2">
+                                <button class="layui-btn layui-btn-normal" onclick="submitFun()">
+                                    <i class="layui-icon">&#xe605;</i> 提交
+                                </button>
+                                <button id="submitBtn" style="display: none" class="layui-btn layui-btn-normal"
+                                        onclick="dbSub()">
+                                    <i class="layui-icon">&#xe605;</i> 提交
+                                </button>
+                                <button class="layui-btn layui-btn-normal" onclick="top.hideData();">关闭</button>
+                            </td>
+                        </tr>
+
+                        <tr id="fjclTr">
+                            <input type="hidden" name="attachJson">
+                            <td align="right" style="text-align: right;vertical-align: middle;" class="title">审批附件</td>
+                            <td>
+                                <form>
+                                    <div class="layui-upload">
+                                        <!--                                        <button type="button" class="layui-btn layui-btn-normal" id="test8">选择文件</button>-->
+                                        <!--                                        <button type="button" class="layui-btn" id="test9">开始上传</button>-->
+                                    </div>
+                                        <button class="layui-btn layui-btn-normal" id="_fileUpload">选择文件</button>
+                                            <span v-show="upload_tips">{{upload_tips}}</span>
+
+
+<!--                                    　　<button id="_fileUpload" name="fileUpload" type='file' @change="fileUpload"> -->
+                                    <!--审批附件-->
+                                    <!--                                    　　<input type='hidden' name='userid'>-->
+                                    <!--                                    　　<input type='hidden' name='signature'>-->
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="12" align="center" class="title">
+                                <button class="layui-btn layui-btn-xs startUpload" id="fjclPickerBtn4"
+                                        style="height: 40px;background-color: #00b7ee"
+                                        @click="fileUpload(applicantDepartment.business_code, data2.userName, activiti.actName, 2)">
+                                    受理通过
+                                </button>
+                                <button class="layui-btn  layui-btn-xs startUpload" id="fjclPickerBtn5"
+                                        style="height: 40px; background-color: #00b7ee"
+                                        @click="fileUpload(applicantDepartment.business_code, data2.userName, activiti.actName, 3)">
+                                    受理不通过
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="fczTr" style="display: none">
+                            <td>
+                                <textarea v-model="pass.approver">{{data2.userName}}</textarea>
+                            </td>
+                        </tr>
+                        <tr class="fczTr" style="display: none">
+                            <td>
+                                <textarea v-model="pass.approver">{{activiti.actName}}</textarea>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="/static/layui/layui.all.js" charset="utf-8"></script>
+<script src="/static/js/utils/helper.js"></script>
+<script src="/static/js/user/demo.js"></script>
+
+<script>
+
+    layui.use('upload', function () {
+        var $ = layui.jquery
+            , upload = layui.upload;
+
+        //选完文件后不自动上传
+
+    });
+</script>
+</body>
+</html>

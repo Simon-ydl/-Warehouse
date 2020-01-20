@@ -1,0 +1,40 @@
+server:
+  port: 7003
+spring:
+  application:
+    name: yjs-manager #微服名称
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://10.147.2.170:7001/eureka,http://10.147.2.170:7002/eureka
+  instance:
+    prefer-ip-address: true #使用ip区分服务
+zuul:
+  host:
+    connect-timeout-millis: 120000
+    socket-timeout-millis: 120000
+  ribbon:
+    eager-load:
+      enabled: true
+  routes:
+    yjs-admin:
+      path: /admin/**
+      serviceId: yjs-admin
+    yjs-api:
+      path: /api/**
+      serviceId: yjs-api
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 25000 #熔断超时时长： 5000ms
+ribbon:
+  ReadTimeout: 12000
+  ConnectTimeout: 10000
+

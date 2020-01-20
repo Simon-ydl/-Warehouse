@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        
+        <meta http-equiv=X-UA-Compatible content=IE=EmulateIE11>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>东莞市一体化政务服务平台</title>
+        <link rel="stylesheet" href="css/login/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/login/camera.css" />
+        <link rel="stylesheet" href="css/login/bootstrap-responsive.min.css" />
+        <link rel="stylesheet" href="css/login/matrix-login.css" />
+        <link rel="stylesheet" href="css/login/font-awesome.css" />
+        <style type="text/css">
+            #loginbox {
+                margin-top: 0;
+            }
+            input:-webkit-autofill {
+                background-color: #fff !important;
+            }
+            body .yourclass{width:420px; height:240px; background-color:#FFFfff; box-shadow: none; color:#fff;}
+            body .yourclass .layui-layer-content{ padding:20px 60px;}
+
+            /*以下为针对IE8进行的更改*/
+            /*IE8不支持backgroud-size*/
+            .bgpic {
+                background-image: url('images/login/xldl.png');
+                background-size: 100% 100%;
+                filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(
+                        src='images/login/xldl.png',
+                        sizingMethod='scale');
+            }
+            /*IE8不支持rgba*/
+            #loginbox{
+                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#4Cffffff,endColorstr=#4Cffffff);
+            }
+        </style>
+
+        <script type="text/javascript" src="js/login/jquery-1.8.2.min.js"></script>
+	<script type="text/javascript" src="js/login/md5.js"></script>
+        <script type="text/javascript" src="js/login/user_pwd_update.js"></script>
+        <script type="text/javascript" src="js/pstrength/jquery.pstrength.js"></script>
+        <link href="js/pstrength/pstrength.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript">
+            function layout()
+            {
+                $('#validcodeimg').css
+                ({
+                    position : 'absolute',
+                    zIndex   : 1000,
+                    top      : $('#authcode').parent().offset().top + 1,
+                    left     : $('#authcode').parent().offset().left + $('#authcode').parent().width() - $('#validcodeimg').width() - 2
+                }).show();
+
+                var width = document.documentElement.clientWidth;
+                var arr = document.getElementsByName("marginImg");
+                if(width < 800){
+                    for (var i = 0, length = arr.length; i < length; i++) arr[i].style.marginLeft = "-9%";
+                }else if(width < 1050){
+                    for (var i = 0, length = arr.length; i < length; i++) arr[i].style.marginLeft = "-5%";
+                }else{
+                    for (var i = 0, length = arr.length; i < length; i++) arr[i].style.marginLeft = "-9%";
+                }
+            }
+            function reload() {
+                 try {
+                    if (self != top) {//iframe中
+                        top.location.reload(true);
+                    }
+                    else {
+                        var hostPath = /^http(s)?:\/\/(.*?)\//.exec(window.document.location.href)[0];//例： http://localhost:88/
+                        location.href = hostPath;
+                    }
+                } catch (e) {alert('本登录页已超时失效，请重新刷新页面');}
+            }
+
+            $(function()
+            {
+                setTimeout(function(){layout();},500);
+                setInterval(function(){reload();},1000 * 60 * 10);//10分钟跳转一次带回调的登录页防止session过期
+                $(window).on('resize',function(){
+                    layout();
+                });
+                $('#authcode').on('keyup',function(e)
+                {
+                    if(e.keyCode == 13) toLogin();
+                })
+            })
+
+            function tyrzDgLogin() {
+                var redirectUrl = 'http://19.104.11.180/html/tyrz_dg_redirect.html';
+                var toUrl = 'http://tyrz.dg/borosoft-oauth2-server/authorize?client_id=79cbec446147456693361e6b882e3247&response_type=code&redirect_uri='
+                              + encodeURIComponent(redirectUrl);
+                $.ajax({
+                    dataType: 'jsonp',
+                    url: toUrl,
+                    timeout:3000,
+                    complete: function (xhr) {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            location.href = toUrl;
+                        }
+                        else
+                            alert("尝试访问 东莞市政府工作人员统一认证平台 失败，请联系相关管理人员进行处理");
+                    }
+                });
+	    }
+
+	    function toLogin() {
+                var pwd = $('#password').val();
+                pwd = pwd.md5(32);
+                $('#password').val(pwd);
+
+                $('form').submit();
+            }
+        </script>
+    </head>
+
+    <body style="width:100%; height:100%;">
+         
+         <div style="width:100%; height:100%;position: absolute;" class="bgpic">
+            <div style="width: 80%;height: 17%;margin:0 auto;text-align: center;">
+                <p style="width: 80%;display: inline-block;vertical-align: top; color: #c30f1a;margin-top: 5%;">
+                    <img src="images/login/log.png" style="width: 10%;text-align: left;margin: 2% 0 0 1%;">
+                    <img src="images/login/logName.png" style="width: 70%;text-align: left;margin: 2% 1% 0 0;">
+                </p>
+            </div>
+            <div id="loginbox" style="width:40%; height:40%;min-height: 230px; margin-top: 7%;overflow: visible !important;background-color: rgba(225,225,255,.3)">
+                <div style="width:100%; ">
+                    <form id="fm1" class="fm-v clearfix" style="width: 80%;margin-left:10%;height:100%;padding-top:6%;" action="/cas/login" method="post">
+                        <input type="hidden" name="lt" value="LT-719-GCJ3yaVGuflsvtSOb0bU-cas01.example.org" />
+                        <input type="hidden" name="execution" value="65372102-4034-4e13-a016-b04b1592cd04_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuYkdSSk9VdEVPR2RoU0VFcmQxUk9iVEpuYWpadksyUTVhRlowTkRZeWVpdHhibEF4ZVhreWRsZEplVXh6VlhSMVp6azJkREoxVFZsUlprOW9UV3BHYURoNlJGVkNhWGg0VEdGbE0wWjNTVGR4VGsxa2RIUjZaelZ6U0ZKcE1qUjJiRk5DUzJ0NFJrSnRibkZtYVhKMGNWSk9aSGxJZFUxSWJ6aENPVzV4UkZGb2IzWmxjR05NUVZaMGJ6SlBSMEpOVTB4cE5qUTJZMVpVZGt4d1VHZDNUbWRyUVZwUWVHcFNWa04wYm1jdmEzY3ZkemxUYm1rMWQwSjFOSEJZYTB4SFpqWklNVmxTUWpOU1lqUXJVbEpPYlZKaFZHZG5MMFppV21KYVYyOVVaVEJVUTI1Q1l6ZFZiemxMYUcxc1ZWSlZNVE5tVG1vMVdWbG9kREJKWVVkWldtWjZUMnBpWlZabFJIVnRSeklyYzBWRU4ySllXWE5WVVZOeFRtNUJSMFpMZDBSQ1FYcHZVVWhPTTFkUVpXVjRPVlJvVFROb1VXWlVMM2xsY21wdGRUUjBlQ3RUUTB3dmJsZzRNMjlNZDFSVWMwOWtXVFJqVUhKNWNWVk9iRUpHU3psTlVVMDVTRXMxWXpsRldFUklhVkJ5UW1RMlowa3lhbmRVVEdseFlWUXdXVXRLUmtOMGN6RjNOM050Y0doRU1XODVjbEZWTVdzclUyWktMM0U0VG5OdlZFWTJTbTFQVW1KSlUxZzBWV1JSYWtKMVVGaGlOVFpsWWpoaFJrdFBhR3RvU25CWGRURlZObWg0V2pCWWRtZzNTVlJWWldRMGRGbG9iV1pYU0ZwWVdFbFhZME5ZSzBWQ1lqazFVVGhzT1dWWlRHNHZVREJVVDFaRmIwRm9RbGRZYTJrME5XTk9Ra3huV0dOc1dFNVpXRmR1U2tkRlJrbE5TV1UxZENzNFRUYzVObmd6UlVJdlFtNWtUeTl6VlRablVtdENVamRFVmpWSlRsVjFSazkyYWtwTlVtdFBXR0psY0dkVlVGVjBja3RUYm5saWR6VnRTa1Z2WjFGcU1HUk5iRlZDYXpkVFoxVllObUpIWkRaRFNreFBPVkJuZUVWNlRVSkhORkYxTUdjcmJVMU1OekZtVXpOUGMzSjVVMkprYm1WbFVteDJibkZvYmk5NVVuY3lNMHMzUW1SNGJYVm1VamROT1U0NGJFbFRibVJ2Y0ZoR04yNXRNSFExWmxodldXd3JSV2R5YjAxdFdrRTRXbGRKU25SQlVUZHVRa2h1UkVaa01TczVSelZyVVN0Q2RIRk5ZM0JTUTNCUFluTk5OazlyYVRnNVlXOWhTR2hyTWs4NVlVWkhORGg0ZGpVNWRtUlVjREJ5TWs1M01VNHpSR0Y0ZHk5SU9WUkljbXNyWVZGV1dsUTRielJNYnl0NU4wNUJhelpGTTNoclMzcFVXWGhyUVhSc2QxSTJkSHBsTTNOd1NYaFliMGRsU0d4bWExbFFkeXRWZUhNd00xVk9UMGxVVm1Gdkwyd3llakpZY0VwSFNrWmlWRmRsWWxwTlRXaGxVRXR1VW1waFpHeG9ZWEp1UmxWclFXaHZVRTl1WkZKb2QwbFJLMnBoYTBaT2JtRXlVemhYTm13ck5TdHRjakI2UldKbE1FVkJiMjlNYzB4UmQwdDBjalpwVm1VM2NrYzJOaXRFVld0S1lqQlJOekZaWmtOVmRYTmlRalUwVVZObk5rbHhWVVl4Y0hwbmVHOXpRaTlwUm14YVoyUTFZWE00T1VWM1YwdFZaV05KUlV4RlZIaEZPRWhXU2s4eFNHSlBSMmd3WVVGYWRrNVlRa2hTTWxFOVBRLk1ZdjZCUzY4ak4weWVZdnNXT2ptbnpoWi1acGxZaTBqSWJwRVdIQlJudkFLTndQQzZpcXpHcUQ3OFMyaURpdS1mZWlod2VlUHVJc1M0aDBOdkwycndB" />
+                        <input type="hidden" name="_eventId" value="submit" />
+                        <div class="main_input_box" style="width:80%; background-color: #fff;border-radius: 5px ;height:40px;">
+                            <img src="images/login/zk.png" style="margin-left: -9%" name="marginImg">
+                            
+                            
+                                <input id="username" name="username" class="inputo" style="height:80%" title="请输入用户名" tabindex="1" placeholder="请输入用户名" type="text" value="" size="15" autocomplete="off"/>
+                            
+                        </div>
+                        <div class="main_input_box"
+                             style="width:80%; margin-top: 7px; background-color: #fff;border-radius: 5px ;height:40px; ">
+                            <img src="images/login/pm.png" style="margin-left: -9%;" name="marginImg">
+                            <input id="password" name="password" class="inputt" style="height:80%" title="请输入密码" tabindex="2" placeholder="请输入密码" type="password" value="" autocomplete="off"/>
+                        </div>
+                        <div class="main_input_box"
+                             style="width:80%; margin-top: 7px; background-color: #fff;border-radius: 5px ;height:40px; ">
+                            <img src="images/login/yzm.png" style="margin-left: -9%;" name="marginImg">
+                            <input type="text" class="inputo" style="height:80%;" id="authcode" name="authcode"
+                                        tabindex="3" maxLength="4" title="请输入验证码"
+                                        autocomplete="off" placeholder="请输入验证码" value="" />
+			</div>
+                        <div class="main_input_box" style="width:94%;margin-top: 14px;height:40px;">
+                            <a onclick="toLogin();"
+                               style="border-radius:5px;border:none;width:35%;font-size: 18px;font-family:'微软雅黑';height: 80%;line-height: 30px;background-color: #5ED126;color: white;font-weight: bold;"
+                               class="flip-link btn btn-info">登&nbsp;&nbsp;录</a>
+                            <a onclick="tyrzDgLogin()"
+                               style="border-radius:5px;border:none;width:38%;font-size: 18px;font-family:'微软雅黑';height: 80%;line-height: 30px;background-color: #5ED126;color: white;font-weight: bold;"
+                               class="flip-link btn btn-info">统一认证登录</a>
+                        </div>
+                        <div class="main_input_box" style="display:table;width:94%;height:40px;">
+                            
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div style="text-align: center;margin-top: 5%;font-size: 12px;color: #fff">
+                主办单位：东莞市人民政府 承办单位：东莞市政务服务数据管理局<br>
+                Copyright 2017 - 2019 shenbao.dg.gov.cn All Rights
+                Reserved.粤ICP备11012759 号<br>
+                技术服务热线：0769-22119520 技术支持：开普云
+            </div>
+        </div>
+        <img id="validcodeimg" src="validateCode" onClick="this.src='validateCode?'+Math.random();" style="display:none;cursor: pointer;height:38px;" />
+    </body>
+</html>

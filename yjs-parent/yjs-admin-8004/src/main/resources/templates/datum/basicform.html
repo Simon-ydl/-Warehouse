@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/vue/vue.js"></script>
+    <script src="/static/js/vue/axios.js"></script>
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;text-align: center">
+    <legend>基本信息</legend>
+</fieldset>
+<form class="layui-form layui-form-pane" action="" id="app" style="text-align: center">
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-inline">
+                <input type="tel" :value="details.name" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">曾用名</label>
+            <div class="layui-input-inline">
+                <input type="tel" :value="details.oldname" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-inline">
+                <input type="tel" :value="details.sex" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">联系电话</label>
+            <div class="layui-input-inline">
+                <input type="text" :value="details.phone" lay-verify="email" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">证件类型</label>
+            <div class="layui-input-inline">
+                <input type="tel" :value="details.Idtype" lay-verify="required|phone" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">证件号</label>
+            <div class="layui-input-inline">
+                <input type="text" :value="details.Idcard" lay-verify="email" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">婚姻状况</label>
+            <div class="layui-input-inline">
+                <input type="tel" :value="details.marriage" lay-verify="required|phone" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">学历</label>
+            <div class="layui-input-inline">
+                <input type="text" :value="details.Record" lay-verify="email" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">身高</label>
+            <div class="layui-input-inline">
+                <input type="tel" :value="details.height" lay-verify="required|phone" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">血型</label>
+            <div class="layui-input-inline">
+                <input type="text" :value="details.bloodtype" lay-verify="email" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">兵役情况</label>
+            <div class="layui-input-inline">
+                <input type="tel" :value="details.bingyi" lay-verify="required|phone" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">工作单位</label>
+            <div class="layui-input-inline">
+                <input type="text" :value="details.wordarea" lay-verify="email" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">入户地址</label>
+            <div class="layui-input-inline">
+                <input type="tel" :value="details.address"  autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">是否用子女</label>
+            <div class="layui-input-inline">
+                <input type="text" :value="details.sex"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">申请人申明</label>
+            <div class="layui-input-inline">
+                <input type="tel" :value="details.statement"  autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline">
+                <input type="text"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div v-if="details.marriage=='1'">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>申请人父母信息</legend>
+        </fieldset>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父亲姓名</label>
+            <div class="layui-input-block" style="width: 50%">
+                <input type="tel" :value="parentsData.f_name" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">父亲证件类型</label>
+                <div class="layui-input-inline">
+                    <input type="tel" :value="parentsData.f_cardtype" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">父亲证件号码</label>
+                <div class="layui-input-inline">
+                    <input type="text" :value="parentsData.f_Idcard" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">母亲姓名</label>
+            <div class="layui-input-block" style="width: 50%">
+                <input type="tel" :value="parentsData.m_name"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">母亲证件类型</label>
+                <div class="layui-input-inline">
+                    <input type="tel" :value="parentsData.m_cardtype" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">母亲证件号码</label>
+                <div class="layui-input-inline">
+                    <input type="text" :value="parentsData.m_Idcard" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="details.marriage=='21'">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>申请人配偶基本信息</legend>
+        </fieldset>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-inline">
+                    <input type="tel" :value="SpouseData.name" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">曾用名</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.oldname" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系电话</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.phone" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">证件类型</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.Idtype" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">身份证号码</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.Idcard" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-inline">
+                    <input type="text"   autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">婚姻状况</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.marriage" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">是否有子女</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.haveson" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">学历</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.Record" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">身高</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.height" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">血型</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.bloodtype" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">兵役情况</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.bingyi" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">工作单位</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.wordarea" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">是否随迁</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.trailing" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div v-else-if="details.marriage=='22'">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>申请人配偶基本信息</legend>
+        </fieldset>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-inline">
+                    <input type="tel" :value="SpouseData.name" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">曾用名</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.oldname" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系电话</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.phone" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">证件类型</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.Idtype" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">身份证号码</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.Idcard" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-inline">
+                    <input type="text"   autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">婚姻状况</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.marriage" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">是否有子女</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.haveson" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">学历</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.Record" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">身高</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.height" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">血型</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.bloodtype" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">兵役情况</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.bingyi" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">工作单位</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.wordarea" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">是否随迁</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.trailing" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-else-if="details.marriage=='23'">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>申请人配偶基本信息</legend>
+        </fieldset>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-inline">
+                    <input type="tel" :value="SpouseData.name" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">曾用名</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.oldname" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系电话</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.phone" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">证件类型</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.Idtype" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">身份证号码</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.Idcard" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-inline">
+                    <input type="text"   autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">婚姻状况</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.marriage" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">是否有子女</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.haveson" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">学历</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.Record" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">身高</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.height" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">血型</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.bloodtype" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">兵役情况</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.bingyi" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">工作单位</label>
+                <div class="layui-input-inline">
+                    <input type="tel"  :value="SpouseData.wordarea" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">是否随迁</label>
+                <div class="layui-input-inline">
+                    <input type="text"  :value="SpouseData.trailing" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+
+<script>
+    $(function () {
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                details: {},
+                parentsData:{},
+                SpouseData:{}
+            },
+            methods: {
+                message: function () {
+                    axios({
+                        url: '/datum/findBasics',
+                    }).then(response => {
+                        console.log(response.data);
+                        this.details = JSON.parse(response.data.data.content)
+                        
+                        this.parentsData = this.parentsData
+                        this.SpouseData = this.details.SpouseData
+                        console.log(this.details);
+                        console.log(this.parentsData);
+                        console.log(this.SpouseData);
+
+                    })
+                }
+            }, mounted: function () {
+                this.message();
+            }
+        })
+    })
+</script>
+</body>
+</html>

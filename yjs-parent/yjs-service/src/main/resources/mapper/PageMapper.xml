@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yjs.dao.mapper.PageMapper" >
+
+<resultMap type="Page" id="page">
+	<id property="id" column="id" />
+	<result property="pgName" column="pg_name" />
+    <result property="pgInfo" column="pg_info" />
+    <result property="matterId" column="matter_id" />
+	<result property="itemId" column="item_id"/>
+	<result property="paType" column="pa_type"/>
+</resultMap>
+	<select id="findAllByMatterIdAndItemId" resultType="com.yjs.bean.page.Page" resultMap="page">
+		SELECT * FROM ro_page WHERE matter_id = #{matterId} AND item_id = #{itemId}
+	</select>
+
+</mapper>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+  <meta charset="UTF-8">
+  <title>欢迎页面-X-admin2.2</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <link rel="stylesheet" href="/static/css/font.css"  >
+<!--  <link rel="stylesheet" href="/static/css/xadmin.css" >-->
+  <link rel="stylesheet" href="/static/layui/css/layui.css">
+  <link rel="stylesheet" href="/static/css/custom.css">
+  <script src="/static/js/utils/tool.js" charset="utf-8"></script>
+  <script src="/static/layui/layui.js" charset="utf-8"></script>
+  <script src="/static/js/vue/vue.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/static/js/jquery.js"></script>
+  <script type="text/javascript" src="/static/js/xcity.js"></script>
+  <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+  <style>
+
+      body {
+          width: 100%;
+          min-height: 100%;
+          background: #fff;
+      }
+
+      .layui-form-label {
+          width: 120px;
+      }
+
+      .layui-input-block {
+          margin-left: 150px;
+      }
+
+      .layui-form-item .layui-input-inline {
+          width: 250px;
+      }
+  </style>
+
+</head>
+
+<body>
+
+    <div id="indexApp" class="registerTableDemo" style="padding: 10px;">
+        <form class="layui-form "  >
+            <table class="layui-table" lay-skin="line,row" lay-even="">
+                <thead class="table-header">
+                <tr>
+                    <td width="10px" align="center" rowspan="4" id="abc">序号</td>
+                    <td align="center" rowspan="4">材料名称</td>
+                    <td width="10px" align="center" rowspan="4" class="share-no">收件要点</td>
+                    <td width="10px" align="center" rowspan="4" class="share-no">收件样本</td>
+                    <td width="10px" align="center" rowspan="4" class="share-no">是否容缺</td>
+                    <td align="center" colspan="9">纸质件</td>
+                    <td width="45px" align="center">电子件</td>
+                    <td width="60px" align="center" rowspan="4">是否具备电子证照</td>
+                    <td width="28px" align="center" rowspan="4" id="upload-tab-header" class="share-no-s">附件</td>
+                </tr>
+
+                <!--<tr>-->
+                <!--<td width="10px" align="center" rowspan="3">必需</td>&lt;!&ndash;1&ndash;&gt;-->
+                <!---->
+                <!--<td align="center" colspan="4">原件</td>&lt;!&ndash;4&ndash;&gt;-->
+                <!--<td align="center" colspan="4">复印件</td>&lt;!&ndash;4&ndash;&gt;-->
+                <!---->
+                <!--<td align="center" rowspan="3">必需</td>-->
+                <!--</tr>-->
+
+                <tr>
+                    <td width="10px" align="center" rowspan="3">必需</td><!--1-->
+
+                    <td align="center" colspan="2" rowspan="3">材料形式</td><!--2-->
+                    <td align="center" colspan="2" rowspan="3">收/验</td><!--2-->
+                    <td align="center" colspan="2" rowspan="3">应收份数</td><!--2-->
+                    <td align="center" colspan="2">收取数量</td><!--2-->
+                    <td align="center" rowspan="3">必需</td>
+                </tr>
+
+                <tr>
+
+                    <td align="center" rowspan="2">总份数</td>
+                    <td align="center" rowspan="2">总页数</td>
+
+                </tr>
+                </thead>
+                <tbody id="material-detail" class="layui-form" lay-filter="material-detail"></tbody>
+            </table>
+
+            <div style="text-align: center;margin-top: 20px;">
+<!--                lay-submit="" lay-filter="*"-->
+                <button type="button" class="layui-btn layui-btn-normal" >保存并下一步</button>
+
+            </div>
+        </form>
+
+
+    </div>
+</body>
+
+<script type="text/html" id="caozuoTpl">
+    <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="sreach">登记</button>
+</script>
+<script type="text/javascript"  th:inline="none">
+
+    var indexApp = new Vue({
+        el: '#indexApp',
+        data: {
+            pre_handle:{notDgHj:false,notXsfz:false},
+            qrzry:"1",
+            certid:'',
+            birthdate:'',
+            nation:nation,
+        },
+        // beforeMount: function () {
+        //     this.$nextTick(function () {
+        //         form.render();
+        //     })
+        // },
+        updated: function () {
+            this.$nextTick(function () {
+                form.render();
+                element.init();
+            })
+        },
+        computed: {
+
+            getbirthdate: function () {
+                if(this.certid){
+                    return getBirthdate(this.certid);
+                }else{
+                    return getBirthdate(this.certid);
+                }
+            }
+        },
+        watch: {
+            certid: function (val, oldVal) {
+                if(val && val.length>=18){
+                    this.birthdate = getBirthdate(val);
+                }
+            },
+        }
+    })
+
+
+    layui.config({
+        version: '1575889601624' //为了更新 js 缓存，可忽略
+    });
+    var element,form;
+    var $;
+    layui.use(['form','element','laydate'], function(){
+        element = layui.element;
+        var laydate = layui.laydate;
+        form= layui.form;
+        $ = layui.$;
+
+        $('#start').xcity('广东');
+
+        //毕业日期
+        laydate.render({
+            elem: '#biyedate',
+            trigger: 'click' //采用click弹出
+        });
+        //出生日期
+        laydate.render({
+            elem: '#graduateDate',
+            trigger: 'click' //采用click弹出
+        });
+
+        form.on('submit(*)', function(data){
+            // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+            // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+
+        form.on('checkbox(pre_handle)', function(data){
+
+            var name = layui.$(data.elem).attr('name');
+            indexApp.pre_handle[name] = data.elem.checked;
+            console.log(indexApp.pre_handle);
+
+        });
+
+
+        form.on('radio(qingxing)', function(data){
+            console.log(data.elem); //得到radio原始DOM对象
+            console.log(data.value); //被点击的radio的value值
+            indexApp.qrzry = data.value;
+            form.render();
+        });
+
+
+        form.verify({
+            //对应表单组件的lay-verify值
+            name: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '姓名不能为空';
+                }
+                if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+                    return '姓名不能有特殊字符';
+                }
+                if(/(^\_)|(\__)|(\_+$)/.test(value)){
+                    return '姓名首尾不能出现下划线\'_\'';
+                }
+                if(/^\d+\d+\d$/.test(value)){
+                    return '姓名不能全为数字';
+                }
+            },
+            certid: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '身份证号码不能为空';
+                }
+                if(!verifyCertId(value)){
+                    return '请输入正确的身份证号码';
+                }
+
+            },
+            nation: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '请选择民族';
+                }
+            },
+            xueli1: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '请选择最高学历（全日制）';
+                }
+            },
+            xueli2: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '请选择最高学历（在职，非全日制）';
+                }
+            },
+            workAddress: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '请输入现在莞工作单位';
+                }
+            },
+            graduateSchool: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '请输入毕业学校';
+                }
+            },
+            graduateLevel: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '请选择学历层次';
+                }
+            },
+            skill: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '请输入专业';
+                }
+            },
+            graduateDate: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '请选择毕业时间';
+                }
+            },
+
+        });
+
+
+    });
+
+
+
+</script>
+
+</html>

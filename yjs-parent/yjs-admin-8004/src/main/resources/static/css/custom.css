@@ -1,0 +1,53 @@
+
+.layui-laypage .layui-laypage-curr .layui-laypage-em{
+    background-color: #01aaed;
+}
+
+.layui-form-radio * {
+    max-width: 100%;
+}
+
+.layui-form-checkbox {
+    max-width: 100%;
+}
+
+.layui-form-checkbox span{
+    white-space: normal;
+    line-height: 25px !important;
+}
+
+.layui-form-checkbox i {
+    top:4px;
+}
+
+.layui-elem-quote{
+    border-left: 5px solid #01AAED !important;
+}
+
+.layui-elem-quote .layui-form-radio{
+    margin: 0;
+}
+
+.mybtnlist .layui-btn+.layui-btn {
+    margin-left: 0px;
+}
+
+#detailBdNr .formBtn {
+    margin-left: 10px;
+    width: 20%;
+}
+#detailBdNr button {
+    border: 0px;
+    text-align: left;
+    color: #009688;
+    height: 36px;
+}
+#detailBdNr button:active {
+    margin-left: -2px;
+}
+#detailBdNr button:hover {
+    color: red;
+}
+
+
+

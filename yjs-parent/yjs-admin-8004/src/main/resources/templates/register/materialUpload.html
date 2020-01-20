@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="/static/css/font.css"  >
+    <!--  <link rel="stylesheet" href="/static/css/xadmin.css" >-->
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <script src="/static/layui/layui.js" charset="utf-8"></script>
+    <script src="/static/js/vue/vue.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="/static/js/utils/global.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+
+        body {
+            width: 100%;
+            min-height: 100%;
+            background: #fff;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div id="indexApp" class="registerTableDemo" style="padding: 10px;">
+    <form class="layui-form">
+        <blockquote class="layui-elem-quote layui-text" style="">
+            <i class="layui-icon layui-icon-tips" style="color: #01AAED;"></i> 本地文件上传支持jpg,jpeg,png,tiff,bmp,tif,,doc,docx,pdf,xls,xlsx，最大上传200.00M。
+        </blockquote>
+
+        <blockquote class="layui-elem-quote layui-text" style="">
+            <span style="margin-right: 20px;">当前高拍仪</span> <input type="radio" name="sex" value="nan" title="方正" checked>
+            <input type="radio" name="sex" value="nv" title="良田" >
+            <input type="radio" name="sex" value="" title="中控" >
+            <input type="radio" name="sex" value="" title="成者" >
+
+        </blockquote>
+
+        <div class="layui-row mybtnlist" id="toolbarDemo">
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" @click="notKaifa">柯达扫描仪</button>
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" @click="notKaifa">高拍仪</button>
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" @click="notKaifa">摄像头</button>
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" @click="notKaifa">材料复用库</button>
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="bendiUpload">本地文件</button>
+
+
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" data-type="batchDelete" style="float: right;">批量删除</button>
+        </div>
+
+    </form>
+    <div class="layui-col-md12">
+
+        <div class="row" >
+            <table class="layui-hide" id="materialTable" lay-filter="materialTable"></table>
+        </div>
+
+    </div>
+    <div style="text-align: center;margin-top: 20px;">
+        <!--                @click="next"-->
+        <button type="button" @click="next" class="layui-btn layui-btn-normal layui-btn-sm" >确定</button>
+    </div>
+</div>
+</body>
+<script type="text/html" id="caozuoTpl">
+    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="delete" >删除</button>
+</script>
+<!-- th:inline="none"-->
+<script  th:inline="javascript" >
+
+    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+    var itemId = [[${itemId}]];
+
+    var materialId = [[${materialId}]]; //一体化对应的材料ID
+
+    var materialName = [[${materialName}]]; //一体化对应的材料名称
+
+    var materialCode = [[${materialCode}]]; //查询当前已经上传的材料code(此code是当前临时上传文件后临时生成的code，只供查询)
+
+    var businessCode = [[${businessCode}]];
+    console.log("上传的材料对应事项id-------",itemId);
+    console.log("上传的材料id-------",materialId);
+    console.log("上传的材料名称-------",materialName);
+    console.log("上传的材料id-------",materialId);
+    var materialCodeArr = []
+
+    if(materialCode){
+
+        materialCodeArr = materialCode.split(",");
+
+        console.log("当前已经上传的材料code-------",materialCodeArr);
+    }
+
+    var indexApp = new Vue({
+        el: '#indexApp',
+        data: {
+
+        },
+
+        updated: function () {
+            this.$nextTick(function () {
+                form.render();
+                // element.init();
+            })
+        },
+        computed: {
+
+        },
+        methods: {
+
+            notKaifa: function(){
+                layer.msg('设备还没接入，敬请期待');
+            },
+            next:function(){
+                console.log("12312");
+                // parent.$('.'+materialId+'_materialCode').val(materialCodeArr.join(","));
+                // if(materialCodeArr.length>0){
+                //     parent.$('.'+materialId).find(".file-num").text("("+materialCodeArr.length+")");
+                // }else{
+                //     parent.$('.'+materialId).find(".file-num").text("");
+                // }
+
+                parent.layer.close(index);
+            }
+        },
+        watch: {
+
+        }
+    })
+
+
+    layui.config({
+        version: '1575889601624' //为了更新 js 缓存，可忽略
+    });
+    var element,form,laytpl,$,table,upload;
+    layui.use(['form','element','laytpl','table','upload'], function(){
+        laytpl = layui.laytpl;
+        element = layui.element;
+        form= layui.form;
+        table= layui.table;
+        upload= layui.upload;
+        $ = layui.$;
+
+        //指定允许上传的文件类型
+        upload.render({
+            elem: '#bendiUpload'
+            ,url: '/register/materialUpload.do'
+            ,accept: 'file' //普通文件
+            ,data:{
+                fileCode:materialId,
+                fileName:materialName,
+                itemId:itemId,
+                businessCode: businessCode
+            }
+            ,done: function(res){
+
+                console.log("上传文件返回的结果——————",res);
+                if(res && res.data && res.data.fileCode){
+                    // materialCodeArr.push(''+res.data.fileCode);
+                    // console.log("添加材料结果后————————",materialCodeArr);
+                    refreshTable({materialId:materialId,businessCode:businessCode});
+                }else{
+                    layer.msg('上传失败，请重试!');
+                }
+
+            }
+        });
+
+        table.render({
+            elem: '#materialTable'
+            , url: "/register/getMaterialFile.do"
+            , page: false
+            , where: {
+                materialId:materialId,
+                businessCode:businessCode
+            }
+            // , toolbar: '#toolbarDemo'
+            // , defaultToolbar: false
+            , height: 'full-250'
+            , id: "materialTable"
+            , cols: [
+                [
+                    {type:'checkbox'}
+                    , {type: "numbers", title: "序号"}
+                    , {field: "originalFileName", title: "文件名", minWidth:50 ,templet: function(d){
+                        return '<a  target="_blank" style="color:#01aaed" href="http://19.104.51.80/'+d.fileUrl+'"'+'>'+d.originalFileName+'</a>'
+                    } }
+                    , {field: "target", title: "状态", minWidth:50  ,templet: function(d){
+                        return '已上传'
+                    } }
+                    , { title: "操作",width:80,fixed:"right",align:"center",toolbar: '#caozuoTpl' }
+                ]
+            ]
+            ,done: function(res, curr, count){
+                //如果是异步请求数据方式，res即为你接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                console.log(res);
+
+                //得到当前页码
+                console.log(curr);
+
+                //得到数据总量
+                console.log(count);
+                if(count>0){
+                    parent.$('.'+materialId).find(".file-num").text("("+materialCodeArr.length+")");
+                }else{
+                    parent.$('.'+materialId).find(".file-num").text("");
+                }
+            }
+        });
+
+
+
+        form.on('checkbox(pre_handle)', function(data){
+
+            var name = layui.$(data.elem).attr('name');
+            indexApp.pre_handle[name] = data.elem.checked;
+            console.log(indexApp.pre_handle);
+
+        });
+
+        form.verify({
+            otherReq: function(value,item){
+                var $ = layui.$;
+                var verifyName=$(item).attr('name')
+                    , verifyType=$(item).attr('type')
+                    ,formElem=$(item).parents('.layui-form')//获取当前所在的form元素，如果存在的话
+                    ,verifyElem=formElem.find('input[name='+verifyName+']')//获取需要校验的元素
+                    ,isTrue= verifyElem.is(':checked')//是否命中校验
+                    ,focusElem = verifyElem.next().find('i.layui-icon');//焦点元素
+                if(!isTrue || !value){
+                    //定位焦点
+                    focusElem.css(verifyType=='radio'?{"color":"#FF5722"}:{"border-color":"#FF5722"});
+                    //对非输入框设置焦点
+                    focusElem.first().attr("tabIndex","1").css("outline","0").blur(function() {
+                        focusElem.css(verifyType=='radio'?{"color":""}:{"border-color":""});
+                    }).focus();
+                    return '必填项不能为空';
+                }
+            }
+
+        });
+
+        form.on('submit(*)', function(data){
+            // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+            // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            console.log(JSON.stringify(data.field)); //当前容器的全部表单字段，名值对形式：{name: value}
+            // indexApp.next();
+
+            var param = data.field;
+
+            var url = "/register/saveRegisterFirst.do";
+
+            var siContentArr = [];
+
+            var itemIdArr = [];
+
+            for(key in param){
+
+                if(key.indexOf("_qx")>=0){
+
+                    if(param[key].indexOf("_item_")>=0){
+                        var arr = param[key].split("_item_");
+                        siContentArr.push(arr[0]);
+                        if(arr[1]){
+                            var s = arr[1].split(",");
+                            for(var j=0;j<s.length;j++){
+                                if(s[j]){
+                                    itemIdArr.push(s[j]);
+                                }
+                            }
+                        }
+
+                        console.log("得到事项ID+++++++",arr[1]);
+                        // for(var i=0;i<onethingItemList.bitemList.length;i++){
+                        //
+                        //     if(onethingItemList.bitemList[i].id){
+                        //
+                        //         itemIdArr.push(onethingItemList.bitemList[i]);
+                        //
+                        //     }
+                        // }
+                    }else{
+                        siContentArr.push(param[key])
+                    }
+                }
+            }
+            console.log("**************",itemIdArr);
+
+
+            parent.layer.close(index);
+
+            parent.layer.open({
+                type: 2,
+                title: '本科生入户事项办理',
+                shadeClose: false,
+                shade: 0.5,
+                maxmin: true,
+                area: ['90%', '90%'],
+                // content: '/register/toRegisterIndex.do?itemId='+itemId+'&itemIdArr=11441900007331881C3442106100010' //iframe的url
+                content: '/register/toRegisterIndex.do?itemId='+itemId+'&itemIdArr='+itemIdArr.join(',') //iframe的url
+            });
+
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+
+        form.on('radio(qingxing)', function(data){
+            console.log(data); //得到radio原始DOM对象
+            console.log(data.elem); //得到radio原始DOM对象
+            console.log($(data.elem).attr("parentname")); //被点击的radio的value值
+            console.log($(data.elem).attr("name")); //被点击的radio的value值
+            console.log("当前节点是否终止————————",$(data.elem).attr("sfzz")); //被点击的radio的value值
+
+            console.log(data.value); //被点击的radio的value值
+            indexApp.checkQztj = data.value;
+            form.render();
+
+            if($(data.elem).attr("sfzz") == '1'){
+                layer.alert('符合该条件不允许继续办理业务,请重新确认')
+            }
+
+            var parentId = $(data.elem).attr("name");
+            parentId = parentId.substring(0,parentId.indexOf("_"));
+            var id = data.value;
+
+            var arr = getItemChild(data.value,onethingItemList.situationData[0])
+            console.log("获取回答问题下级——————————",arr,parentId);
+            if(arr && arr.length>0){
+                initChildQztj(parentId,arr);
+            }else{
+                initChildQztj(parentId,[]);
+            }
+
+
+
+
+        });
+
+        //监听工具条
+        table.on('tool(materialTable)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+            if(layEvent === 'batch'){ //
+                //do somehing
+
+
+            } else if(layEvent === 'delete'){ //删除
+                layer.confirm('真的删除行么', {icon: 7, title:'提示'},function(index){
+                    // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    // layer.close(index);
+                    //向服务端发送删除指令
+                    console.log("删除材料的数据——————————",data);
+                    var url = "/register/deleteMaterial";
+                    globalAsyncPost(url, {
+                        "materialCode": data.id || ''
+                    },function(res) {
+                        console.log("删除材料结果————————",res);
+                        if(res && res.flag == true){
+                            // materialCodeArr.splice(materialCodeArr.indexOf(''+data.fileCode),1);
+                            // console.log("删除材料结果————————",materialCodeArr);
+                            // refreshTable({materialId:materialCodeArr.join(',')});
+                            // parent.$('.'+materialId+'_materialCode').val(materialCodeArr.join(","));
+                            // if(materialCodeArr.length>0){
+                            //     parent.$('.'+materialId).find(".file-num").text("("+materialCodeArr.length+")");
+                            // }else{
+                            //     parent.$('.'+materialId).find(".file-num").text("");
+                            // }
+
+                            refreshTable({materialId:materialId,businessCode:businessCode});
+
+                        }else{
+                            layer.msg('保存失败，请重试!');
+                        }
+                    })
+                });
+            } else if(layEvent === 'edit'){ //编辑
+
+            }
+        });
+
+        //工具栏事件
+        table.on('toolbar(materialTable)', function(obj){
+            console.log("11111111");
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'batchDelete':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选': '未全选')
+                    break;
+            };
+        });
+
+        function refreshTable(data){
+            table.reload('materialTable', {
+                where: data //设定异步数据接口的额外参数
+                ,done: function(res, curr, count){
+                    //如果是异步请求数据方式，res即为你接口返回的信息。
+                    //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                    console.log(res);
+                    //得到当前页码
+                    console.log(curr);
+                    //得到数据总量
+                    console.log(count);
+                    if(count>0){
+                        parent.$('.'+materialId).find(".file-num").text("("+materialCodeArr.length+")");
+                    }else{
+                        parent.$('.'+materialId).find(".file-num").text("");
+                    }
+                }
+            });
+        }
+
+
+        var $ = layui.$, active = {
+
+            batchDelete: function(){
+                var checkStatus = table.checkStatus('materialTable');
+                var data = checkStatus.data;
+                if(data.length<=0){
+                    layer.msg('至少选中一个');
+                    return;
+                }else{
+                    layer.confirm('真的删除选择的文件么', {icon: 7, title:'提示'},function(index){
+                        var url = "/register/deleteMaterial";
+                        var arr = [];
+                        for(var i=0;i<data.length;i++){
+                            arr.push(data[i].id);
+                        }
+                        globalAsyncPost(url, {
+                            "materialCode": arr.join(',')
+                        },function(res) {
+                            console.log("删除材料结果————————",res);
+                            if(res && res.flag == true){
+                                // for(var i=0;i<data.length;i++){
+                                //     materialCodeArr.splice(materialCodeArr.indexOf(''+data[i]),1);
+                                // }
+                                // console.log("删除材料结果————————",materialCodeArr);
+                                // refreshTable({materialId:materialCodeArr.join(',')});
+                                // parent.$('.'+materialId+'_materialCode').val(materialCodeArr.join(","));
+                                // if(materialCodeArr.length>0){
+                                //     parent.$('.'+materialId).find(".file-num").text("("+materialCodeArr.length+")");
+                                // }else{
+                                //     parent.$('.'+materialId).find(".file-num").text("");
+                                // }
+                                refreshTable({materialId:materialId,businessCode:businessCode});
+                            }else{
+                                layer.msg('保存失败，请重试!');
+                            }
+                        })
+                    });
+                }
+                console.log("1111",checkStatus);
+                // parent.layer.close(index);
+            }
+        }
+
+        $('.registerTableDemo .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+        form.render();
+
+
+    });
+</script>
+
+</html>

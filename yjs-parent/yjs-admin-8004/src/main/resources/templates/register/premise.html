@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+  <meta charset="UTF-8">
+  <title>欢迎页面-X-admin2.2</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <link rel="stylesheet" href="/static/css/font.css"  >
+<!--  <link rel="stylesheet" href="/static/css/xadmin.css" >-->
+  <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
+  <script src="/static/layui/layui.js" charset="utf-8"></script>
+  <script src="/static/js/vue/vue.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/static/js/xadmin.js"></script>
+  <script type="text/javascript" src="/static/js/jquery.js"></script>
+  <script type="text/javascript" src="/static/js/utils/global.js"></script>
+  <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+  <style>
+
+      body {
+          width: 100%;
+          min-height: 100%;
+          background: #fff;
+      }
+  </style>
+
+</head>
+
+<body>
+
+    <div id="indexApp" class="registerTableDemo" style="padding: 10px;">
+        <form class="layui-form">
+            <input style="display: none;" name="matterCode" th:value="${itemId}">
+            <div class="layui-collapse">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title" style="color: rgb(67, 142, 185);">{{matter.name}}</h2>
+                    <div class="layui-colla-content layui-show">
+                        <div class="layui-form-pane">
+                            <div class="layui-row">
+                                <div class="layui-col-xs6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">事项名称</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" disabled autocomplete="off" :value="matter.name" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-xs6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">主管部门</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" disabled autocomplete="off" :value="matter.accept" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-xs12">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">面向对象</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" disabled autocomplete="off" :value="matter.target" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" style="color: rgb(67, 142, 185);">请选择申办条件信息</h2>
+                    <div class="layui-colla-content layui-show" >
+                        <div class="content">
+                            <div id="qztj" class="situation layui-form " style="background: rgb(242, 242, 242); padding: 20px;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    <!--            <div class="layui-colla-item" v-if="isPassPre">-->
+    <!--                <h2 class="layui-colla-title" style="color: rgb(67, 142, 185);">办事材料</h2>-->
+    <!--                <div class="layui-colla-content layui-show gr material-table" id="material-table">-->
+    <!--                    <table class="layui-table" lay-skin="line,row" lay-even="">-->
+    <!--                        <thead class="table-header">-->
+    <!--                        <tr>-->
+    <!--                            <td width="10px" align="center" rowspan="4" id="abc">序号</td>-->
+    <!--                            <td align="center" rowspan="4">材料名称</td>-->
+    <!--                            <td width="10px" align="center" rowspan="4" class="share-no">收件要点</td>-->
+    <!--                            <td width="10px" align="center" rowspan="4" class="share-no">收件样本</td>-->
+    <!--                            <td width="10px" align="center" rowspan="4" class="share-no">是否容缺</td>-->
+    <!--                            <td align="center" colspan="9">纸质件</td>-->
+    <!--                            <td width="45px" align="center">电子件</td>-->
+    <!--                            <td width="60px" align="center" rowspan="4">是否具备电子证照</td>-->
+    <!--                            <td width="28px" align="center" rowspan="4" id="upload-tab-header" class="share-no-s">附件</td>-->
+    <!--                        </tr>-->
+
+    <!--                        &lt;!&ndash;<tr>&ndash;&gt;-->
+    <!--                        &lt;!&ndash;<td width="10px" align="center" rowspan="3">必需</td>&lt;!&ndash;1&ndash;&gt;&ndash;&gt;-->
+    <!--                        &lt;!&ndash;&ndash;&gt;-->
+    <!--                        &lt;!&ndash;<td align="center" colspan="4">原件</td>&lt;!&ndash;4&ndash;&gt;&ndash;&gt;-->
+    <!--                        &lt;!&ndash;<td align="center" colspan="4">复印件</td>&lt;!&ndash;4&ndash;&gt;&ndash;&gt;-->
+    <!--                        &lt;!&ndash;&ndash;&gt;-->
+    <!--                        &lt;!&ndash;<td align="center" rowspan="3">必需</td>&ndash;&gt;-->
+    <!--                        &lt;!&ndash;</tr>&ndash;&gt;-->
+
+    <!--                        <tr>-->
+    <!--                            <td width="10px" align="center" rowspan="3">必需</td>&lt;!&ndash;1&ndash;&gt;-->
+
+    <!--                            <td align="center" colspan="2" rowspan="3">材料形式</td>&lt;!&ndash;2&ndash;&gt;-->
+    <!--                            <td align="center" colspan="2" rowspan="3">收/验</td>&lt;!&ndash;2&ndash;&gt;-->
+    <!--                            <td align="center" colspan="2" rowspan="3">应收份数</td>&lt;!&ndash;2&ndash;&gt;-->
+    <!--                            <td align="center" colspan="2">收取数量</td>&lt;!&ndash;2&ndash;&gt;-->
+    <!--                            <td align="center" rowspan="3">必需</td>-->
+    <!--                        </tr>-->
+
+    <!--                        <tr>-->
+
+    <!--                            <td align="center" rowspan="2">总份数</td>-->
+    <!--                            <td align="center" rowspan="2">总页数</td>-->
+
+    <!--                        </tr>-->
+    <!--                        </thead>-->
+    <!--                        <tbody id="material-detail" class="layui-form" lay-filter="material-detail"></tbody>-->
+    <!--                    </table>-->
+    <!--                </div>-->
+    <!--            </div>-->
+
+            </div>
+            <div style="text-align: center;margin-top: 20px;" v-if="isPass">
+<!--                @click="next"-->
+                <button type="button" lay-submit="" lay-filter="*" class="layui-btn layui-btn-normal" >下一步</button>
+            </div>
+        </form>
+    </div>
+</body>
+<script type="text/html" id="caozuoTpl">
+    <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="sreach">登记</button>
+</script>
+<script type="text/x-template" id="qztjRootTemplate">
+    {{# for(var i = 0; i < d.data.length; i++) { }}
+        {{# var condition = d.data[i]; }}
+        {{# if(condition.sjlx == '1'){ }}
+
+            {{# if(d.type == '1'){ }}
+                {{# var conditionId = condition.id; }}
+                <div class="layui-card" >
+                        <div>
+                            <div class="layui-card-header">
+                                {{# if(condition.sfbx == '1'){ }}
+                                    <span style="color:red">*</span>
+                                {{# } }}
+                                {{= condition.name }}
+                            </div>
+                            <div class="layui-card-body" style="border-bottom: 1px solid rgb(246, 246, 246);">
+                                <div class="qztj" name="{{= condition.id+'_qx'}}">
+                                    {{# for(var j = 0; j < condition.childs.length; j++) { }}
+                                        {{# var item = condition.childs[j]; }}
+                                        {{# var sfzz = item.sfzz?item.sfzz:'0'; }}
+                                        {{# if(condition.sfdx == '0'){ }}
+                                            {{# var itemId = '' }}
+                                            {{# if(item.childs && item.childs.length){ }}
+                                                {{# for(var k = 0; k < item.childs.length; k++) { }}
+                                                    {{# if(item.childs[k].data){ }}
+                                                        {{# itemId += item.childs[k].data.itemId+"," }}
+                                                    {{# } }}
+                                                {{# } }}
+                                            {{# } }}
+                                            {{# if(condition.sfbx == '1'){ }}
+
+                                                <input type="radio" lay-verify="otherReq" sfzz="{{= sfzz}}" rootId="{{= condition.id}}" name="{{= condition.id+'_qx'}}" value="{{= item.id+(itemId?'_item_'+itemId:'')}}" lay-filter="qingxing"  title="{{= item.name}}" >
+                                            {{# }else{ }}
+                                                <input type="radio"  rootId="{{= condition.id}}" sfzz="{{= sfzz}}" name="{{= condition.id+'_qx'}}" value="{{= item.id+(itemId?'_item_'+itemId:'')}}" lay-filter="qingxing"  title="{{= item.name}}" >
+                                            {{# } }}
+                                        {{# } }}
+                                        {{# if(condition.sfdx == '1'){ }}
+                                            <input type="checkbox" rootId="{{= condition.id}}" sfzz="{{= sfzz}}" name="{{= condition.id+'_qx'}}" value="{{= item.id}}" lay-filter="qingxing"  title="{{= item.name}}"  lay-skin="primary" >
+                                        {{# } }}
+                                    {{# } }}
+                                </div>
+                            </div>
+                            <div id="{{= conditionId+'_childContent'}}">
+                            </div>
+                        </div>
+                </div>
+            {{# }else{ }}
+                <div class="layui-card-header">
+                    {{# if(condition.sfbx == '1'){ }}
+                    <span style="color:red">*</span>
+                    {{# } }}
+                    {{= condition.name }}
+                </div>
+                <div class="layui-card-body" style="border-bottom: 1px solid rgb(246, 246, 246);">
+                    <div class="qztj" name="{{= condition.id+'_qx'}}">
+                        {{# for(var j = 0; j < condition.childs.length; j++) { }}
+                            {{# var item = condition.childs[j]; }}
+                            {{# var sfzz = item.sfzz?item.sfzz:'0'; }}
+                            {{# if(condition.sfdx == '0'){ }}
+                                {{# var itemId = '' }}
+                                {{# if(item.childs && item.childs.length){ }}
+                                    {{# for(var k = 0; k < item.childs.length; k++) { }}
+                                        {{# if(item.childs[k].data){ }}
+                                            {{# itemId += item.childs[k].data.itemId+"," }}
+                                        {{# } }}
+                                    {{# } }}
+                                {{# } }}
+                                {{# if(condition.sfbx == '1'){ }}
+                                    <input type="radio" lay-verify="otherReq" sfzz="{{= sfzz}}" rootId="{{= condition.id}}" name="{{= condition.id+'_qx'}}" value="{{= item.id+(itemId?'_item_'+itemId:'')}}"lay-filter="qingxing"  title="{{= item.name}}" >
+                                {{# }else{ }}
+                                    <input type="radio"  rootId="{{= condition.id}}" sfzz="{{= sfzz}}" name="{{= condition.id+'_qx'}}" value="{{= item.id+(itemId?'_item_'+itemId:'')}}" lay-filter="qingxing"  title="{{= item.name}}" >
+                                {{# } }}
+<!--                                <input type="radio" rootId="{{= condition.id}}" name="{{= condition.id+'_qx'}}" value="{{= item.id}}" lay-filter="qingxing"  title="{{= item.name}}" >-->
+                            {{# } }}
+                            {{# if(condition.sfdx == '1'){ }}
+                                <input type="checkbox" rootId="{{= condition.id}}" sfzz="{{= sfzz}}" name="{{= condition.id+'_qx'}}" value="{{= item.id}}" lay-filter="qingxing"  title="{{= item.name}}"  lay-skin="primary" >
+                            {{# } }}
+                        {{# } }}
+                    </div>
+                </div>
+                {{# if(condition.sfdx == '0'){ }}
+                    <div id="{{= condition.id+'_childContent'}}">
+                    </div>
+                {{# } }}
+                {{# if(condition.sfdx == '1'){ }}
+                    {{# for(var j = 0; j < condition.childs.length; j++) { }}
+                    {{# var item = condition.childs[j]; }}
+                        <div id="{{= condition.id+'_childContent_'+item.id}}"></div>
+                    {{# } }}
+                {{# } }}
+            {{# } }}
+        {{# } }}
+    {{# } }}
+
+    {{# if(d.data.length <= 0 && d.type == '1'){ }}
+        <span>无数据</span>
+    {{# } }}
+</script>
+<script type="text/x-template" id="qztjChildsRadio">
+    {{# for(var i = 0; i < d.childs.length; i++) { }}
+        {{#     var condition = d.childs[i]; }}
+            <input type="radio" name="qrzry" value="1" lay-filter="qingxing"  title="国内全日制普通高等教育学历人员" >
+    {{# } }}
+
+</script>
+<!-- th:inline="none"-->
+<script  th:inline="javascript" >
+
+    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+    var itemId = [[${itemId}]];
+
+    var onethingItem = [[${onethingItem}]];
+
+    var matter = [[${matter}]];
+
+    console.log(itemId);
+    console.log(onethingItem);
+    console.log(matter);
+
+    if(!itemId){
+
+        console.log('获取一件事ID失败，请重试！！！');
+    }
+
+    // var notPassPre = true;
+    //
+    // if(itemId == 'ff8080816dd7ef4a016ded9734320011'){
+    //     notPassPre = false;
+    // }
+    //
+    // if(itemId == 'ff8080816cb6dcad016cb72e02a104c6'){
+    //     onethingItem = JSON.parse('{"code":1,"msg":"操作成功","data":{"createTime":1576460094000,"id":"ff8080816ef91832016f0c580a4e7f1e","version":"4","sffqx":"1","situationData":[{"id":"ff8080816ef91832016f0c580bce7fb7","name":"新生儿入户","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"e4267e3a415c4ba6bdae74f5cda44a22","childs":[{"id":"ff8080816ef91832016f0c580bc97f44","name":"父母是否东莞户籍？","status":"1","sfbx":"1","sfdx":"0","sjlx":"1","sfzz":"0","unSid":"bf3d2079b36f4eaaa137834c4b7e42ba","childs":[{"id":"ff8080816ef91832016f0c580bc97f45","name":"非东莞户籍","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"39fc1e080e9c4d2493e686134d4ad790","childs":[{"id":"ff8080816ef91832016f0c580bc97f46","name":"父母双方是否在莞从事","status":"1","sfbx":"1","sfdx":"0","sjlx":"1","sfzz":"0","unSid":"c5965ba2a54f466ca292cd36bd8ff886","childs":[{"id":"ff8080816ef91832016f0c580bc97f47","name":"是","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"e13151ba2d8c4c6ca26c507285f7cbd3","childs":[]},{"id":"ff8080816ef91832016f0c580bc97f49","name":"否","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"e98693b3e4ca4f3d984af13b58e65637","childs":[]}]}]},{"id":"ff8080816ef91832016f0c580bc97f51","name":"东莞户籍","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"1cc6e1ac59cb46a18bfd9d38b21c73b2","childs":[]}]},{"id":"ff8080816ef91832016f0c580bca7f6b","name":"是否是一孩登记？","status":"1","sfbx":"1","sfdx":"0","sjlx":"1","sfzz":"0","unSid":"418299c931484d92a60ba88aa4046b3f","childs":[{"id":"ff8080816ef91832016f0c580bca7f6c","name":"是","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"d61e60b594d647c3bf0f4a9e7c255e9f","childs":[]},{"id":"ff8080816ef91832016f0c580bcd7fa0","name":"否","status":"1","sfbx":"0","sfdx":"0","sjlx":"2","sfzz":"0","unSid":"e29c0e7d82474882b0e5858852583736","childs":[]}]}]}]}}');
+    // }
+
+
+    var onethingItemList = [];
+
+    if(onethingItem && onethingItem.code && onethingItem.data){
+
+        onethingItemList = onethingItem.data;
+
+    }
+
+
+
+    console.log(onethingItemList);
+
+    // onethingItemList.situationData[0].childs[0].sfdx = '1';
+    // onethingItemList.situationData[0].childs[0].sfbx = '0';
+
+    function getItemChild(id,item){
+
+        if(item.sfbx == '0' && item.sjlx == '1'){
+            console.log("---------"+item.name)
+        }
+
+        if(item.sfdx == '1' && item.sjlx == '1'){
+            console.log("+++++++++"+item.name)
+        }
+
+        if(item.id == id){
+            return item.childs;
+        }else{
+            var arr = [];
+            for(var i=0;i<item.childs.length;i++){
+                var childs  = item.childs[i];
+                var arrs = [];
+                if(childs.childs && childs.childs.length>0){
+                    arrs = getItemChild(id,childs)
+                }
+                if(arrs && arrs.length>0){
+                    return arrs;
+                }
+            }
+            return arr;
+        }
+    }
+
+    function getItem(id,item){
+
+        if(item.sfbx == '0' && item.sjlx == '1'){
+            console.log("---------"+item.name)
+        }
+
+        if(item.sfdx == '1' && item.sjlx == '1'){
+            console.log("+++++++++"+item.name)
+        }
+
+        if(item.id == id){
+            return item;
+        }else{
+            var arr = [];
+            for(var i=0;i<item.childs.length;i++){
+                var childs  = item.childs[i];
+                var arrs = [];
+                if(childs.childs && childs.childs.length>0){
+                    arrs = getItemChild(id,childs)
+                }
+                if(arrs && arrs.length>0){
+                    return arrs;
+                }
+            }
+            return arr;
+        }
+    }
+
+    var indexApp = new Vue({
+        el: '#indexApp',
+        data: {
+            pre_handle:{notDgHj:false,notXsfz:false},
+            qrzry:"1",
+            notPassPre: false,
+            matter:matter,
+            checkQztj: '',
+            isPass:false
+        },
+        // beforeMount: function () {
+        //     this.$nextTick(function () {
+        //         form.render();
+        //     })
+        // },
+        updated: function () {
+            this.$nextTick(function () {
+                form.render();
+                element.init();
+            })
+        },
+        computed: {
+            isPassPre: function () {
+                if(itemId == 'ff8080816dd7ef4a016ded9734320011'){
+                    var isPassPre = true;
+                    for(var key in this.pre_handle){
+                        if(!this.pre_handle[key]){
+                            isPassPre = false;
+                        }
+                    }
+                    return isPassPre;
+                }else{
+                    return true;
+                }
+
+            }
+        },
+        methods: {
+            next:function(){
+
+
+
+
+
+
+            }
+        },
+        watch: {
+            isPassPre: function (val, oldVal) {
+               console.log("11111111111");
+               if(val){
+                   this.$nextTick(function () {
+                       if(onethingItemList && onethingItemList.situationData && onethingItemList.situationData[0]){
+                           initQztj(onethingItemList.situationData[0].childs);
+                           form.render();
+                       }
+                   })
+               }
+            },
+
+            checkQztj: function (val, oldVal) {
+                console.log("22222222222");
+                this.isPass =  checkQztj();
+                console.log("111111",this.isPass);
+            }
+        }
+    })
+
+
+    layui.config({
+        version: '1575889601624' //为了更新 js 缓存，可忽略
+    });
+    var element,form,laytpl,$;
+    layui.use(['form','element','laytpl'], function(){
+        laytpl = layui.laytpl;
+        element = layui.element;
+        form= layui.form;
+        $ = layui.$;
+
+
+
+
+        window.initQztj = function initQztj(data){
+            //渲染情形
+            var getTpl = qztjRootTemplate.innerHTML
+                ,view = document.getElementById('qztj');
+            laytpl(getTpl).render({data:data,type:'1'}, function(html){
+                view.innerHTML = html;
+                form.render();
+            });
+        }
+
+        //当没有前置条件时渲染情形
+        if(true){
+            if(onethingItemList && onethingItemList.situationData && onethingItemList.situationData[0]){
+                initQztj(onethingItemList.situationData[0].childs);
+                form.render();
+            }else{
+                initQztj([]);
+                form.render();
+            }
+        }
+
+        window.initChildQztj = function initChildQztj(parentid,data){
+            //渲染情形
+            var getTpl = qztjRootTemplate.innerHTML
+                ,view = document.getElementById(parentid+'_childContent');
+            laytpl(getTpl).render({data:data,type:'2'}, function(html){
+                view.innerHTML = html;
+                form.render();
+            });
+        }
+
+
+
+        form.on('checkbox(pre_handle)', function(data){
+
+            var name = layui.$(data.elem).attr('name');
+            indexApp.pre_handle[name] = data.elem.checked;
+            console.log(indexApp.pre_handle);
+
+        });
+
+        form.verify({
+            otherReq: function(value,item){
+                var $ = layui.$;
+                var verifyName=$(item).attr('name')
+                    , verifyType=$(item).attr('type')
+                    ,formElem=$(item).parents('.layui-form')//获取当前所在的form元素，如果存在的话
+                    ,verifyElem=formElem.find('input[name='+verifyName+']')//获取需要校验的元素
+                    ,isTrue= verifyElem.is(':checked')//是否命中校验
+                    ,focusElem = verifyElem.next().find('i.layui-icon');//焦点元素
+                if(!isTrue || !value){
+                    //定位焦点
+                    focusElem.css(verifyType=='radio'?{"color":"#FF5722"}:{"border-color":"#FF5722"});
+                    //对非输入框设置焦点
+                    focusElem.first().attr("tabIndex","1").css("outline","0").blur(function() {
+                        focusElem.css(verifyType=='radio'?{"color":""}:{"border-color":""});
+                    }).focus();
+                    return '必填项不能为空';
+                }
+            }
+
+        });
+
+        form.on('submit(*)', function(data){
+            // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+            // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            console.log(JSON.stringify(data.field)); //当前容器的全部表单字段，名值对形式：{name: value}
+            // indexApp.next();
+
+            var param = data.field;
+
+            var url = "/register/saveRegisterFirst.do";
+
+            var siContentArr = [];
+
+            var itemIdArr = [];
+
+            for(key in param){
+
+                if(key.indexOf("_qx")>=0){
+
+                    if(param[key].indexOf("_item_")>=0){
+                        var arr = param[key].split("_item_");
+                        siContentArr.push(arr[0]);
+                        if(arr[1]){
+                            var s = arr[1].split(",");
+                            for(var j=0;j<s.length;j++){
+                                if(s[j]){
+                                    itemIdArr.push(s[j]);
+                                }
+                            }
+                        }
+
+                        console.log("得到事项ID+++++++",arr[1]);
+                        // for(var i=0;i<onethingItemList.bitemList.length;i++){
+                        //
+                        //     if(onethingItemList.bitemList[i].id){
+                        //
+                        //         itemIdArr.push(onethingItemList.bitemList[i]);
+                        //
+                        //     }
+                        // }
+                    }else{
+                        siContentArr.push(param[key])
+                    }
+                }
+            }
+            console.log("**************",itemIdArr);
+
+
+            parent.layer.close(index);
+
+            parent.layer.open({
+                type: 2,
+                title: '本科生入户事项办理',
+                shadeClose: false,
+                shade: 0.5,
+                maxmin: true,
+                area: ['90%', '90%'],
+                // content: '/register/toRegisterIndex.do?itemId='+itemId+'&itemIdArr=11441900007331881C3442106100010' //iframe的url
+                content: '/register/toRegisterIndex.do?itemId='+itemId+'&itemIdArr='+itemIdArr.join(',') //iframe的url
+            });
+
+
+            // globalAsyncPost(url, {
+            //     "matterCode": param.matterCode || '',
+            //         "apName": param.apName || '',
+            //         "apNumberType": param.apNumberType || '',
+            //         "apNumber": param.apNumber || '',
+            //         "rWay": param.rWay || '',
+            //         "rHall": param.rHall || '',
+            //         "content": "",
+            //         "siContent": siContentArr.join(","),
+            // },function(res) {
+            //     console.log(res);
+            //     if(res && res.flag == true){
+            //         indexApp.next();
+            //     }else{
+            //         layer.msg('保存失败，请重试!');
+            //     }
+            // })
+
+
+
+
+
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+
+        window.checkQztj = function checkQztj(){
+            var flag = true;
+            $(".qztj").each(function(){
+                var name = $(this).attr("name");
+                flag = $("input[name='"+name+"']:checked").val();
+                var sfzz = $("input[name='"+name+"']:checked").attr("sfzz");
+                console.log(sfzz);
+                console.log(flag);
+                if(!flag){
+                    flag = false;
+                }else{
+                    console.log("asdjajdsjajds",sfzz == "1")
+                    if(sfzz == "1"){
+                        flag = false;
+                    }
+                }
+            });
+
+            return flag;
+        }
+
+
+        form.on('radio(qingxing)', function(data){
+            console.log(data); //得到radio原始DOM对象
+            console.log(data.elem); //得到radio原始DOM对象
+            console.log($(data.elem).attr("parentname")); //被点击的radio的value值
+            console.log($(data.elem).attr("name")); //被点击的radio的value值
+            console.log("当前节点是否终止————————",$(data.elem).attr("sfzz")); //被点击的radio的value值
+
+            console.log(data.value); //被点击的radio的value值
+            indexApp.checkQztj = data.value;
+            form.render();
+
+            if($(data.elem).attr("sfzz") == '1'){
+                layer.alert('符合该条件不允许继续办理业务,请重新确认')
+            }
+
+            var parentId = $(data.elem).attr("name");
+            parentId = parentId.substring(0,parentId.indexOf("_"));
+            var id = data.value;
+
+            var arr = getItemChild(data.value,onethingItemList.situationData[0])
+            console.log("获取回答问题下级——————————",arr,parentId);
+            if(arr && arr.length>0){
+                initChildQztj(parentId,arr);
+            }else{
+                initChildQztj(parentId,[]);
+            }
+
+
+
+
+        });
+
+
+        var $ = layui.$, active = {
+
+            next: function(){
+
+                console.log("1111");
+                parent.layer.close(index);
+            }
+        }
+
+        $('.registerTableDemo .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+    });
+</script>
+
+</html>

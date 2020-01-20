@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yjs.dao.mapper.InspectionMapper">
+	
+	
+	<insert id="save" parameterType="com.yjs.bean.inspection.Inspection">
+	insert into ro_inspection
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+	<if test="inContent != null">
+		in_content,
+	</if>
+	<if test="businessCode != null">
+	business_code,
+	</if>
+	
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+	<if test="inContent != null">
+	#{inContent,jdbcType=LONGVARCHAR},
+	</if>
+	<if test="businessCode != null">
+	#{businessCode,jdbcType=VARCHAR},
+	</if>
+	</trim>
+	</insert>
+
+	<select id="findAllByBusinessCode" resultType="Inspection" resultMap="inspection">
+		select * from ro_inspection where business_code = #{businessCode};
+	</select>
+
+	<resultMap id="inspection" type="Inspection">
+		<id property="id" column="id"/>
+		<result property="inContent" column="in_content"/>
+		<result property="businessCode" column="business_code"/>
+	</resultMap>
+
+	<update id="update"  parameterType="com.yjs.bean.inspection.Inspection">
+		UPDATE ro_inspection
+		<trim prefix="set" suffixOverrides=",">
+			<if test="inContent!=null">in_content=#{inContent},</if>
+			<if test="businessCode!=null">business_code=#{businessCode},</if>
+		</trim>
+		WHERE business_code=#{businessCode}
+	</update>
+</mapper>

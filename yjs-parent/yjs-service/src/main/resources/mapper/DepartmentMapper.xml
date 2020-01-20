@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yjs.dao.mapper.DepartmentMapper">
+	
+	<select id="findByDepartmentId" resultType="com.yjs.bean.department.Department" resultMap="department">
+		select * from ro_department where id = #{departmentId};
+	</select>
+
+	<resultMap id="department" type="Department">
+		<id property="id" column="id"/>
+		<result property="departmentName" column="department_name"/>
+	</resultMap>
+
+	<select id="findByBusinessCode" resultType="com.yjs.bean.department.Department" resultMap="department">
+		SELECT a.id, a.department_name FROM ro_department a, ro_datum b, ro_items c WHERE a.id = c.department_id AND b.items_id = c.id AND b.business_code = #{businessCode}
+	</select>
+
+	<select id="findByItemsId" resultType="com.yjs.bean.department.Department" resultMap="department">
+		SELECT a.id, a.department_name FROM ro_department a,ro_items c WHERE a.id = c.department_id AND c.id = #{itemsIds};
+	</select>
+
+</mapper>

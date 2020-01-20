@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>开办企业一窗受理</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0 , user-scalable=no" /> 
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="format-detection" content="telephone=no,email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link href="/css/0.f814ee32.css" rel="stylesheet"><link href="/css/3.ee31b0c7.css" rel="stylesheet"></head>
+    <body>
+        <script>
+// Array includes Polyfill
+if (!Array.prototype.includes) {
+  Object.defineProperty(Array.prototype, 'includes', {
+    value: function(searchElement, fromIndex) {
+
+      // 1. Let O be ? ToObject(this value).
+      if (this == null) {
+        throw new TypeError('"this" is null or not defined');
+      }
+
+      var o = Object(this);
+
+      // 2. Let len be ? ToLength(? Get(O, "length")).
+      var len = o.length >>> 0;
+
+      // 3. If len is 0, return false.
+      if (len === 0) {
+        return false;
+      }
+
+      // 4. Let n be ? ToInteger(fromIndex).
+      //    (If fromIndex is undefined, this step produces the value 0.)
+      var n = fromIndex | 0;
+
+      // 5. If n ≥ 0, then
+      //  a. Let k be n.
+      // 6. Else n < 0,
+      //  a. Let k be len + n.
+      //  b. If k < 0, let k be 0.
+      var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+
+      // 7. Repeat, while k < len
+      while (k < len) {
+        // a. Let elementK be the result of ? Get(O, ! ToString(k)).
+        // b. If SameValueZero(searchElement, elementK) is true, return true.
+        // c. Increase k by 1.
+        // NOTE: === provides the correct "SameValueZero" comparison needed here.
+        if (o[k] === searchElement) {
+          return true;
+        }
+        k++;
+      }
+
+      // 8. Return false
+      return false;
+    }
+  });
+}
+        </script>
+    	<div id="root">
+      </div>
+      <!-- <script src="https://cdn.bootcss.com/babel-polyfill/6.23.0/polyfill.min.js"></script> -->
+      <script src="//static.gdzwfw.gov.cn/mhyy/browser-upgrade/index.js"></script>
+    <script type="text/javascript" src="/js/vendors.893eecb7.js" crossorigin="anonymous"></script><script type="text/javascript" src="/js/manifest.96f2a6ec.js" crossorigin="anonymous"></script><script type="text/javascript" src="/js/benkeruhu.36cefd7e.js" crossorigin="anonymous"></script></body>
+</html>

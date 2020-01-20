@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+  <meta charset="UTF-8">
+  <title>非婚生育说明</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <link rel="stylesheet" href="/static/css/font.css"  >
+<!--  <link rel="stylesheet" href="/static/css/xadmin.css" >-->
+  <link rel="stylesheet" href="/static/layui/css/layui.css">
+  <link rel="stylesheet" href="/static/css/custom.css">
+  <script src="/static/js/utils/tool.js" charset="utf-8"></script>
+  <script src="/static/js/utils/gongan.js" charset="utf-8"></script>
+  <script src="/static/layui/layui.js" charset="utf-8"></script>
+  <script src="/static/js/vue/vue.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/static/js/jquery-1.8.2.min.js"></script>
+<!--  <script type="text/javascript" src="/static/js/xcity.js"></script>-->
+  <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+  <style>
+
+      body {
+          width: 100%;
+          min-height: 100%;
+          background: #fff;
+      }
+
+      .layui-form-label {
+          width: 180px;
+      }
+
+      .layui-input-block {
+          margin-left: 210px;
+      }
+
+      .layui-form-item .layui-input-inline {
+          width: 250px;
+      }
+
+      .layui-row{
+          margin-bottom: 10px;
+      }
+
+      thead .layui-table-cell {
+          padding: 0 10px;
+      }
+
+      /*.layui-table-cell {*/
+      /*    overflow: visible !important;*/
+      /*}*/
+      .layui-table-box {
+          overflow: visible;
+      }
+      .layui-table-body {
+          overflow: visible;
+      }
+      td .layui-form-select {
+          margin-top: -10px;
+          margin-left: -15px;
+          margin-right: -15px;
+      }
+
+      .laytable-cell-1-0-1{
+          overflow: visible !important;
+      }
+      .laytable-cell-1-0-0, .laytable-cell-1-0-3{
+          padding: 0px;
+          overflow: visible !important;
+      }
+      .laytable-cell-1-0-2, .laytable-cell-1-1-2, .laytable-cell-1-2-2, .laytable-cell-1-3-2, .laytable-cell-1-4-2, .laytable-cell-1-5-2,
+      .laytable-cell-1-6-2, .laytable-cell-1-7-2, .laytable-cell-1-8-2, .laytable-cell-1-9-2, .laytable-cell-1-10-2 {
+          padding: 0px;
+          overflow: visible !important;
+      }
+  </style>
+
+</head>
+
+<body>
+
+    <div id="indexApp" class="registerTableDemo" style="padding: 10px;">
+        <form class="layui-form"  lay-filter="form_NonMarriage">
+            <div style="text-align: center;padding: 20px;">
+                <h2 style="font-weight: 600;">非婚生育说明</h2>
+            </div>
+            <div style="width:90%;margin-left: auto; margin-right: auto;">
+
+                <div class="layui-row">
+                    <div class="layui-col-xs12">
+                        <label class="layui-form-label"><span style="color:red">*</span>婚况</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="maritalStatus" value="1" title="非婚生" checked="" lay-filter="maritalStatus" >
+                            <input type="radio" name="maritalStatus" value="2" title="单亲" lay-filter="maritalStatus">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="layui-row">
+                    <div class="layui-col-xs6">
+                        <label class="layui-form-label"><span style="color:red">*</span>本人</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" lay-verify="name" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <label class="layui-form-label"><span style="color:red">*</span>公民身份号码</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="selfCertId" lay-verify="certID" placeholder="请输入" autocomplete="off" class="layui-input">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-row">
+                    <div class="layui-col-xs6">
+                        <label class="layui-form-label"><span style="color:red">*</span>与居民</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="loverName" lay-verify="name" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <label class="layui-form-label"><span style="color:red">*</span>公民身份号码</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="loverCertId" lay-verify="certID" placeholder="请输入" autocomplete="off" class="layui-input">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-row">
+                    <div class="layui-col-xs6">
+                        <label class="layui-form-label"><span style="color:red">*</span>生育孩子个数</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="childNumber" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-row">
+                    <div class="layui-col-xs12">
+                            <label class="layui-form-label"><span style="color:red">*</span>未办理结婚证的原因</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="nonMarriageReason" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                    </div>
+                </div>
+
+                <div class="layui-row" v-if="maritalStatus == '2'">
+                    <div class="layui-col-xs10">
+                        <label class="layui-form-label"><span style="color:red">*</span>造成单亲小孩入户的原因</label>
+                        <div class="layui-input-block">
+                            <div>
+                                <input type="radio" name="danqinReason" value="wfqr" title="无法确认生父（母）身份"  lay-filter="danqinReason" >
+
+                            </div>
+                            <div>
+                                <input type="radio" name="danqinReason" value="xjxx" title="生父（母）使用虚假身份信息登记出生医学证明" lay-filter="danqinReason">
+
+                            </div>
+                            <div>
+                                <input type="radio" name="danqinReason" value="wflx" title="无法联系生父（母）" lay-filter="danqinReason">
+
+                            </div>
+                            <div>
+                                <input type="radio" name="danqinReason" value="qt" title="其他" lay-filter="danqinReason">
+
+                            </div>
+                            <div v-if="danqinReason == 'qt'">
+                                <input type="text" name="nonMarriageReason" lay-verify="required"  placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="layui-row">
+                    <div class="layui-col-xs12">
+                        <label class="layui-form-label"><span style="color:red">*</span>非婚生育小孩情况：</label>
+                    </div>
+                </div>
+
+                <div style="width: 80%;margin: auto;margin-bottom: 20px;margin-top: -10px">
+                    <table class="layui-hide" id="brotherTable" lay-filter="brotherTable"></table>
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" @click="addBrother">添加</button>
+                </div>
+
+                <div class="layui-row">
+                    <div class="layui-col-xs12">
+                        <label class="layui-form-label" style="width: 100%;text-align: left;"><span style="color:red">*</span>本人郑重声明以上内容真实无误，如有虚假，愿承担一起法律责任。</label>
+
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-xs12">
+                        <div class="layui-input-block">
+                            <input type="radio" name="ifconfirm" lay-verify="required" checked="" value="1" title="请确认" lay-filter="ifconfirm" >
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div style="text-align: center;margin-top: 20px;">
+<!--                lay-submit="" lay-filter="*"  @click="next"-->
+                <button type="button" lay-submit="" lay-filter="*" class="layui-btn layui-btn-normal" >完成</button>
+
+            </div>
+        </form>
+
+
+    </div>
+</body>
+<script type="text/html" id="selectRelation">
+    <select lay-filter="printerNo_select" lay-verify="required">
+        <option value=""></option>
+        <option value="1" {{d.sex=='1'?'selected':''}}>男</option>
+        <option value="2" {{d.sex=='2'?'selected':''}}>女</option>
+    </select>
+</script>
+
+<script type="text/html" id="inputName">
+    <input type="text" value="{{d.name}}"  onchange="chooseCateAttr($(this),'name','{{d.LAY_INDEX}}')" style="margin-top: -10px;"  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+</script>
+<script type="text/html" id="inputAddress">
+    <input type="text" value="{{d.birthaddress}}" onchange="chooseCateAttr($(this),'birthaddress','{{d.LAY_INDEX}}')" style="margin-top: -10px;"  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+</script>
+
+
+<script type="text/html" id="selectCertType">
+    <input type="text" style="margin-top: -10px;" readonly id="birthdate_{{d.LAY_INDEX}}"  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+</script>
+<script type="text/html" id="inputCertId">
+    <input type="text" >
+</script>
+<script type="text/html" id="caozuoTpl">
+    <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="delete" >删除</button>
+</script>
+<script   th:inline="javascript">
+
+    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+    // var formData = "";
+    //
+    // function initFormData(data){
+    //     console.log("父亲触发了我——————————");
+    //     if(data){
+    //         formData = data;
+    //         if(formData){
+    //             form.val("form_NonMarriage", formData);
+    //         }
+    //     }
+    // }
+    // console.log("获得初始化表单值-------",formData);
+
+    var itemId = [[${itemId}]];
+
+    var itemIdStr = [[${itemIdStr}]];
+
+    var materialId = [[${materialId}]];
+
+    var materialItemId = [[${materialItemId}]];
+
+    var businessCode = [[${businessCode}]];
+
+    console.log("主题ID------",itemId);
+
+    console.log("主题事项ID------",itemIdStr);
+
+    console.log("事项材料ID------",materialId);
+
+    console.log("事项材料对应事项ID------",materialItemId);
+
+    console.log("业务ID------",businessCode);
+
+    var indexApp = new Vue({
+        el: '#indexApp',
+        data: {
+            acceptData:acceptData,//公安受理地单位数据
+            bloodData:bloodData,//血型数据
+            inareaData:inareaData,
+            IdtypeData:IdtypeData,
+            danqinReason:'1',
+            maritalStatus:'1',
+            pre_handle:{notDgHj:false,notXsfz:false},
+            qrzry:"1",
+            certid:'',
+            birthdate:'',
+            nation:nation,
+            brotherData:[{"name":'',"sex":"","birthdate":'',"birthaddress":''}]
+        },
+        // beforeMount: function () {
+        //     this.$nextTick(function () {
+        //         form.render();
+        //     })
+        // },
+        updated: function () {
+            this.$nextTick(function () {
+                form.render();
+                element.init();
+            })
+        },
+        computed: {
+
+            getBrotherData: function(){
+                return "{ data:"+JSON.stringify(this.brotherData)+",  id:'test'}";
+            },
+            getNowFormatDate: function(){
+                return getNowFormatDate();
+            },
+            getbirthdate: function () {
+                if(this.certid){
+                    return getBirthdate(this.certid);
+                }else{
+                    return getBirthdate(this.certid);
+                }
+            }
+        },
+        methods: {
+
+            addBrother: function(){
+                this.brotherData.push({"name":'',"sex":"","birthdate":'',"birthaddress":''})
+                console.log(this.brotherData);
+                this.$nextTick(function(){
+                    table.reload('brotherTable',{
+                        data: this.brotherData
+                    });
+                })
+
+            },
+            next: function(){
+
+                console.log("111");
+
+                parent.layer.close(index);
+
+                // parent.layer.open({
+                //     type: 2,
+                //     title: '本科生入户事项办理',
+                //     shadeClose: false,
+                //     shade: 0.5,
+                //     maxmin: true,
+                //     area: ['90%', '90%'],
+                //     content: '/register/toUploadMaterial.do' //iframe的url
+                // });
+
+                parent.layer.open({
+                    type: 2,
+                    title: "上传材料",
+                    shade: 0.5,
+                    maxmin: true,
+                    area: ['90%', '90%'],
+                    content: '/register/toRegisterIndex.do?businessCode='+businessCode+'&formPage=material&itemId='+itemId+'&itemIdArr='+itemIdStr
+                });
+
+            }
+        },
+        watch: {
+            certid: function (val, oldVal) {
+                if(val && val.length>=18){
+                    this.birthdate = getBirthdate(val);
+                }
+            },
+        }
+    })
+
+
+    layui.config({
+        version: '1575889601624' //为了更新 js 缓存，可忽略
+    });
+    var element,form,table;
+    var $;
+    layui.use(['form','element','laydate','table'], function(){
+        element = layui.element;
+        var laydate = layui.laydate;
+        form= layui.form;
+        table= layui.table;
+        $ = layui.$;
+
+        var formData = parent.$('.form_NonMarriage').find(".form-json").val();
+
+        if(formData){
+
+            formData = JSON.parse(formData);
+
+            console.log("获取表单数据------",formData);
+
+            if(formData.maritalStatus){
+
+                indexApp.maritalStatus = formData.maritalStatus;
+
+            }
+
+            if(formData.childData){
+
+                indexApp.brotherData = formData.childData;
+            }
+
+            indexApp.$nextTick(function(){
+                form.val("form_NonMarriage", formData);
+            })
+
+
+        }
+
+        // $('#start').xcity('广东');
+        function initTable(){
+            table.render({
+                elem: '#brotherTable'
+                , data: indexApp.brotherData
+                // , page: false
+                , limit: 100
+                , id: "brotherTable"
+                // , cellMinWidth: 200
+                , cols: [
+                    [
+                        {field: "name", width:120, title: "小孩姓名",templet: '#inputName' }//inputName
+                        , {field: "sex",width:120, title: "性别",templet: '#selectRelation'} //,templet: '#selectRelation'
+                        , {field: "birthdate",width:120, title: "出生日期",templet: '#selectCertType'} //,templet: '#selectCertType'
+                        , {field: "birthaddress", title: "出生地点",templet: '#inputAddress'}
+                        , {title: "操作",toolbar: '#caozuoTpl',width:80 }
+                    ]
+                ]
+                ,done: function(res, curr, count){
+                    //如果是异步请求数据方式，res即为你接口返回的信息。
+                    //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                    console.log(res);
+
+                    //得到当前页码
+                    console.log(curr);
+
+                    //得到数据总量
+                    console.log(count);
+                    for(var i=0;i<count;i++){
+                        var index = i+1;
+                        laydate.render({
+                            elem: '#birthdate_'+index
+                            ,trigger: 'click' //采用click弹出
+                            ,value: indexApp.brotherData[index-1].birthdate
+                            ,done: function(value, date, endDate){
+                                console.log(this.elem.selector.split('_')[1],index,"    ",value); //得到日期生成的值，如：2017-08-18
+                                indexApp.brotherData[Number(this.elem.selector.split('_')[1])-1].birthdate = value;
+                                console.log(indexApp.brotherData,date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+                                console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+                            }
+                        });
+                    }
+
+                }
+            });
+        }
+
+        initTable();
+
+        window.chooseCateAttr =function chooseCateAttr(event,name,index){
+            console.log("11111",event.val(),index,name);
+            indexApp.brotherData[Number(index)-1][name] = event.val();
+            indexApp.$nextTick(function(){
+                table.reload('brotherTable',{
+                    data: indexApp.brotherData
+                });
+            })
+        }
+
+        //监听工具条
+        table.on('tool(brotherTable)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+            var trElem = $(obj.tr);
+            if(layEvent === 'batch'){ //
+                //do somehing
+
+
+            } else if(layEvent === 'delete'){ //删除
+                layer.confirm('真的删除行么', {icon: 7, title:'提示'},function(index){
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+
+                    indexApp.brotherData.splice(trElem.data('index'),1);
+
+                    indexApp.$nextTick(function(){
+                        table.reload('brotherTable',{
+                            data: indexApp.brotherData
+                        });
+                    })
+                    console.log("删除后的结果信息----",indexApp.brotherData)
+                    layer.close(index);
+                    //向服务端发送删除指令
+                });
+            }
+        });
+
+        //毕业日期
+        laydate.render({
+            elem: '#birthdate',
+            trigger: 'click' //采用click弹出
+        });
+        //出生日期
+        laydate.render({
+            elem: '#graduateDate',
+            trigger: 'click' //采用click弹出
+        });
+        //出生证签发日期
+        laydate.render({
+            elem: '#birthCertStartDate',
+            trigger: 'click' //采用click弹出
+        });
+
+        // 监听表格中的下拉选择将数据同步到table.cache中
+        form.on('select(printerNo_select)', function (data) {
+            console.log("data-----",data);
+            var selectElem = $(data.elem);
+            var tdElem = selectElem.closest('td');
+            var trElem = tdElem.closest('tr');
+            var tableView = trElem.closest('.layui-table-view');
+            console.log("data-----",trElem.data('index'));
+            console.log("data-----",tdElem.data('field'));
+            table.cache[tableView.attr('lay-id')][trElem.data('index')][tdElem.data('field')] = data.value;
+            indexApp.brotherData[trElem.data('index')][tdElem.data('field')] = data.value;
+            console.log("表格上的数据------", indexApp.brotherData)
+        });
+
+        //监听单元格编辑
+        table.on('edit(brotherTable)', function(obj){
+            var trElem = $(obj.tr);
+            var value = obj.value //得到修改后的值
+                ,data = obj.data //得到所在行所有键值
+                ,field = obj.field; //得到字段
+            console.log(trElem.data('index'),value,data,field);
+            // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+            indexApp.brotherData[trElem.data('index')][field] = value;
+            console.log("表格上的数据------", indexApp.brotherData)
+        });
+
+
+        form.on('submit(*)', function(data){
+            // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+            // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            // indexApp.next();
+            // if(data.field.existBrotherInfo == '1'){
+
+                if(indexApp.brotherData && indexApp.brotherData.length>0){
+                    console.log(indexApp.brotherData);
+                    for(var i=0;i<indexApp.brotherData.length;i++){
+                        for(var j in indexApp.brotherData[i]) {
+
+                            if(!indexApp.brotherData[i][j] && j != 'LAY_TABLE_INDEX'){
+                                console.log("123123123");
+                                layer.alert('请完善生育孩子信息!', {icon: 5});
+                                return;
+                            }
+
+                        }
+                    }
+
+                }else{
+                    layer.alert('请完善生育孩子信息!', {icon: 5});
+                    return;
+                }
+            // }
+
+            data.field.childData = indexApp.brotherData;
+
+
+
+            console.log("提交。。。。",data.field);
+            // parent.formCallback(data.field);
+
+
+            parent.$('.form_NonMarriage').find(".form-json").val(JSON.stringify(data.field));
+            parent.$('.form_NonMarriage').find(".form_tips").text("(已填写)");
+            parent.layer.close(index);
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+
+        form.on('checkbox(pre_handle)', function(data){
+
+            var name = layui.$(data.elem).attr('name');
+            indexApp.pre_handle[name] = data.elem.checked;
+            console.log(indexApp.pre_handle);
+
+        });
+
+        //监听是否出生证存在父母信息
+        form.on('radio(danqinReason)', function(data){
+            console.log(data.elem); //得到radio原始DOM对象
+            console.log(data.value); //被点击的radio的value值
+            // indexApp.qrzry = data.value;
+            indexApp.danqinReason = data.value
+            form.render();
+        });
+
+        //监听是否存在兄弟姐妹信息
+        form.on('radio(maritalStatus)', function(data){
+            console.log(data.elem); //得到radio原始DOM对象
+            console.log(data.value); //被点击的radio的value值
+            // indexApp.qrzry = data.value;
+            indexApp.maritalStatus = data.value
+            // if(data.value == '1'){
+            //     indexApp.$nextTick(function(){
+            //         initTable();
+            //     })
+            //
+            // }
+            form.render();
+        });
+
+
+
+        var $ = layui.$, active = {
+
+            next: function(){
+
+                console.log("1111");
+                parent.layer.close(index);
+            }
+        }
+
+        $('.registerTableDemo .layui-btn').on('click', function(){
+            console.log("1111");
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+        form.verify({
+            //对应表单组件的lay-verify值
+            name: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '姓名不能为空';
+                }
+                if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+                    return '姓名不能有特殊字符';
+                }
+                if(/(^\_)|(\__)|(\_+$)/.test(value)){
+                    return '姓名首尾不能出现下划线\'_\'';
+                }
+                if(/^\d+\d+\d$/.test(value)){
+                    return '姓名不能全为数字';
+                }
+            },
+            certID: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '身份证号码不能为空';
+                }
+                if(!verifyCertId(value)){
+                    return '请输入正确的身份证号码';
+                }
+
+            },
+            nation: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!value){
+                    return '请选择民族';
+                }
+            },
+
+        });
+
+
+    });
+
+
+
+</script>
+
+</html>

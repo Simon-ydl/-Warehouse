@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:position="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>图片页面</title>
+    <link rel="stylesheet" href="static/layui/css/layui.css" media="all">
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/vue/vue.js"></script>
+    <script src="static/js/vue/axios.js"></script>
+</head>
+<body>
+<div id="app">
+
+    <div style="height: 110px;width: 100px">
+        <ul>
+            <li>
+                <div style="margin-top: 20px;margin-left: 20px">
+
+                    <div style="z-index:1;position: absolute;width: 100px;height: 20px;background:rgb(76, 66, 54);"><p>{{fileDetails.file_name}}</p></div>
+                    <div >
+                        <a :href="url" target="_Blank" >
+                            <img :src="url" width="100px" height="100px"/>
+                        </a></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+
+
+<script>
+    $(function () {
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                fileDetails:{},
+                head:'http://19.104.51.80/',
+                url:''
+            },
+            methods: {
+                aaa: function () {
+                    axios({
+                        url: '/datum/findByBusinessResultFile',
+                    }).then(respond => {
+
+                        this.fileDetails = respond.data.data
+                        this.url=this.head+this.fileDetails.file_url
+                        if (this.fileDetails.file_name.length>6){
+                            this.fileDetails.file_name=this.fileDetails.file_name.substring(0,6)+"....";
+                        }
+                        console.log(this.fileDetails)
+                        console.log(this.url)
+                    })
+                },
+                aJump:function () {
+
+                }
+            },
+            mounted: function () {
+                this.aaa();
+            }
+        })
+    })
+</script>
+</body>
+</html>

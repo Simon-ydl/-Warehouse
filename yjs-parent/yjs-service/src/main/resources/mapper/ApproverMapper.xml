@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yjs.dao.mapper.ApproverMapper">
+
+	<select id="findAllByBusinessCode" resultType="Approver" resultMap="approver">
+		select * from ro_approver where business_code = #{businessCode};
+	</select>
+	<select id="findAllByBusinessCodeAndItemId" resultType="Approver" resultMap="approver">
+		select * from ro_approver where business_code = #{businessCode} and item_id = #{itemId};
+	</select>
+	<update id="updateLackMaterials"  parameterType="com.yjs.bean.approver.Approver">
+		UPDATE ro_approver
+		<trim prefix="set" suffixOverrides=",">
+			<if test="lackMaterials!=null">lack_materials=#{lackMaterials},</if>
+		</trim>
+		WHERE business_code=#{businessCode}
+	</update>
+
+	<resultMap id="approver" type="Approver">
+		<id property="id" column="id"/>
+		<result property="approver" column="approver"/>
+		<result property="approverOpinion" column="approverOpinion"/>
+		<result property="departmentId" column="department_id"/>
+		<result property="itemId" column="item_id"/>
+		<result property="createTime" column="create_time"/>
+		<result property="businessCode" column="business_code"/>
+	</resultMap>
+
+</mapper>

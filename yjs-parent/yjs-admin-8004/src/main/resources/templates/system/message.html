@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="/static/js/jquery.js"></script>
+        <script type="text/javascript" src="/static/js/global.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/css/layui.css">
+        <script type="text/javascript" src="/static/js/validate.js"></script>
+        <script type="text/javascript" src="/static/js/widget.js"></script>
+        <link href="/static/css/rcms_edit.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="/static/js/jquery.pstrength.js"></script>
+        <link href="/static/css/pstrength.css" rel="stylesheet" type="text/css">
+        <script src="/static/js/vue/vue.js"></script>
+        <script src="/static/js/vue/axios.js"></script>
+        <style>
+            .layui-input-block {
+                margin-left: 135px;
+            }
+            .third-input {
+               width: 420px;
+            }
+            .layui-table-cell {
+                height: auto;
+                line-height: 28px;
+            }
+
+        </style>
+    </head>
+    <body>
+    <div class="bodyDiv" >
+        <form id="mainForm" name="mainForm"  class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>基本信息<span style="color:red" id="tips"></span></legend>
+            </fieldset>
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <span class="layui-form-label">登录名称</span>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" disabled="disabled" id="userCode" :value="details.account" style="width:630px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md12">
+                    <div class="layui-form-item">
+                        <span class="layui-form-label"><font color="red">*</font>所属单位</span>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" :value="details.user_org" disabled="disabled" id="userOrg" style="width:630px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <span class="layui-form-label">窗口编号</span>
+                        <div class="layui-input-inline">
+                            <input type="value" class="layui-input" :value="details.ck_id" disabled="disabled" id="ckId" style="width:630px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <span class="layui-form-label">窗口名称</span>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" disabled="disabled" :value="details.ck_name" id="ckName" style="width:630px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <span class="layui-form-label">大厅编号</span>
+                        <div class="layui-input-inline">
+                            <input type="value" class="layui-input" disabled="disabled" :value="details.dt_id" id="dtId" style="width:630px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <span class="layui-form-label">大厅名称</span>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" disabled="disabled" :value="details.dt_name" id="dtName" style="width:630px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <span class="layui-form-label">用户角色</span>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" disabled="disabled" :value="details.user_role" id="userRole" style="width:630px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <span class="layui-form-label">联系电话</span>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" disabled="disabled" :value="details.user_tel" id="userTel" style="width:630px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    </body>
+<script>
+ $(function () {
+     var vm = new Vue({
+       el:'.bodyDiv',
+       data:{
+           details:{}
+       },
+         methods:{
+           message:function () {
+                axios({
+                    url:'/user/details',
+                }).then(response=>{
+                    this.details=response.data.data;
+                    console.log(this.details);
+                })
+           }
+         },mounted:function () {
+            this.message();
+         }
+     })
+ })
+</script>
+</html>

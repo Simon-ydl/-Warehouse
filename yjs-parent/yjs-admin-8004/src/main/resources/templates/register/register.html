@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>现场登记</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/layui.global.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/iconfont.css">
+    <!-- 单选框、复选框样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/ui-choose.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/registration.css">
+    <link rel="stylesheet" href="/static/css/file.uploader.css">
+    <link rel="stylesheet" href="/static/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/file.uploader.css">
+    <link rel="stylesheet" href="/static/css/xcdj.css">
+
+    <link rel="stylesheet" type="text/css" href="/static/css/city-select.v2.css">
+    <style>
+        body .layui-open-css .layui-layer-title{
+            background-color: #1e9fff;
+        }
+
+        #detailBdDiv {
+            display: none;
+        }
+
+        #detailBdNr button{
+            border: 0px;
+            text-align: left;
+            color: #009688;
+        }
+        #detailBdNr button:hover{
+            color: red;
+        }
+        #detailBdNr button:active{
+            margin-left: -2px;
+        }
+        #detailBdNr button.fail label{
+            color: red;
+        }
+        #detailBdNr button.pass{
+            color: green;
+        }
+
+        #detailBdNr .formBtn{
+            margin-left: 10px;
+            margin-top: 5px;
+            width: 30%;
+        }
+
+        #send-checkbox {
+            /*position: absolute;*/
+            /*right: 35px;*/
+            position: fixed;
+            bottom: 10px;
+            right: 35px;
+        }
+
+        #screen-panel{
+            position: fixed;
+            bottom: 10px;
+            left: 35px;
+        }
+
+        #send-checkbox span {
+            color: white !important;
+        }
+
+        div .layui-form-radio {
+            position: relative;
+            /*top: -14px;*/
+        }
+
+        .page-num {
+            width: 20px;
+            text-align: center;
+        }
+
+        .layui-table thead tr:hover{
+            background: #F2F2F2;
+        }
+
+        .layui-table td{
+            padding: 9px 10px;
+        }
+
+        .layui-form-checkbox[lay-skin=primary] span {
+            white-space: normal;!important;
+            padding-left: 28px;!important;
+        }
+
+        .layui-form-checkbox[lay-skin=primary] i {
+            position: absolute;!important;
+            left: 0;!important;
+        }
+
+        /*
+            thead背景色, 这样子td的border将由这个背景色来充当
+         */
+        thead {
+            background: #e6e6e6;
+        }
+
+        /*
+            thead td的背景色, 防空白, 3行以上会有空白, 暂无解
+         */
+        thead tr td {
+            background: #F2F2F2;
+        }
+        ._gl{
+            background: #009688;
+        }
+    </style>
+</head>
+<body>
+<textarea hidden="true" name="content" cols="1" rows="6" id="content" style="width:100%; border: 1px solid #888888;LINE-HEIGHT:18px;padding: 3px; font-size:12px"></textarea>
+<div class="layui-fluid padd-b40">
+    <form class="layui-form formSearch" lay-filter="filterForm" onsubmit="return false;">
+        <!-- 事项受理部门统一社会信用代码-->
+        <input type="hidden" id="tongyiCode">
+        <!-- 事项受理部门统一社会信用代码-->
+        <input type="hidden" id="parTongyiCode">
+        <!-- 事项类型(行政许可/公共服务/政府内部)-->
+        <input type="hidden" id="itemType">
+        <!-- 本事项编码-->
+        <input type="hidden" id="baseItemcode">
+        <!-- 本事项唯一标识 -->
+        <input type="hidden" id="baseItemId">
+        <!-- 事项区域编码 -->
+        <input type="hidden" id="areacode">
+        <!-- 事项办件类型 -->
+        <input type="hidden" id="bjlx">
+        <!-- 事项办理是否现场拍照 -->
+        <input type="hidden" id="sfxypz">
+        <!-- 事项办理是否为二次跳转 -->
+        <input type="hidden" id="sjtzfs">
+        <!-- 电子签名ID -->
+        <input type="hidden" id="applySignId">
+        <!-- 手绘笔迹标识：空及未定义未开启功能；0：未完成；1:完成；2失败-->
+        <input type="hidden" id="signImgFlag">
+        <!-- 手绘签名ID -->
+        <input type="hidden" id="applyImgSignId">
+        <!-- 手绘复用承诺函附件ID -->
+        <input type="hidden" id="promiseAttachId">
+        <!-- 用户电子签名微信地址 -->
+        <input type="hidden" id="signUrl">
+        <!-- 用户电子签名平板地址(网融)/e签宝签署短链接 -->
+        <input type="hidden" id="pingBanUrl">
+        <!-- 电子签名平板预览材料 -->
+        <input type="hidden" id="previewContent">
+        <!-- 事项是否收费 -->
+        <input type="hidden" id="isFee">
+        <!-- 受理机构id -->
+        <input type="hidden" id="zzjgdm">
+        <!-- 业务情形id -->
+        <input type="hidden" id="ywqxid">
+        <!--  前置条件版本编号 -->
+        <input type="hidden" id="prefixId">
+        <!-- 事项id -->
+        <input type="hidden" id="auditItemId">
+        <input type="hidden" id="itemid">
+        <input type="hidden" id="itemcode">
+        <input type="hidden" id="sjxtlx">
+        <input type="hidden" id="itemVersion">
+        <input type="hidden" id="auditParItemId">
+        <input type="hidden" id="parDeptCode">
+        <!-- 办事人/企业id -->
+        <input type="hidden" id="bs-id">
+        <!-- 代办人/企业id -->
+        <input type="hidden" id="db-id">
+        <input type="hidden" id="db-agentCardType">
+        <!-- 经办人/企业id -->
+        <input type="hidden" id="jb-id">
+        <input type="hidden" id="jb-jCardType">
+        <!-- 用于防止重读选择办事人 -->
+        <input type="hidden" id="existBsIds">
+
+        <div class="layui-collapse mytheme" lay-filter="item-body">
+            <!-- 事项信息 -->
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">
+                    <div style="color: #d15b47;" id="ssmctitle">
+                    </div>
+                </h2>
+                <div class="layui-colla-content matter-info-content">
+                    <table class="layui-table" lay-skin="line">
+                        <tr class="">
+                            <td align="center" width="150" class="title">事项名称</td>
+                            <td width="" colspan="3" id="ssmc">
+
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td width="150" align="center" class="title">面向对象</td>
+                            <td id="mxdx">
+
+                            </td>
+                            <td width="150" align="center" class="title">主管部门</td>
+                            <td id="zgbm">
+
+                            </td>
+                            <!-- <td width="150" align="center" class="title">受理机构</td>
+                            <td id="sljg">
+								
+                            </td> -->
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!--叫号信息--->
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">
+                    <div style="width:60%;color: rgb(67, 142, 185);">
+                        叫号信息
+                    </div>
+                </h2>
+                <div class="layui-colla-content matter-info-content">
+                    <table class="layui-table" lay-skin="line">
+                        <tr class="">
+                            <td align="center" width="150" class="title">叫号号码</td>
+                            <td> <input type="text" id="yjhhm" name="yjhhm" lay-verify="required" autocomplete="off" class="layui-input">
+                            </td>
+                            <td align="center" width="150" class="title">叫号姓名</td>
+                            <td> <input type="text" id="yjhxm" name="yjhxm" lay-verify="required" autocomplete="off" class="layui-input">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- 办事对象信息 -->
+            <div class="layui-colla-item bsdx" id="bsdx-panel">
+                <h2 class="layui-colla-title">
+                    <div style="width:60%;color: rgb(67, 142, 185);">
+                        办事对象信息
+                    </div>
+                    <div class="condition-group headericon share-no-d" style="width:50%;padding-right:9px;text-align: right" onclick="event.cancelBubble = true">
+                        <label class="control otype-control" data-otype="1"><i></i>个人</label>
+                        <label class="control otype-control" data-otype="2"><i></i>企业</label>
+                        <span class="control db-control layui-form" lay-filter="isDb">
+                            <input lay-skin="primary" title="代办" type="checkbox" id="isDb" lay-filter="isDb-btn">
+                        </span>
+                        <span class="control post-control" id="isPostSpan">
+                            <input lay-skin="primary" title="邮递" type="checkbox" id="isPost" lay-filter="isPost-btn">
+                        </span>
+                        <label>
+                            <button class="layui-btn layui-btn-normal" type="button" id="xcPhoto">现场拍照<span class="file-num" style="color: red;"></span></button>
+                            <input class="file-json" type="hidden" value="[]">
+                        </label>
+                        <label>
+                            <button class="layui-btn layui-btn-normal" type="button" id="facesBtn">人脸识别<span style="color: red;"></span></button>
+                        </label>
+
+                    </div>
+                </h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-row">
+                        <div class="layui-form-item areaInfo" id="areaInfo">
+                            <label class="layui-form-label">所在区域</label>
+                            <div class="layui-input-block" id="areaList">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item gr gr-panel">
+                        <div class="bsrxx" data-flag="0">
+                            <div class="layui-row">
+                                <div class="layui-col-md11 layui-col-sm12 layui-col-xs12">
+                                    <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label"><span style="color:red;">*</span>姓名</label>
+                                            <div class="layui-input-block">
+                                                <div class="form-control search-form-autocomplete" name="per-name" id="per-name" placeholder="请输入办事人姓名进行检索"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label"><span style="color:red">*</span>证件号码</label>
+                                            <div class="layui-input-block">
+                                                <div class="form-control search-form-autocomplete" name="per-num" id="per-num" placeholder="请输入办事人证件号码进行检索"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <object id="eloamPlugin" type="application/x-eloamplugin" style="width: 0px;height:0px;" align="middle"></object>
+                                <div class="layui-col-md1 input-group-btn layui-col-sm12 layui-col-xs12 share-no-d">
+                                    <button type="button" class="layui-btn" onclick="readIDCardInfo()" title="点击开始读卡">
+                                        <img src="static/picture/card.png">
+                                    </button>
+
+                                    <!--
+                                    <button type="button" class="layui-btn" onclick="new Device().startFun()" title="点击开始读卡"><img src="../../../../resource/images/business/card.png"/></button>
+                                    -->
+                                    <!--<button type="button" class="layui-btn" onclick="readIdCardEloamPlugin()" title="点击开始读卡"><img src="../../../../resource/images/business/card.png"/></button>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item panel_otherinfo" id="per-info-div-0" style="display: none">
+                                <div class="layui-col-xs11">
+                                    <div class="layui-col-xs6">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">手机号码</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="per-cellphone" name="per-cellphone" readonly="readonly" placeholder="" autocomplete="off" class="layui-input cellphone">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-xs6">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">详细地址</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="per-address" name="per-address" readonly="readonly" placeholder="" autocomplete="off" class="layui-input address">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md1 input-group-btn share-no-d">
+                                    <button type="button" class="layui-btn btn-editPerInfo" title="查看详情">
+                                        <img src="static/picture/show_detail.png">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-btn-group operbsr share-no-d">
+                                <button type="button" class="layui-btn layui-btn-white layui-btn-normal add" onclick="funAddBsr(this)">
+                                    <i class="iconfont layui-extend-add"></i>
+                                    添加办事对象
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="gr" class="gr-panel"></div>
+
+                    <div class="layui-form-item qy qy-panel">
+                        <div class="bsrxx" data-qy-flag="-1">
+                            <div class="layui-row">
+                                <div class="layui-col-xs11">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label" style=" background-color: #f2f2f2;text-align: center"><span style="color:red">*</span>机构名称</label>
+                                        <div class="layui-input-block">
+                                            <div class="form-control search-form-autocomplete" name="company-name" id="company-name" placeholder="请输入机构名称进行检索"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md1 input-group-btn share-no-d">
+                                    <button type="button" class="layui-btn btn-qrcodeBtn" title="扫码" onclick="scanQrcode(-1)">
+                                        <img src="static/picture/scan.png">
+                                    </button>
+                                </div>
+                                <div class="layui-col-md1 input-group-btn">
+                                    <!--<button type="button" class="layui-btn" title="联网核查">-->
+                                    <!--<img src="../../../../resource/images/business/lwhc.png"/>-->
+                                    <!--</button>-->
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-xs11">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label" style=" background-color: #f2f2f2;text-align: center"><span style="color:red">*</span>证件号码</label>
+                                        <div class="layui-input-block">
+                                            <div class="form-control search-form-autocomplete" name="company-num" id="company-num" placeholder="请输入机构证件代码进行检索"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md1 input-group-btn share-no-d">
+                                    <button type="button" class="layui-btn btn-editComInfo" id="btn-editComInfo" title="编辑企业信息">
+                                        <img src="static/picture/show_detail.png">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-btn-group operbsr share-no-d">
+                                <button type="button" class="layui-btn layui-btn-white layui-btn-normal add" onclick="funAddBsr(this)">
+                                    <i class="iconfont layui-extend-add"></i>
+                                    添加办事对象
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="qy" class="qy-panel"></div>
+                    <div class="db-panel share-no-d">
+                        <h2 class="" style="color: rgb(67, 142, 185);margin: 10px 0px;font-size: 1rem!important;">
+                            代办对象信息</h2>
+                        <div class="layui-colla-content layui-show dbrxx">
+                            <div class="layui-form-item dblx">
+                                <label class="layui-form-label">类型</label>
+                                <div class="layui-input-block">
+                                    <ul class="ui-choose" id="uc_01">
+                                        <li data-dtype="1" class="dtype-control">个人</li>
+                                        <li data-dtype="2" class="dtype-control">企业、中介机构</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="layui-row qydb-panel">
+                                <div class="layui-col-md11" data-flag="-1">
+                                    <div class="layui-col-xs6">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label"><span style="color:red">*</span>姓名</label>
+                                            <div class="layui-input-block">
+                                                <div data-flag="-1" class="form-control search-form-autocomplete" name="db-per-name" id="db-per-name" placeholder="请输入办事人姓名进行检索"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-xs6">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label"><span style="color:red">*</span>证件号码</label>
+                                            <div class="layui-input-block">
+                                                <div data-flag="-1" class="form-control search-form-autocomplete" name="db-per-num" id="db-per-num" placeholder="请输入办事人证件号码进行检索"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md1 input-group-btn share-no-d">
+                                    <button type="button" class="layui-btn" onclick="readIdCard2(-1)" title="点击开始读卡">
+                                        <img src="static/picture/card.png">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" id="qydb-info-div" style="display: none">
+                                <div class="layui-col-xs11">
+                                    <div class="layui-col-xs6">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">手机号码</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="db-per-cellphone" readonly="readonly" placeholder="" autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-xs6">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">详细地址</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="db-per-address" readonly="readonly" placeholder="" autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md1 input-group-btn">
+                                    <button type="button" class="layui-btn" id="btn-editDbPerInfo" title="查看详情">
+                                        <img src="static/picture/show_detail.png">
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="jbr-panel">
+                                <div class="layui-form-item">
+                                    <div class="layui-col-xs11">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label"><span style="color:red">*</span>机构名称</label>
+                                            <div class="layui-input-block">
+                                                <div class="form-control search-form-autocomplete" name="db-company-name" id="db-company-name" placeholder="请输入机构名称进行检索"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md1 input-group-btn">
+                                        <!--<button type="button" class="layui-btn" title="联网核查">-->
+                                        <!--<img src="../../../../resource/images/business/lwhc.png"/>-->
+                                        <!--</button>-->
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-col-xs11">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label"><span style="color:red">*</span>证件号码</label>
+                                            <div class="layui-input-block">
+                                                <div class="form-control search-form-autocomplete" name="db-company-num" id="db-company-num" placeholder="请输入机构证件代码进行检索"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md1 input-group-btn">
+                                        <button type="button" class="layui-btn" id="btn-editDbComInfo" title="编辑企业信息">
+                                            <img src="static/picture/show_detail.png">
+                                        </button>
+                                    </div>
+                                </div>
+                                <h2 class="" style="color: rgb(67, 142, 185);margin: 10px 0px;font-size: 1rem!important;">
+                                    经办人信息</h2>
+                                <div class="layui-colla-content layui-show jbrxx">
+                                    <div class="layui-row" data-flag="-100">
+                                        <div class="layui-col-md11">
+                                            <div class="layui-col-xs6">
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"><span style="color:red">*</span>姓名</label>
+                                                    <div class="layui-input-block">
+                                                        <div class="form-control search-form-autocomplete" name="jb-per-name" id="jb-per-name" placeholder="请输入办事人姓名进行检索"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs6">
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"><span style="color:red">*</span>证件号码</label>
+                                                    <div class="layui-input-block">
+                                                        <div class="form-control search-form-autocomplete" name="jb-per-num" id="jb-per-num" placeholder="请输入办事人证件号码进行检索"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md1 input-group-btn">
+                                            <button type="button" class="layui-btn" onclick="readIdCard2(-100)" title="点击开始读卡">
+                                                <img src="static/picture/card.png">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item" id="qyjb-info-div" style="display: none">
+                                        <div class="layui-col-xs11">
+                                            <div class="layui-col-xs6">
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label">手机号码</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" id="jb-per-cellphone" readonly="readonly" placeholder="" autocomplete="off" class="layui-input">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs6">
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label">详细地址</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" id="jb-per-address" readonly="readonly" placeholder="" autocomplete="off" class="layui-input">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md1 input-group-btn">
+                                            <button type="button" class="layui-btn" id="btn-editJbPerInfo" title="查看详情">
+                                                <img src="static/picture/show_detail.png">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="layui-form-item otherxx share-no-d">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="bz" name="bz" lay-verify="required" placeholder="请填写备注" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-colla-item post-panel" style="display: none;">
+                <h2 class="layui-colla-title" style="color: rgb(67, 142, 185);">邮政速递收件人信息</h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-row">
+                        <button type="button" id="receiver-addr-btn" class="layui-btn layui-btn-normal">选择常用邮递地址</button>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-xs6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label"><span style="color:red">*</span>收件人姓名</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="post-per-name" name="post-per-name" lay-verify="required" placeholder="请输入收件人姓名" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label"><span style="color:red">*</span>联系电话</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="post-per-phone" name="post-per-phone" lay-verify="required" placeholder="请输入收件人手机/电话号码" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-xs12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label"><span style="color:red">*</span>收件人地址</label>
+                                <div class="layui-input-block" hidden="">
+                                    <input type="text" id="post-per-address" name="post-per-address" lay-verify="required" placeholder="请输入收件人地址" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-block">
+                                    <div class="layui-input-inline">
+                                        <input type="hidden" name="receiverProvince" id="receiverProvince">
+                                        <input type="hidden" name="receiverCity" id="receiverCity">
+                                        <div class="city-province layui-input-inline" style="height: 50px;">
+                                            <table style="width: 100%;height: 100%;">
+                                                <tr>
+                                                    <td id="receiverProvinceName" style="text-align: center;padding: 0px 5px;"></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <div class="city-select layui-input-inline" style="height: 50px;" id="receiver-single-select-city"></div>
+                                    </div>
+                                    <div class="layui-input-inline" style="margin: auto auto auto 105px;height: 50px;">
+                                        <select class="townSelect" name="receiverCounty" id="receiverCounty">
+                                            <option>请选择</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-input-block">
+                                    <textarea placeholder="请输入收件人地址" class="layui-textarea receiver-apartAddr"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-colla-item hall-panel" id="getResHallPanel">
+                <h2 class="layui-colla-title" style="color: rgb(67, 142, 185);">取件大厅信息</h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-row">
+                        <div class="layui-col-xs12">
+                            <!--<div class="layui-form-item areaInfo" id="areaInfo">-->
+                            <div class="layui-form-item areaInfo">
+                                <label class="layui-form-label">大厅名称</label>
+                                <div class="layui-input-block" id="hall-name">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-row is-self-receive" style="display: none;">
+                        <div class="layui-col-xs12">
+                            <div class="layui-form-item areaInfo">
+                                <label class="layui-form-label" style="width: unset; "><span style="color:red">*</span>是否自助区取件: </label>
+
+                                <div class="layui-input-block" style="border: 1px solid #F2F2F2; padding: 4px 0 4px 30px;">
+                                    <input type="radio" name="isSelfReceive" value="1" title="是">
+                                    <input type="radio" name="isSelfReceive" value="0" title="否">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--回执加盖电子印章选择列表-->
+            <div class="layui-colla-item hall-panel" id="getResStampPanel" style="display: none">
+                <h2 class="layui-colla-title" style="color: rgb(67, 142, 185);">已授权电子印章信息</h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-row">
+                        <div class="layui-col-xs12">
+                            <div class="layui-form-item areaInfo" id="ckStampInfo">
+                                <label class="layui-form-label"><span style="color:red;">*</span>印章名称</label>
+                                <div class="layui-input-block" id="stamp-name">
+                                    <select id="stampSelect" name="stampId" lay-filter="stampSelect">
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 前置条件 -->
+            <div class="layui-colla-item qianzhitiaojian" id="qztj-panel" style="display: none;">
+                <h2 class="layui-colla-title" style="color: rgb(67, 142, 185);">前置条件信息&nbsp;&nbsp;&nbsp;<span id="qztj_tips"></span></h2>
+                <div class="layui-colla-content layui-show no-padding">
+                    <div class="content">
+                        <div id="tiaojian" lay-filter="prefix-panel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 基础表单 -->
+            <div class="layui-colla-item" id="baseFormPanel" style="display: none;">
+                <h2 class="layui-colla-title" style="color: rgb(67, 142, 185);">
+                    基础表单
+                </h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-row">
+                        <div class="layui-col-xs12">
+                            <div class="layui-form-item share-no-d" id="detailBdDiv">
+                                <input type="hidden" id="baseFormRowid">
+                                <input type="hidden" id="baseFormId">
+                                <label class="layui-form-label"><span style="color:red">*</span>办事信息</label>
+                                <div class="layui-input-block" id="detailBdNr" style="border: 1px solid #F2F2F2;">
+                                    <button type="button" class="layui-btn layui-btn-fluid layui-btn-primary formBtn">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 情形 -->
+            <div class="layui-colla-item conditions table-header" id="situation-panel" style="display: none;">
+                <h2 class="layui-colla-title" style="color: rgb(67, 142, 185);">申报条件信息 </h2>
+                <div class="layui-colla-content layui-show no-padding">
+                    <div class="content">
+                        <div id="situationDiv" class="situation"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 材料 -->
+            <div class="layui-colla-item materials layui-form" id="material-panel" lay-filter="material-panel" style="display: none;">
+                <h2 class="layui-colla-title">
+                    <div style="width:40%;color: rgb(67, 142, 185);">
+                        办事材料信息
+                    </div>
+
+                    <div class="condition-group headericon share-no-s" style="width:60%;padding-right:9px;text-align: right" onclick="event.cancelBubble = true">
+                        <span class="control post-control">
+                            <input type="hidden" id="viewSignInfoData">
+                            <input type="hidden" id="viewSignBase64Img">
+                            <!--显示并默认关闭签名服务-->
+                            <!--<div style="display: none">-->
+                            <input type="checkbox" name="openSign" value="开启签名" title="开启签名">
+                            <!--</div>-->
+                            <button class="layui-btn layui-btn-normal" id="viewSignInfo" type="button">查看签名</button>
+                            <!-- 网融签名 -->
+                            <button class="layui-btn layui-btn-normal" id="shareMaterial" type="button">文件加签</button>
+                            <!-- E签宝签名 -->
+                            <button class="layui-btn layui-btn-normal" id="shareEasySign" type="button">文件加签</button>
+                            <button class="layui-btn layui-btn-normal" id="shareImgSign" type="button">笔迹取集</button>
+                            <button class="layui-btn layui-bg-green" style="display: none" id="shareSuccess" type="button">分享成功</button>
+                        </span>
+                    </div>
+                </h2>
+                <div class="layui-colla-content layui-show gr material-table" id="material-table">
+                    <table class="layui-table" lay-skin="line,row" lay-even="">
+                        <thead class="table-header">
+                        <tr>
+                            <td width="10px" align="center" rowspan="4" id="abc">序号</td>
+                            <td align="center" rowspan="4">材料名称</td>
+                            <td width="10px" align="center" rowspan="4" class="share-no">收件要点</td>
+                            <td width="10px" align="center" rowspan="4" class="share-no">收件样本</td>
+                            <td width="10px" align="center" rowspan="4" class="share-no">是否容缺</td>
+                            <td align="center" colspan="9">纸质件</td>
+                            <td width="45px" align="center">电子件</td>
+                            <td width="60px" align="center" rowspan="4">是否具备电子证照</td>
+                            <td width="28px" align="center" rowspan="4" id="upload-tab-header" class="share-no-s">附件</td>
+                        </tr>
+
+                        <!--<tr>-->
+                        <!--<td width="10px" align="center" rowspan="3">必需</td>&lt;!&ndash;1&ndash;&gt;-->
+                        <!---->
+                        <!--<td align="center" colspan="4">原件</td>&lt;!&ndash;4&ndash;&gt;-->
+                        <!--<td align="center" colspan="4">复印件</td>&lt;!&ndash;4&ndash;&gt;-->
+                        <!---->
+                        <!--<td align="center" rowspan="3">必需</td>-->
+                        <!--</tr>-->
+
+                        <tr>
+                            <td width="10px" align="center" rowspan="3">必需</td><!--1-->
+
+                            <td align="center" colspan="2" rowspan="3">材料形式</td><!--2-->
+                            <td align="center" colspan="2" rowspan="3">收/验</td><!--2-->
+                            <td align="center" colspan="2" rowspan="3">应收份数</td><!--2-->
+                            <td align="center" colspan="2">收取数量</td><!--2-->
+                            <td align="center" rowspan="3">必需</td>
+                        </tr>
+
+                        <tr>
+
+                            <td align="center" rowspan="2">总份数</td>
+                            <td align="center" rowspan="2">总页数</td>
+
+                        </tr>
+                        </thead>
+                        <tbody id="material-detail" class="layui-form" lay-filter="material-detail"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="layui-colla-item" style="display: none;">
+                <h2 class="layui-colla-title" style="color: rgb(67, 142, 185);">即来即办意见信息</h2>
+                <div class="layui-colla-content layui-show">
+                    <label class="layui-form-label" style=" background-color: #f2f2f2;text-align: center">意见</label>
+                    <div class="layui-input-block">
+                        <select name="interest" lay-filter="aihao">
+                            <option value="">请选择</option>
+                            <option value="0">同意</option>
+                            <option value="1">不同意</option>
+                            <option value="2">其他意见</option>
+                        </select>
+                    </div>
+                    <br>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="background-color: #f2f2f2;text-align: center">备注</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="title" lay-verify="required" placeholder="请填写备注" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="screen-panel" style="z-index: 3">
+                <button id="openWS" class="layui-btn layui-btn-warm" onclick="openWebSocket()" type="button" style="margin-left: 10px;">开启投屏</button>
+                <button id="closeWS" class="layui-btn" onclick="closeWebSocket()" type="button" style="display:none">关闭投屏</button>
+            </div>
+
+            <div class="layui-btn-group text fixBtn apply-btn-div" id="bottom-btn-group" style="z-index: 2">
+                <button class="layui-btn layui-btn-danger accpet-btn" type="button" data-status="2" value="不收件">不收件(通知书)
+                </button>
+                <!--原打印材料告知清单-->
+                <button class="layui-btn layui-btn-normal accept-btn-group accpet-btn" type="button" data-status="6" value="打印材料告知清单">不收件(一次性告知)
+                </button>
+                <!--<button class="layui-btn layui-btn-warm accept-btn-group accpet-btn" type="button" data-status="5"-->
+                <!--value="预收件">预收件-->
+                <!--</button>-->
+                <button class="layui-btn accept-btn-group accpet-btn" type="button" data-status="1" value="收件">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;收&nbsp;&nbsp;&nbsp;&nbsp;件&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </button>
+                <!-- 非模式三的综合查询目前只支持本地页面 -->
+                <button style="display: none" type="button" class="layui-btn layui-btn-warm" id="QueryBtn">综合查询</button>
+                <button type="button" class="layui-btn layui-btn-primary" onclick="toClose()" value="关闭">关闭
+                </button>
+            </div>
+
+            <div class="layui-btn layui-btn-normal" id="send-checkbox" style="z-index: 2">
+                <input lay-skin="primary" title="是否通知取件" type="checkbox" id="isSend" lay-filter="isSend-btn" checked/="">
+            </div>
+
+            <!-- 模式3二次跳转显示的按钮 -->
+            <div class="layui-btn-group text fixBtn" id="mode3-btn-group" style="display: none">
+                <button class="layui-btn layui-btn-danger accpet-btn" type="button" data-status="2">
+                    不收件(通知书)
+                </button>
+                <button class="layui-btn layui-btn-normal accept-btn-group accpet-btn" type="button" data-status="6">不收件(一次性告知)
+                </button>
+                <button class="layui-btn" type="button" id="next-btn" data-status="1">下一步</button>
+                <button style="display: none" type="button" class="layui-btn layui-btn-warm" id="mode3QueryBtn">综合查询</button>
+                <button type="button" class="layui-btn layui-btn-primary" onclick="top.hideDataAll()">关闭</button>
+            </div>
+            <!-- 模式3二次跳转显示的按钮 -->
+        </div>
+    </form>
+    <form class="layui-form formSearch" id="bsl-reason" style="display: none;">
+        <div class="row" style="width: 450px;  margin-left:7px; margin-top:10px;">
+            <div class="col-sm-12">
+                <div class="layui-form-item">
+	    	            <span class="layui-form-label">
+		    	            <input type="radio" name="reason" value="1">
+	    	            </span>
+                    <div class="layui-input-block" style="width:330px;">
+                        1、依法不需要取得行政许可。
+                    </div>
+                </div>
+                <div class="layui-form-item">
+	    	            <span class="layui-form-label">
+		    	            <input type="radio" name="reason" value="2">
+	    	            </span>
+                    <div class="layui-input-block" style="width:330px;">
+                        2、该事项依法不属于本行政机关职权范围，请向
+                        <!--  <input type="text" id="jg-name" name="jg-name" placeholder="请输入机构名称进行检索" autocomplete="off" class="layui-input"> -->
+                        <div class="form-control search-form-autocomplete" name="jg-name" id="jg-name" placeholder="请输入机构名称进行检索"></div>
+                        提出行政许可申请。
+                    </div>
+                </div>
+                <div class="layui-form-item">
+	    	            <span class="layui-form-label">
+		    	            <input type="radio" name="reason" value="3">
+	    	            </span>
+                    <div class="layui-input-block" style="width:330px;">
+                        3、你（单位）隐瞒有关情况，提供虚假材料。
+                    </div>
+                </div>
+                <div class="layui-form-item">
+    	            	<span class="layui-form-label">
+    	            		<input type="radio" name="reason" value="4">
+    	            	</span>
+                    <div class="layui-input-block" style="width:330px;">
+                        4、其他原因
+                        <input id="rejectReason" type="text" class="layui-input" placeholder="请输入">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form class="layui-form" id="receiptlist" style="display: none;">
+        <div class="row" style=" margin-top:10px;">
+            <div id="receiptbtn" class="layui-btn-container" style="text-align: center;">
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/x-template" id="qztj-template">
+    {{# for(var i = 0; i < d.pcList.length; i++) { }}
+    {{#     var condition = d.pcList[i]; }}
+    <div class="layui-form-item {{= condition.qztjlx == 2? 'qztj-unaccept-div' : '' }}">
+        {{# if(d.qztjType == 1) { }}
+        <input lay-skin="primary" title="{{= condition.qztjmc }}" type="radio" lay-filter="qztj-inp" name="qztj-inp"
+               class="qztj-inp {{= condition.qztjlx == 2? 'qztj-unaccept' : 'qztj-accept' }}"
+               data-reason="{{= condition.bslyy}}" data-id="{{= condition.id}}">
+        {{# } else if(d.qztjType == 2) { }}
+        <input lay-skin="primary" title="{{= condition.qztjmc }}" type="checkbox" lay-filter="qztj-inp" name="qztj-inp"
+               class="qztj-inp {{= condition.qztjlx == 2? 'qztj-unaccept' : 'qztj-accept' }}"
+               data-reason="{{= condition.bslyy}}" data-id="{{= condition.id}}">
+        {{# } }}
+    </div>
+    {{# } }}
+</script>
+<script type="text/x-template" id="material-template">
+    {{# if($.isArray(d.materials) && d.materials.length > 0) { }}
+    {{# for(var i = 0; i < d.materials.length; i++) { }}
+    {{#     var material = d.materials[i]; }}
+    {{#     var licenses = d.licenses; }}
+    {{#     var isHaveLicense = material.dsfsjly == 1 && licenses && licenses.length > 0 ? true : false; }}
+    {{#     var isShare = material.dsfsjly == 2 ? true : false; }}
+    {{#     var isShareMaterial = material.dsfsjly == 3 ? true : false; }}
+    <!--纸质件是否必须-->
+    {{#     if(material.zzjyqbx != 1) { }}
+    {{#     material.yfs = ''; }}
+    {{#     material.ybf = ''; }}
+    {{#     material.fjbf = ''; }}
+    {{#     material.fjfs = ''; }}
+    {{#     } }}
+    {{#     var tmpOriginNum =  ''; }}
+    {{#     var tmpOriginPageNum =  ''; }}
+    {{#     var tmpCopyNum =  ''; }}
+    {{#     var tmpCopyPageNum =  ''; }}
+    {{#     var tmpFileJsonStr =  ''; }}
+    {{#     var tmpGuidJsonStr =  ''; }}
+    {{#     var tmpContent =  ''; }}
+    {{#     if(d.tmpMaterialData && d.tmpMaterialData[material.id]) { }}
+    {{#         var tmpData = d.tmpMaterialData[material.id]; }}
+    {{#         var tmpOriginNum = tmpData.originNum || ''; }}
+    {{#         var tmpOriginPageNum = tmpData.originPageNum || ''; }}
+    {{#         var tmpCopyNum = tmpData.copyNum || ''; }}
+    {{#         var tmpCopyPageNum = tmpData.copyPageNum || ''; }}
+    {{#         var tmpFileJsonStr = tmpData.fileJsonStr || ''; }}
+    {{#         var tmpGuidJsonStr = tmpData.guidJsonStr || ''; }}
+    {{#         var tmpContent = tmpData.content || material.FormContent || ''; }}
+    {{#     } }}
+    <tr class="item-material-info" data-id="{{= material.id }}" data-unsid="{{= material.unSid }}" data-ybf="{{= material.ybf}}" data-fjbf="{{= material.fjbf}}"
+        data-sfdzzz="{{= isHaveLicense ? '1' : '0' }}" data-sfgxpt="{{= isShare ? '1' : '0' }}" data-mid="{{= material.materialId}}"
+        data-dzbdlx="{{= material.dzbdlx}}" data-sfgxcl="{{= isShareMaterial ? '1' : '0' }}"
+        data-needInputCopy="{{material.needInputCopy}}" data-needInputOri="{{material.needInputOri}}"
+        data-fileSize="{{= material.fileSize || ''}}" data-fileExt="{{= material.fileExt || ''}}">
+
+        <td align="center">{{= (i+1) }}</td>
+        <td align="left"><span class="material-name">{{= material.filenameAlias? material.filenameAlias : material.materialName }}</span>
+        </td>
+        <!--收件要点-->
+        <td align="center" class="share-no">
+            <i class="layui-icon layui-icon-tips icon-size-20 {{= material.sjyd? 'icon-search-blue tips-btn' : ''}}"></i>
+            <input type="hidden" class="tips-data" value="{{= material.sjyd }}">
+        </td>
+        <!-- 收件样本 -->
+        <td align="center" class="share-no">
+            {{# if(material.sjydsAttachList && material.sjydsAttachList.length > 0) { }}
+            <i class="layui-icon layui-icon-search icon-size-20 icon-search-blue form-show-btn"
+               data-formtype="sjyd"></i>
+            <input type="hidden" class="form-data" value="{{= JSON.stringify(material.sjydsAttachList) }}">
+            {{# } else { }}
+            <i class="layui-icon layui-icon-search icon-size-20"></i>
+            {{# } }}
+        </td>
+        <!-- 是否容缺 -->
+        <td align="center" class="zcqy share-no" data-zcqy="{{= material.zcqy }}">{{= material.zcqy == 1? '是':'否' }}</td>
+        <input type="hidden" class="sfxytxzys" value="{{= material.sfxytxzys}}">
+
+        <!-- 纸质件是否必须 -->
+        <td align="center" class="iszzjyqbx" data-zzjyqbx="{{= material.zzjyqbx }}">{{= material.zzjyqbx == 1? '是':'否'
+            }}
+        </td>
+
+        <!--材料形式-->
+        <td align="center" colspan="2">
+            {{# if(material.ybf == 2) { }}
+            原件正本
+            {{# } else if(material.fjbf == 2) { }}
+            复印件
+            {{# }else if(material.ybf == 1){ }}
+            原件正本
+            {{# }else if(material.fjbf == 1){ }}
+            复印件
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+        <!-- 收/验 -->
+        <!-- TODO 临时处理，隐藏原有，采用新td显示 -->
+        {{# var syText = ''; }}
+        {{# if(material.ybf == 2) { }}
+        {{#   syText = '收'; }}
+        {{# } else if(material.fjbf == 2) { }}
+        {{#   syText = '收'; }}
+        {{#   if(material.orgCheck == 1) { }}
+        {{#       syText = '收(验原件)'; }}
+        {{#   } }}
+        {{# } else if(material.ybf == 1 || material.fjbf == 1) { }}
+        {{#       syText = '验'; }}
+        {{# } }}
+        <td align="center" colspan="2">{{= syText }}</td>
+        {{# if(material.ybf == 2) { }}
+        <td align="center" class="org-sy" colspan="2" style="display:none;">收</td>
+        <td align="center" class="copy-sy" colspan="2" style="display:none;">验</td>
+        {{# }else if(material.fjbf == 2){ }}
+        <td align="center" class="copy-sy" colspan="2" style="display:none;">收</td>
+        <td align="center" class="org-sy" colspan="2" style="display:none;">验</td>
+        {{# }else if(material.ybf == 1){ }}
+        <td align="center" class="org-sy" colspan="2" style="display:none;">验</td>
+        <td align="center" class="copy-sy" colspan="2" style="display:none;">验</td>
+        {{# }else if(material.fjbf == 1){ }}
+        <td align="center" class="copy-sy" colspan="2" style="display:none;">验</td>
+        <td align="center" class="org-sy" colspan="2" style="display:none;">验</td>
+        {{# }else { }}
+        <td align="center" class="org-sy" colspan="2" style="display:none;">-</td>
+        <td align="center" class="copy-sy" colspan="2" style="display:none;">-</td>
+        {{# } }}
+
+        <!-- 应收份数 -->
+        <td align="center"colspan="2">
+            {{# if(material.ybf == 2) { }}
+            <span class="org-num" data-num="{{= material.yfs }}">
+                    {{ material.oriNumDisplay }}
+                </span>
+            {{#} else if(material.fjbf == 2) { }}
+            <span class="copy-num" data-num="{{= material.fjfs }}" >
+                    {{ material.copyNumDisplay }}
+                </span>
+            {{# }else if(material.ybf == 1){ }}
+            <span class="org-num" data-num="{{= material.yfs }}">
+                    {{ material.oriNumDisplay }}
+                </span>
+            {{# }else if(material.fjbf == 1){ }}
+            <span class="copy-num" data-num="{{= material.fjfs }}" >
+                    {{ material.copyNumDisplay }}
+                </span>
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+
+        <!-- 收取数量 -->
+
+        {{# if(material.ybf == 2) { }}
+            <td align="center">
+                {{# if(material.needInputOri) { }}
+                <!-- 收 - 填写数量 -->
+                <input type="text" class="layui-input-inline page-num org-fs" value="{{= tmpOriginNum || '' }}" maxlength="3">
+                <input type="hidden" class="layui-input-inline page-num copy-fs" value="{{= tmpCopyNum || '' }}" maxlength="3">
+                {{# } else { }}
+                -
+                {{# } }}
+            </td>
+            <td align="center">
+                {{# if(material.needInputOri && material.sfxytxzys == 1) { }}
+                <!-- 收 - 填写数量 -->
+                <input type="text" class="layui-input-inline page-num org-zs" value="{{= tmpOriginPageNum || '' }}" maxlength="3">
+                <input type="hidden" class="layui-input-inline page-num copy-zs" value="{{= tmpCopyPageNum  || '' }}" maxlength="3">
+                {{# } else { }}
+                -
+                {{# } }}
+            </td>
+        {{#} else if(material.fjbf == 2) { }}
+            <td align="center">
+                {{# if(material.needInputCopy) { }}
+                <!-- 收 - 填写数量 -->
+                <input type="text" class="layui-input-inline page-num copy-fs" value="{{= tmpCopyNum || '' }}" maxlength="3">
+                <input type="hidden" class="layui-input-inline page-num org-fs" value="{{= tmpOriginNum || '' }}" maxlength="3">
+                {{# } else { }}
+                -
+                {{# } }}
+            </td>
+            <td align="center">
+                {{# if(material.needInputCopy && material.sfxytxzys == 1) { }}
+                <!-- 收 - 填写数量 -->
+                <input type="text" class="layui-input-inline page-num copy-zs" value="{{= tmpCopyPageNum  || '' }}" maxlength="3">
+                <input type="hidden" class="layui-input-inline page-num org-zs" value="{{= tmpOriginPageNum || '' }}" maxlength="3">
+                {{# } else { }}
+                -
+                {{# } }}
+            </td>
+        {{# }else if(material.ybf == 1){ }}
+            <td align="center">
+                {{# if(material.needInputOri) { }}
+                <!-- 收 - 填写数量 -->
+                <input type="text" class="layui-input-inline page-num org-fs" value="{{= tmpOriginNum || '' }}" maxlength="3">
+                <input type="hidden" class="layui-input-inline page-num copy-fs" value="{{= tmpCopyNum || '' }}" maxlength="3">
+                {{# } else { }}
+                -
+                {{# } }}
+            </td>
+            <td align="center">
+                {{# if(material.needInputOri && material.sfxytxzys == 1) { }}
+                <!-- 收 - 填写数量 -->
+                <input type="text" class="layui-input-inline page-num org-zs" value="{{= tmpOriginPageNum || '' }}" maxlength="3">
+                <input type="hidden" class="layui-input-inline page-num copy-zs" value="{{= tmpCopyPageNum  || '' }}" maxlength="3">
+                {{# } else { }}
+                -
+                {{# } }}
+            </td>
+        {{# }else if(material.fjbf == 1){ }}
+        <td align="center">
+            {{# if(material.needInputCopy) { }}
+            <!-- 收 - 填写数量 -->
+            <input type="text" class="layui-input-inline page-num copy-fs" value="{{= tmpCopyNum || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num org-fs" value="{{= tmpOriginNum || '' }}" maxlength="3">
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+        <td align="center">
+            {{# if(material.needInputCopy && material.sfxytxzys == 1) { }}
+            <!-- 收 - 填写数量 -->
+            <input type="text" class="layui-input-inline page-num copy-zs" value="{{= tmpCopyPageNum  || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num org-zs" value="{{= tmpOriginPageNum || '' }}" maxlength="3">
+            {{# } else { }}
+            -
+            {{# } }}
+        </td>
+        {{# } else { }}
+        <td align="center">
+            <input type="hidden" class="layui-input-inline page-num copy-fs" value="{{= tmpCopyNum || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num org-fs" value="{{= tmpOriginNum || '' }}" maxlength="3">
+            -
+        </td>
+        <td align="center">
+            <input type="hidden" class="layui-input-inline page-num copy-zs" value="{{= tmpCopyPageNum || '' }}" maxlength="3">
+            <input type="hidden" class="layui-input-inline page-num org-zs" value="{{= tmpOriginPageNum || '' }}" maxlength="3">
+            -
+        </td>
+        {{# } }}
+
+
+        <!-- 电子件是否必须 -->
+        <td align="center" class="isdzjyqbx" data-dzjyqbx="{{= material.dzjyqbx }}">{{= material.dzjyqbx == 1? '是':'否'
+            }}
+        </td>
+        <!--是否具备电子证照-->
+        <td align="center">
+            {{= isHaveLicense ? '是' : '否' }}
+        </td>
+        <!--上传附件, 模式3下的二次跳转不显示上传按钮-->
+        <td align="center" class="upload-td share-no-s" style="{{= (!isMode3_Redirect || isMode3_redirect_upload)? '': 'display: none;' }}">
+            {{# if(isHaveLicense) { }}
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal upload-license-btn upload-btn" data-content="{{=JSON.stringify(licenses) }}"><span class="btnName">选择</span>
+                <span class="file-num" style="color: red;"></span></button>
+            <input type="hidden" class="file-json">
+            {{# } else if(isShare){ }}
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal check-thirdData-btn upload-btn">上传<span
+                    class="file-num" style="color: red;"></span></button>
+            <input type="hidden" class="file-json" value='[]' data-thirdList="">
+            {{# } else if(isShareMaterial){ }}
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal upload-shareMaterial-btn upload-btn" data-uniqueConnectId = {{= material.uniqueConnectId}}><span class="btnName">选择</span>
+                <span class="file-num" style="color: red;"></span></button>
+            <input type="hidden" class="file-json" value=''>
+            {{# } else if(material.dzbdlx == 1){ }}
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal write-dzbdlx-btn upload-btn {{= tmpContent? 'pass' : 'fail'}}" data-content="{{= tmpContent? JSON.stringify(tmpContent) : '' }}">
+                <label>{{= tmpContent || material.isFormFilled? '已填写' : '填写' }}</label>
+            </button>
+
+                <input type="hidden" class="formState" value='{{= material.formState}}' >
+                <input type="hidden" class="tbid" value='{{= material.dzbdid}}' >
+            {{# } else if(material.dzbdlx == 2){ }}
+            <button type="button" class="thirdBdButton layui-btn layui-btn-sm layui-btn-normal third-dzbdlx-btn upload-btn {{= tmpContent? 'pass' : 'fail'}}" data-content="{{= tmpContent? JSON.stringify(tmpContent) : '' }}">
+                <label class="thirdBdLabel">填写</label>
+            </button>
+
+                <input type="hidden" class="formState" value='{{= material.formState}}' >
+                <input type="hidden" class="tbid" value >
+                <input type="hidden" class="dzbddz" value='{{= material.dzbddz}}' >
+            {{# } else { }}
+            {{#   var tmpFileNum = ''; }}
+            {{#   if(tmpFileJsonStr) { }}
+            {{#       var tmpFileLength = JSON.parse(tmpFileJsonStr).length || ''; }}
+            {{#       if(tmpFileLength) { }}
+            {{#           tmpFileNum = '(' + tmpFileLength + ')'; }}
+            {{#       } }}
+            {{#   } else { }}
+            {{#       tmpFileJsonStr = '[]'; }}
+            {{#   } }}
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal upload-attach-btn upload-btn">上传<span
+                    class="file-num" style="color: red;">{{= tmpFileNum || '' }}</span></button>
+            <input type="hidden" class="file-json" value='{{= tmpFileJsonStr || "[]" }}'>
+            {{# } }}
+            <input type="hidden" class="guid-json" value=''>
+        </td>
+    </tr>
+    {{# } }}
+    {{# } else { }}
+    <tr>
+        <td colspan="17" style="text-align: center;">无数据</td>
+    </tr>
+    {{# } }}
+
+</script>
+<script type="text/javascript" src="static/js/jquery.js"></script>
+<script type="text/javascript" src="static/js/global.js"></script>
+<script type="text/javascript" src="static/js/util.js"></script>
+<script type="text/javascript" src="static/js/layui.all.js"></script>
+<script type="text/javascript" src="static/js/validateSub.js"></script>
+<script type="text/javascript" src="static/js/dataload.js"></script>
+<script type="text/javascript" src="static/js/widget.js"></script>
+<script type="text/javascript" src="static/js/ui-choose.js"></script>
+<script src="static/js/situation.init.v2.js"></script>
+<script type="text/javascript" src="static/js/precodition.situation.js"></script>
+<script type="text/javascript" src="static/js/hallUtil.js"></script>
+
+<script type="text/javascript" src="static/js/file.reader.js"></script>
+<script type="text/javascript" src="static/js/webuploader.min.js"></script>
+<script type="text/javascript" src="static/js/autocomplete.js"></script>
+<script src="static/js/xcdj_receipt.js"></script>
+<script src="static/js/xcdj.checkcard.js"></script>
+<script src="static/js/xcdj.js"></script>
+<script src="static/js/sign_share.js"></script>
+<script src="static/js/xcdj.funtion.js"></script>
+<script type="text/javascript" src="static/js/sfzdq.js"></script>
+<script src="static/js/initThirdDataTable.js"></script>
+
+<script src="static/js/xcdj_edit-2019121_4.js"></script>
+<script src="static/js/xcdj_websocket.js"></script>
+<!-- 模式3二次跳转js -->
+<script src="static/js/modeThree.js"></script>
+<!-- 二维码条形码js //++++++++++++++++++++++++条形码, 二维码  -->
+<!--<script src="static/js/qrcodebar.js"></script>-->
+<!-- 二代证读卡js -->
+<script src="static/js/idcardReader.js"></script>
+
+<script type="text/javascript" charset="utf-8" id="kpyfx_js_id_10005905" src="static/js/10005905.js"></script>
+
+<script type="text/javascript" src="static/js/enterprise_checkcard.js"></script>
+<script type="text/javascript" src="static/js/certificate_checkcard.js"></script>
+<!--<script type="text/javascript" src="static/js/baseISSObject.js"></script>
+<script type="text/javascript" src="static/js/baseISSOnline.js"></script>-->
+<script type="text/javascript" src="static/js/eloamIdCardReader.js"></script>
+<!--<script type="text/javascript" src="static/js/common.js"></script>-->
+<script type="text/javascript" src="static/js/citydata.js"></script>
+<script type="text/javascript" src="static/js/citySelect-1.0.2.min.js"></script>
+</body>
+<script>
+
+    //webSocket中的一个标识
+    isFlag = false;
+
+    // 地区选择插件
+    var receiverCityTimer = false, receiverCityTimerInterval = 500;
+    var initReceiverSelectCity = function (selector, selectCity, selectCounty) {
+
+        var $div = $(selector);
+        var tmp = $div.citySelect({
+            dataJson: cityData, //数据源
+            multiSelect: false, //单选
+            shorthand: false, //简称
+            search: true, //搜索
+            onInit: function () { //初始化回调
+                if (receiverCityTimer)  {
+                    window.clearTimeout(receiverCityTimer);
+                }
+                receiverCityTimer = window.setTimeout(function () {
+                    var city = tmp.getCityVal();
+                    var province = getData(city.parentId);
+                    var town = getDataChildrens(city.id);
+                    receiverInitialCity({province: province, city: city, town: town, selectTown: selectCounty});
+                }, receiverCityTimerInterval);
+            },
+            onTabsAfter: function (target) { //切换tab回调
+            },
+            onCallerAfter: function (target, values) { //选择后回调
+                var city = values;
+                var province = getData(city.parentId);
+                var town = getDataChildrens(city.id);
+                receiverInitialCity({province: province, city: city, town: town});
+            }
+        });
+
+        tmp.setCityVal(selectCity);
+
+        return tmp;
+    };
+
+    var receiverInitialCity = function (cfg) {
+        var receiverProvince = cfg.province;
+        var receiverCity = cfg.city;
+        var receiverTown = cfg.town;
+        var selectTown = cfg.selectTown || '';
+
+        $('#receiverProvinceName').text(receiverProvince.name);
+        $('#receiverProvince').val(receiverProvince.name);
+        $('#receiverCity').val(receiverCity.name);
+        var $select = $('.townSelect')
+            , $nullOption = $('<option></option>').text('请选择');
+        $select.empty().append($nullOption);
+        $.each(receiverTown, function (index, dom) {
+            var $option = $('<option></option>').val(dom.name).text(dom.name)
+            if (selectTown && dom.name.indexOf(selectTown) > -1) {
+                $option.attr('selected', true);
+            }
+            $select.append($option)
+        })
+        layui.form.render();
+    };
+
+    initReceiverSelectCity('#receiver-single-select-city', '东莞市');
+</script>
+</html>

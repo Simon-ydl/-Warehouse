@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yjs.dao.mapper.FileMapper">
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="com.yjs.bean.file.Files">
+		insert into ro_files
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test="fileName != null">
+		file_name,
+		</if>
+		<if test="originalFileName != null">
+			original_fileName,
+		</if>
+		<if test="nameEx != null">
+			nameEx,
+		</if>
+		<if test="fileUrl != null">
+		file_url,
+		</if>
+		<if test="businessCode != null">
+		business_code,
+		</if>
+		<if test="itemId != null">
+			item_id,
+		</if>
+		<if test="fileCode != null">
+			file_code,
+		</if>
+		<if test="fileAgain != null">
+			file_again,
+		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		<if test="fileName != null">
+			#{fileName,jdbcType=VARCHAR},
+		</if>
+		<if test="originalFileName != null">
+			#{originalFileName,jdbcType=VARCHAR},
+		</if>
+		<if test="nameEx != null">
+			#{nameEx,jdbcType=VARCHAR},
+		</if>
+		<if test="fileUrl != null">
+			#{fileUrl,jdbcType=VARCHAR},
+		</if>
+		<if test="businessCode != null">
+			#{businessCode,jdbcType=VARCHAR},
+		</if>
+		<if test="itemId != null">
+			#{itemId,jdbcType=INTEGER},
+		</if>
+		<if test="fileCode != null">
+			#{fileCode,jdbcType=VARCHAR},
+		</if>
+		<if test="fileAgain != null">
+			#{fileAgain,jdbcType=INTEGER},
+		</if>
+		</trim>
+	</insert>
+	<delete id="delete" parameterType="com.yjs.bean.file.Files">
+        DELETE FROM ro_files WHERE id = #{id}
+	</delete>
+
+	<select id="findAllByBusinessCode" resultType="com.yjs.bean.file.Files" resultMap="files">
+		SELECT * FROM ro_files WHERE business_code = #{businessCode}
+	</select>
+
+	<select id="findAllById" resultType="com.yjs.bean.file.Files" resultMap="files">
+		SELECT * FROM ro_files WHERE id = #{id}
+	</select>
+
+	<select id="findAllByBusinessCodeAnditemsId" resultType="com.yjs.bean.file.Files" resultMap="files">
+		SELECT * FROM ro_files WHERE business_code = #{businessCode} AND item_id = #{itemsId}
+	</select>
+
+	<select id="findAllByBusinessCodeAndfileName" resultType="com.yjs.bean.file.Files" resultMap="files">
+		SELECT * FROM ro_files WHERE business_code = #{businessCode} AND file_name = #{fileName}
+	</select>
+
+	<select id="findAllByBusinessCodeAndfileCodeAnditemId" resultType="com.yjs.bean.file.Files" resultMap="files">
+		SELECT * FROM ro_files WHERE business_code = #{businessCode} AND file_code = #{fileCode} AND item_id = #{itemsId}
+	</select>
+
+	<select id="findAllByBusinessCodeAndfileUrl" resultType="com.yjs.bean.file.Files" resultMap="files">
+		SELECT * FROM ro_files WHERE business_code = #{businessCode} AND file_url = #{fileUrl}
+	</select>
+
+	<update id="update"  parameterType="com.yjs.bean.file.Files">
+		UPDATE ro_files
+		<trim prefix="set" suffixOverrides=",">
+			<if test="fileName!=null">file_name=#{fileName},</if>
+			<if test="originalFileName!=null">original_fileName=#{originalFileName},</if>
+			<if test="nameEx!=null">nameEx=#{nameEx},</if>
+			<if test="fileUrl!=null">file_url=#{fileUrl},</if>
+			<if test="businessCode!=null">business_code=#{businessCode},</if>
+			<if test="itemId!=null">item_id=#{itemId},</if>
+			<if test="fileCode!=null">file_code=#{fileCode},</if>
+			<if test="fileAgain!=null">file_again=#{fileAgain},</if>
+		</trim>
+		WHERE business_code=#{businessCode} AND file_name=#{fileName}
+	</update>
+
+	<update id="updateFileAgent"  parameterType="com.yjs.bean.file.Files">
+		UPDATE ro_files
+		<trim prefix="set" suffixOverrides=",">
+			<if test="fileAgain!=null">file_again=#{fileAgain},</if>
+		</trim>
+		WHERE business_code=#{businessCode}
+	</update>
+
+	<resultMap type="Files" id="files">
+		<id property="id" column="id" />
+		<result property="fileName" column="file_name" />
+		<result property="originalFileName" column="original_fileName"/>
+		<result property="nameEx" column="nameEx"/>
+		<result property="fileUrl" column="file_url" />
+		<result property="businessCode" column="business_code" />
+		<result property="itemId" column="item_id" />
+		<result property="fileCode" column="file_code"/>
+		<result property="fileAgain" column="file_again"/>
+	</resultMap>
+</mapper>
