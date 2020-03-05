@@ -16,6 +16,8 @@
         <module>tensquare_gathering_9005</module>
         <module>tensquare_spit_9006</module>
         <module>tensquare_search_9007</module>
+        <module>tensquare_use_9008</module>
+        <module>tensquare_sms_9009</module>
     </modules>
 
     <packaging>pom</packaging>

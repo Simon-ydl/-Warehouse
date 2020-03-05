@@ -1,0 +1,20 @@
+server:
+  port: 9009
+spring:
+  application:
+    name: tensquare_sms_9009
+  rabbitmq:
+    host: 192.168.11.211
+    listener:   # 开启ACK
+      direct:
+        acknowledge-mode: manual
+      simple:
+        acknowledge-mode: manual
+    publisher-confirms: true  # 需要手动确定消息是否发送成功
+    publisher-returns: true   # 如果发送失败退出
+aliyun:
+  sms:
+    template_code: SMS_184815246
+    sign_name: 泡面讨论系统
+    accessKeyId: LTAI4FffrUF78LKpZ7GUS7kc
+    accessKeySecret: h0TR99EHDo7kyYg05YdUMPSCUqL2oh

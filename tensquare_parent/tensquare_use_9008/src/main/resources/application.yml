@@ -1,0 +1,26 @@
+server:
+  port: 9008
+spring:
+  application:
+    name: tensquare-user-9008 #指定服务名
+  datasource:
+    url: jdbc:mysql://192.168.11.211:3306/tensquare_user?characterEncoding=UTF8
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+  jpa:
+    database: mysql
+    show-sql: true
+    generate-ddl: true
+  redis:
+    host: 192.168.11.211
+  rabbitmq:
+    host: 192.168.11.211
+#eureka:
+#  client:
+#    registerWithEureka: true #是否将自己注册到Eureka服务中，默认为true
+#    fetchRegistry: false #是否从Eureka中获取注册信息，默认为true
+#    serviceUrl: #Eureka客户端与Eureka服务端进行交互的地址
+#      defaultZone: http://192.168.11.211:6868/eureka/
+#  instance:
+#    prefer-ip-address: true #将自己的ip地址注册到Eureka服务中

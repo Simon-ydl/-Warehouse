@@ -1,10 +1,16 @@
 package com.tensquare.search.dao;
 
 import com.tensquare.search.pojo.Article;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-import java.util.List;
-
-public interface ArticleDao extends JpaRepository<Article,String>,JpaSpecificationExecutor<Article>{
+/**
+ * 文章dao
+ */
+public interface ArticleDao extends ElasticsearchRepository<Article,String> {
+    /**
+     * 根据关键词查询titile或content
+     */
+    public Page<Article> findByTitleOrContentLike(String title, String content, Pageable pageable);
 }

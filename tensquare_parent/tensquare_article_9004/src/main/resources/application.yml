@@ -4,7 +4,8 @@ spring:
   application:  # 服务名称，为后续的服务注册做准备的
     name: tensquare-article-9004
   datasource:  # 数据源
-    url: jdbc:mysql://192.168.11.211:3306/tensquare_article?characterEncoding=UTF8
+    # url: jdbc:mysql://192.168.11.211:3306/tensquare_article?characterEncoding=UTF8
+    url: jdbc:mysql://192.168.11.211:3306/tensquare_article?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 123456
